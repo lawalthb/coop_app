@@ -9,33 +9,46 @@
 <body>
     <nav class="bg-purple-600 text-white">
         <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <a href="/" class="text-xl font-bold">OGITECH COOP</a>
-                <div class="space-x-4">
-                    <a href="{{ route('home') }}">Home</a>
-                    <a href="{{ route('about') }}">About</a>
-                    <a href="{{ route('services') }}">Services</a>
-                    <a href="{{ route('resources') }}">Resources</a>
-                    <a href="{{ route('events') }}">Events</a>
-                    <a href="{{ route('contact') }}">Contact</a>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                <div class="flex justify-between items-center">
+                    <a href="/" class="text-xl font-bold">OGITECH COOP</a>
+                    <button class="md:hidden" onclick="toggleMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden md:flex md:space-x-4" id="mobile-menu">
+                    <a href="{{ route('home') }}" class="block py-2 md:py-0">Home</a>
+                    <a href="{{ route('about') }}" class="block py-2 md:py-0">About</a>
+                    <a href="{{ route('services') }}" class="block py-2 md:py-0">Services</a>
+                    <a href="{{ route('resources') }}" class="block py-2 md:py-0">Resources</a>
+                    <a href="{{ route('events') }}" class="block py-2 md:py-0">Events</a>
+                    <a href="{{ route('contact') }}" class="block py-2 md:py-0">Contact</a>
                     @guest
-                        <a href="{{ route('login') }}" class="btn">Login</a>
-                        <a href="{{ route('register') }}" class="btn">Register</a>
+                        <a href="{{ route('login') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Login</a>
+                        <a href="{{ route('register') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Register</a>
                     @else
-                        <a href="{{ route('dashboard') }}">Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="block py-2 md:py-0">Dashboard</a>
                     @endguest
                 </div>
             </div>
         </div>
     </nav>
 
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
     <main>
         @yield('content')
     </main>
 
     <footer class="bg-purple-800 text-white py-8">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4">OGITECH COOP</h3>
                     <p class="text-purple-100">Building financial futures together through cooperation and support</p>

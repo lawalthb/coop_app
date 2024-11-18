@@ -23,7 +23,7 @@
                 <textarea name="message" rows="5" class="w-full p-2 border rounded" required></textarea>
             </div>
 
-            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
                 Send Message
             </button>
         </form>
