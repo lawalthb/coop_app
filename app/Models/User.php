@@ -17,7 +17,8 @@ class User extends Authenticatable
         'monthly_savings', 'share_subscription', 'month_commence',
         'staff_no', 'signature_image', 'date_join', 'admin_remark',
         'admin_sign', 'admin_signdate', 'member_no', 'gensec_sign_image',
-        'president_sign', 'member_image', 'password', 'is_admin'
+        'president_sign', 'member_image', 'password', 'is_admin',
+        'registration_stage'
     ];
 
     protected $casts = [
