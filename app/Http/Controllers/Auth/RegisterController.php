@@ -57,9 +57,9 @@ class RegisterController extends Controller
         $rules = [
             'personal' => [
                 'title' => 'required',
-                'surname' => 'required|string|max:255',
-                'firstname' => 'required|string|max:255',
-                'othername' => 'nullable|string|max:255',
+                'surname' => 'required|string|max:100',
+                'firstname' => 'required|string|max:100',
+                'othername' => 'nullable|string|max:100',
                 'dob' => 'required|date',
                 'nationality' => 'required|string',
             ],

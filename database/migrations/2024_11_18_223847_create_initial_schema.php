@@ -49,6 +49,7 @@ return new class extends Migration
             $table->string('surname');
             $table->string('firstname');
             $table->string('othername')->nullable();
+             $table->string('facebook')->nullable();
             $table->text('home_address')->nullable();;
             $table->foreignId('department_id')->constrained();
             $table->foreignId('faculty_id')->constrained();
