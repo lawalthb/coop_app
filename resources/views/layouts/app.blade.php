@@ -11,7 +11,7 @@
         <div class="container mx-auto px-4 py-3">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center">
                 <div class="flex justify-between items-center">
-                    <a href="/" class="text-xl font-bold">OGITECH COOP</a>
+                    <a href="/" class="text-xl font-bold">OGITECH COOP.</a>
                     <button class="md:hidden" onclick="toggleMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -50,7 +50,9 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">OGITECH COOP</h3>
+                                    <div>
+                                        <img src="{{ asset('images/logo.jpg') }}" alt="OGITECH COOP" class="h-12 w-auto">
+                                    </div>
                     <p class="text-purple-100">Building financial futures together through cooperation and support</p>
                 </div>
                 <div>

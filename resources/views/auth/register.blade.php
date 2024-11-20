@@ -3,13 +3,12 @@
 @section('content')
 
 <div class="min-h-screen bg-purple-50 py-12">
-    <br />
-    <br />
+
     <div class="container mx-auto px-4">
         <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <!-- Header -->
 
-            <div class="bg-purple-600 px-8 py-6 mt-10">
+            <div class="bg-purple-600 px-8 py-6 mt-5">
                 <h2 class="text-2xl font-bold text-white">OGITECH COOP Registration</h2>
                 <p class="text-purple-100 mt-1">Complete all steps to become a member</p>
             </div>
