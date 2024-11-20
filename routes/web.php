@@ -6,6 +6,12 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberDashboardController;
+use App\Http\Controllers\MemberDocumentController;
+use App\Http\Controllers\MemberNotificationController;
+use App\Http\Controllers\MemberProfileController;
+use App\Http\Controllers\MemberSavingsController;
+use App\Http\Controllers\MemberTransactionController;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -40,7 +46,13 @@ Route::middleware('guest')->group(function () {
 // Protected Routes
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+    Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
+    Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+    Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
+    Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
+    Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
+    Route::get('/member/notifications', [MemberNotificationController::class, 'index'])->name('member.notifications');
 });
 
 // Admin Routes
