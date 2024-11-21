@@ -7,14 +7,33 @@
             <h2 class="text-2xl font-bold text-gray-800">Member Management</h2>
             <div class="flex space-x-4">
                 <div class="relative">
-                    <input type="text" placeholder="Search members..." class="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-purple-500">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    <form action="{{ route('admin.members') }}" method="GET" class="relative">
+                        <input type="text"
+                            name="search"
+                            value="{{ $search ?? '' }}"
+                            placeholder="Search members..."
+                            class="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-purple-500">
+                        <button type="submit" class="absolute left-3 top-3 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        @if($search)
+                        <a href="{{ route('admin.members') }}" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </a>
+                        @endif
+                    </form>
                 </div>
             </div>
         </div>
         <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
                 <div class="overflow-hidden md:rounded-lg">
+                    @if(session('warning'))
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+                        {{ session('warning') }}
+                    </div>
+                    @endif
+
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
@@ -59,6 +78,9 @@
                                     <div class="flex space-x-2">
                                         <a title="Click to View Details" href="{{ route('admin.members.show', $member) }}" class="text-purple-600 hover:text-purple-900">
                                             <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.members.edit', $member) }}" class="text-blue-600 hover:text-blue-900" title="Edit Member">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                         @if($member->admin_sign === 'No')
                                         <form action="{{ route('admin.members.approve', $member) }}" method="POST" class="inline">

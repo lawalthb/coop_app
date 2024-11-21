@@ -81,7 +81,7 @@
                         <div class="flex items-center">
                             <div x-data="{ isOpen: false }" class="relative">
                                 <button @click="isOpen = !isOpen" class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 focus:outline-none">
-                                    <img src="{{ asset('storage/' . $member->member_image) }}" alt="Admin Avatar" class="w-8 h-8 rounded-full">
+                                    <img src="{{ asset('storage/' . auth()->user()->member_image) }}" alt="Admin Avatar" class="w-8 h-8 rounded-full">
                                     <span class="text-gray-700">{{ auth()->user()->firstname }}</span>
                                     <svg class="w-4 h-4 text-gray-500" :class="{'rotate-180': isOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />

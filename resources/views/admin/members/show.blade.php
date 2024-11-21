@@ -20,7 +20,7 @@
         <div class="border-b px-6 py-4">
             <div class="flex space-x-4">
                 <a href="{{ route('admin.members.pdf', $member) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                    <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                    <i class="fas fa-file-pdf mr-2"></i> Download Form
                 </a>
                 @if($member->admin_sign === 'No')
                 <form action="{{ route('admin.members.approve', $member) }}" method="POST">

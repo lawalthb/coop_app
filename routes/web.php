@@ -79,6 +79,9 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::patch('/members/{member}/activate', [MemberController::class, 'activate'])->name('members.activate');
     Route::delete('/members/{member}', [MemberController::class, 'destroy'])->name('members.destroy');
     Route::get('/members/{member}/pdf', [MemberController::class, 'downloadPDF'])->name('members.pdf');
+    Route::get('/members/{member}/edit', [MemberController::class, 'edit'])->name('members.edit');
+    Route::put('/members/{member}', [MemberController::class, 'update'])->name('members.update');
+
 
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans');
