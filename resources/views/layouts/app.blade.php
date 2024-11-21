@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OGITECH Cooperative - @yield('title')</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- In your app.blade.php head section -->
+
+
 </head>
+
 <body>
     <nav class="bg-purple-600 text-white">
         <div class="container mx-auto px-4 py-3">
@@ -26,10 +33,10 @@
                     <a href="{{ route('events') }}" class="block py-2 md:py-0">Events</a>
                     <a href="{{ route('contact') }}" class="block py-2 md:py-0">Contact</a>
                     @guest
-                        <a href="{{ route('login') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Login</a>
-                        <a href="{{ route('register') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Register</a>
+                    <a href="{{ route('login') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Login</a>
+                    <a href="{{ route('register') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Register</a>
                     @else
-                        <a href="{{ route('dashboard') }}" class="block py-2 md:py-0">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="block py-2 md:py-0">Dashboard</a>
                     @endguest
                 </div>
             </div>
@@ -50,9 +57,9 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                 <div>
-                                    <div>
-                                        <img src="{{ asset('images/logo.jpg') }}" alt="OGITECH COOP" class="h-12 w-auto">
-                                    </div>
+                    <div>
+                        <img src="{{ asset('images/logo.jpg') }}" alt="OGITECH COOP" class="h-12 w-auto">
+                    </div>
                     <p class="text-purple-100">Building financial futures together through cooperation and support</p>
                 </div>
                 <div>
@@ -86,4 +93,5 @@
         </div>
     </footer>
 </body>
+
 </html>
