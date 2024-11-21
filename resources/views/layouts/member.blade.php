@@ -33,7 +33,7 @@
                     <h2 class="text-2xl font-bold">OGITECH COOP</h2>
                 </div>
                 <nav class="flex-1 overflow-y-auto">
-                    <div class="px-4 py-2 text-purple-200 text-sm uppercase tracking-wider">Menu</div>
+                    <div class="px-4 py-2 text-purple-200 text-sm uppercase tracking-wider">Member</div>
                     <a href="{{ route('member.dashboard') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.dashboard') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-home w-5"></i>
                         <span class="ml-3">Dashboard</span>

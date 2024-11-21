@@ -1,6 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\Admin\SavingController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\AdminProfileController;use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
@@ -62,9 +69,15 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 });
 
 // Admin Routes
-Route::middleware(['auth', 'admin'])->group(function () {
-    // Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    // Route::get('/admin/pending-approvals', [AdminController::class, 'pendingApprovals'])->name('admin.approvals');
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/members', [MemberController::class, 'index'])->name('members');
+    Route::get('/loans', [LoanController::class, 'index'])->name('loans');
+    Route::get('/savings', [SavingController::class, 'index'])->name('savings');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
 });
 
 

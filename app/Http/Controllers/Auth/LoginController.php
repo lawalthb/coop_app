@@ -31,8 +31,15 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
-            return redirect()->intended('member/dashboard');
+
+            if ($user->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('member.dashboard');
         }
+
+        
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
