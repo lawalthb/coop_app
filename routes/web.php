@@ -48,8 +48,11 @@ Route::middleware('guest')->group(function () {
 
 // Protected Routes
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+
+
+
     Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
     Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');

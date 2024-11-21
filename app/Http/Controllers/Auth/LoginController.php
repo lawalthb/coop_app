@@ -22,8 +22,8 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $user = Auth::user();
+            if ($user->admin_sign === "No") {
 
-            if (!$user->admin_sign) {
                 Auth::logout();
                 return back()->withErrors([
                     'email' => 'Your account is pending approval.',
@@ -31,7 +31,7 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('member/dashboard');
         }
 
         return back()->withErrors([

@@ -9,7 +9,8 @@ class CheckAdminApproval
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->user()->admin_sign) {
+        // Only check admin approval if user is logged in
+        if (auth()->check() && auth()->user()->admin_sign === 'No') {
             return redirect()->route('member.dashboard')
                 ->with('warning', 'Your account is pending admin approval.');
         }

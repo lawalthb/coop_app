@@ -21,6 +21,26 @@
     </div>
 </div>
 @endif
+
+<!-- Warning Alert -->
+@if(session('warning'))
+<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+    <div class="flex items-center">
+        <div class="flex-shrink-0">
+            <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+        </div>
+        <div class="ml-3">
+            <p class="font-medium">{{ session('warning') }}</p>
+        </div>
+        <div class="ml-auto">
+            <button onclick="this.parentElement.parentElement.remove()" class="text-yellow-500 hover:text-yellow-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
     <!-- Quick Stats -->
     <div class="bg-white rounded-lg shadow p-6">

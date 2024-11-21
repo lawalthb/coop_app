@@ -24,7 +24,7 @@
                             </span>
                             <input type="email" name="email"
                                 class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200 @error('email') border-red-500 @enderror"
-                                required autofocus style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                                required autofocus style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                         @error('email')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -39,7 +39,7 @@
                             </span>
                             <input type="password" name="password"
                                 class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200 @error('password') border-red-500 @enderror"
-                                required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                                required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                         @error('password')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
