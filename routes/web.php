@@ -12,6 +12,9 @@ use App\Http\Controllers\MemberNotificationController;
 use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\MemberSavingsController;
 use App\Http\Controllers\MemberTransactionController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -62,4 +65,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
+
+
+// Password Reset Routes
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])
+    ->name('password.update');
 

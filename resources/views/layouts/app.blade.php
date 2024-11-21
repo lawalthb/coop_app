@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <!-- Top Bar -->
     <div class="bg-purple-900 text-white py-2">
@@ -18,8 +20,8 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="#" class="hover:text-purple-200"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-purple-200"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-purple-200"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-purple-200"><i class="fab fa-whatsapp"></i></a>
+
                 </div>
             </div>
         </div>
@@ -62,18 +64,18 @@
                         <i class="fas fa-envelope mr-1"></i> Contact
                     </a>
                     @guest
-                        <div class="flex items-center space-x-2">
-                            <a href="{{ route('login') }}" class="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg transition-colors">
-                                <i class="fas fa-sign-in-alt mr-1"></i> Login
-                            </a>
-                            <a href="{{ route('register') }}" class="bg-white text-purple-600 hover:bg-purple-100 px-4 py-2 rounded-lg transition-colors">
-                                <i class="fas fa-user-plus mr-1"></i> Register
-                            </a>
-                        </div>
-                    @else
-                        <a href="{{ route('dashboard') }}" class="nav-link">
-                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('login') }}" class="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login
                         </a>
+                        <a href="{{ route('register') }}" class="bg-white text-purple-600 hover:bg-purple-100 px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-user-plus mr-1"></i> Register
+                        </a>
+                    </div>
+                    @else
+                    <a href="{{ route('dashboard') }}" class="nav-link">
+                        <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                    </a>
                     @endguest
                 </div>
             </div>
@@ -84,6 +86,7 @@
         .nav-link {
             @apply px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors;
         }
+
         .nav-link.active {
             @apply bg-purple-700;
         }
@@ -118,11 +121,10 @@
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Working Hours</h3>
+                    <h3 class="text-lg font-bold mb-4">Meeting Hours</h3>
                     <ul class="space-y-2 text-purple-100">
-                        <li>Monday - Friday: 8:00 AM - 4:00 PM</li>
-                        <li>Saturday: 9:00 AM - 1:00 PM</li>
-                        <li>Sunday: Closed</li>
+                        <li>Thursday: 12:00 PM - 1:00 PM</li>
+                        <li>Saturday (Online): 7:00PM - 8:00PM</li>
                     </ul>
                 </div>
             </div>
@@ -131,6 +133,54 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuButton = document.querySelector('[onclick="toggleMenu()"]');
+
+        function toggleMenu() {
+            // Toggle mobile menu visibility
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex', 'flex-col', 'w-full', 'py-4', 'absolute', 'top-full', 'left-0', 'bg-purple-800', 'shadow-lg');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex', 'flex-col', 'w-full', 'py-4', 'absolute', 'top-full', 'left-0', 'bg-purple-800', 'shadow-lg');
+            }
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+    <button id="scrollToTop" class="fixed bottom-8 right-8 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-purple-700 transition-all duration-300 opacity-0 invisible">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Scroll to top functionality
+        const scrollButton = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.remove('opacity-0', 'invisible');
+                scrollButton.classList.add('opacity-100', 'visible');
+            } else {
+                scrollButton.classList.add('opacity-0', 'invisible');
+                scrollButton.classList.remove('opacity-100', 'visible');
+            }
+        });
+
+        scrollButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 
 </html>
