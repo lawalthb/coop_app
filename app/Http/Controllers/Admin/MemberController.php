@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf ;
 
 class MemberController extends Controller
 {
@@ -51,7 +52,16 @@ class MemberController extends Controller
         $member->delete();
         return redirect()->route('admin.members')->with('danger', 'Member deleted successfully');
     }
+
+
+    public function downloadPDF(User $member)
+    {
+        $pdf = PDF::loadView('admin.members.pdf', compact('member'));
+        return $pdf->download($member->surname . '_' . $member->firstname . '_details.pdf');
+    }
+
 }
+
 
 
 

@@ -19,6 +19,9 @@
         <!-- Action Buttons -->
         <div class="border-b px-6 py-4">
             <div class="flex space-x-4">
+                <a href="{{ route('admin.members.pdf', $member) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                    <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                </a>
                 @if($member->admin_sign === 'No')
                 <form action="{{ route('admin.members.approve', $member) }}" method="POST">
                     @csrf
@@ -54,6 +57,7 @@
             <!-- Personal Information -->
             <div class="space-y-6">
                 <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Personal Information</h3>
+
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
