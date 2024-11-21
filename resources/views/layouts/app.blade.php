@@ -1,54 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OGITECH Cooperative - @yield('title')</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <!-- In your app.blade.php head section -->
-
-
 </head>
-
 <body>
-    <nav class="bg-purple-600 text-white">
-        <div class="container mx-auto px-4 py-3">
+    <!-- Top Bar -->
+    <div class="bg-purple-900 text-white py-2">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <span><i class="fas fa-phone-alt mr-2"></i> +234 XXX XXX XXXX</span>
+                    <span><i class="fas fa-envelope mr-2"></i> info@ogitechcoop.com</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="hover:text-purple-200"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-purple-200"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-purple-200"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="bg-purple-600 text-white sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center">
                 <div class="flex justify-between items-center">
-                    <a href="/" class="text-xl font-bold">OGITECH COOP.</a>
-                    <button class="md:hidden" onclick="toggleMenu()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
+                    <a href="/" class="flex items-center space-x-3">
+                        <img src="{{ asset('images/logo_co.jpg') }}" alt="OGITECH COOP" class="h-12 w-auto">
+                        <div>
+                            <span class="text-xl font-bold block">OGITECH COOP</span>
+                            <span class="text-sm text-purple-200">Building futures together</span>
+                        </div>
+                    </a>
+                    <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
+                        <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
-                <div class="hidden md:flex md:space-x-4" id="mobile-menu">
-                    <a href="{{ route('home') }}" class="block py-2 md:py-0">Home</a>
-                    <a href="{{ route('about') }}" class="block py-2 md:py-0">About</a>
-                    <a href="{{ route('services') }}" class="block py-2 md:py-0">Services</a>
-                    <a href="{{ route('resources') }}" class="block py-2 md:py-0">Resources</a>
-                    <a href="{{ route('events') }}" class="block py-2 md:py-0">Events</a>
-                    <a href="{{ route('contact') }}" class="block py-2 md:py-0">Contact</a>
+
+                <div class="hidden md:flex md:items-center md:space-x-6" id="mobile-menu">
+                    <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+                        <i class="fas fa-home mr-1"></i> Home
+                    </a>
+                    <a href="{{ route('about') }}" class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}">
+                        <i class="fas fa-info-circle mr-1"></i> About
+                    </a>
+                    <a href="{{ route('services') }}" class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}">
+                        <i class="fas fa-hand-holding-usd mr-1"></i> Services
+                    </a>
+                    <a href="{{ route('resources') }}" class="nav-link {{ request()->routeIs('resources') ? 'active' : '' }}">
+                        <i class="fas fa-book mr-1"></i> Resources
+                    </a>
+                    <a href="{{ route('events') }}" class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-alt mr-1"></i> Events
+                    </a>
+                    <a href="{{ route('contact') }}" class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">
+                        <i class="fas fa-envelope mr-1"></i> Contact
+                    </a>
                     @guest
-                    <a href="{{ route('login') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Login</a>
-                    <a href="{{ route('register') }}" class="block py-2 md:py-0 bg-purple-700 px-4 rounded">Register</a>
+                        <div class="flex items-center space-x-2">
+                            <a href="{{ route('login') }}" class="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg transition-colors">
+                                <i class="fas fa-sign-in-alt mr-1"></i> Login
+                            </a>
+                            <a href="{{ route('register') }}" class="bg-white text-purple-600 hover:bg-purple-100 px-4 py-2 rounded-lg transition-colors">
+                                <i class="fas fa-user-plus mr-1"></i> Register
+                            </a>
+                        </div>
                     @else
-                    <a href="{{ route('dashboard') }}" class="block py-2 md:py-0">Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="nav-link">
+                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                        </a>
                     @endguest
                 </div>
             </div>
         </div>
     </nav>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+    <style>
+        .nav-link {
+            @apply px-3 py-2 rounded-lg hover:bg-purple-700 transition-colors;
         }
-    </script>
+        .nav-link.active {
+            @apply bg-purple-700;
+        }
+    </style>
     <main>
         @yield('content')
     </main>
