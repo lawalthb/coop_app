@@ -72,6 +72,11 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/members', [MemberController::class, 'index'])->name('members');
+    Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
+    Route::patch('/members/{member}/approve', [MemberController::class, 'approve'])->name('members.approve');
+    Route::patch('/members/{member}/reject', [MemberController::class, 'reject'])->name('members.reject');
+    Route::patch('/members/{member}/suspend', [MemberController::class, 'suspend'])->name('members.suspend');
+    Route::patch('/members/{member}/activate', [MemberController::class, 'activate'])->name('members.activate');
     Route::get('/loans', [LoanController::class, 'index'])->name('loans');
     Route::get('/savings', [SavingController::class, 'index'])->name('savings');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
@@ -79,7 +84,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
 });
-
 
 
 
