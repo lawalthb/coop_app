@@ -9,6 +9,8 @@ use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -113,14 +115,26 @@ class RegisterController extends Controller
     {
         $data = $request->session()->get('registration_data');
         $data['password'] = Hash::make($data['password']);
-        $data['member_no'] = 'MEM' . date('Y') . str_pad(User::count() + 1, 4, '0', STR_PAD_LEFT);
+        $latestMember = User::orderBy('member_no', 'desc')->first();
+        $lastNumber = $latestMember ? intval(substr($latestMember->member_no, 7)) : 0;
+        $data['member_no'] = 'MEM' . date('Y') . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+
+        //dd($data['member_no']);
         $data['date_join'] = now();
 
         $user = User::create($data);
+
+        // Send welcome email
+        Mail::to($user->email)->send(new WelcomeEmail($user));
+
+
+
         $request->session()->forget('registration_data');
 
-        auth()->login($user);
+        //auth()->login($user);
 
-        return redirect()->route('member.dashboard')->with('success', 'Registration completed successfully!');
+        return redirect()->route('login')->with('success', 'Registration completed successfully!
+      
+         Please check your email to continue');
     }
 }

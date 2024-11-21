@@ -37,6 +37,7 @@ class User extends Authenticatable
         'admin_sign',
         'status',
         'is_admin',
+        'member_no',
     ];
 
     protected $hidden = [

@@ -7,11 +7,19 @@
         <div class="max-w-md mx-auto">
             <!-- Logo Section -->
             <div class="text-center mb-8">
-                             <h2 class="text-3xl font-bold text-purple-800">Welcome Back!</h2>
+                <h2 class="text-3xl font-bold text-purple-800">Welcome Back!</h2>
                 <p class="text-gray-600 mt-2">Sign in to access your account</p>
             </div>
 
             <!-- Login Card -->
+            <!-- success message will be here -->
+            <!-- Success Notification -->
+            @if(session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+                <p class="font-bold">Success!</p>
+                <p>{{ session('success') }}</p>
+            </div>
+            @endif
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
@@ -27,7 +35,7 @@
                                 required autofocus style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                         @error('email')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -42,7 +50,7 @@
                                 required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                         @error('password')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 

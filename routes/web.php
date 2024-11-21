@@ -35,7 +35,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
 });
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::any('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::get('/register/{stage}', [RegisterController::class, 'showRegistrationForm'])->name('register.show');
@@ -57,9 +57,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
-
-
-
     Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
     Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');

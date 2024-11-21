@@ -9,6 +9,9 @@ use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\AccountActivatedEmail;
+use Illuminate\Support\Facades\Mail;
+
 
 class MemberController extends Controller
 {
@@ -20,9 +23,9 @@ class MemberController extends Controller
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('firstname', 'like', "%{$search}%")
-                    ->orWhere('surname', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('member_no', 'like', "%{$search}%");
+                        ->orWhere('surname', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('member_no', 'like', "%{$search}%");
                 });
             })
             ->latest()
@@ -30,7 +33,7 @@ class MemberController extends Controller
 
         if ($search && $members->isEmpty()) {
             return view('admin.members.index', compact('members', 'search'))
-            ->with('warning', 'No members found matching "' . $search . '"');
+                ->with('warning', 'No members found matching "' . $search . '"');
         }
 
         return view('admin.members.index', compact('members', 'search'));
@@ -45,9 +48,11 @@ class MemberController extends Controller
     public function approve(User $member)
     {
         $member->update(['admin_sign' => 'Yes']);
+
+        Mail::to($member->email)->send(new AccountActivatedEmail($member));
+
         return back()->with('success', 'Member approved successfully');
     }
-
     public function reject(User $member)
     {
         $member->update(['admin_sign' => 'No']);
