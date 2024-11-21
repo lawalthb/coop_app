@@ -7,7 +7,7 @@
         <div class="max-w-md mx-auto">
             <!-- Logo Section -->
             <div class="text-center mb-8">
-                <img src="{{ asset('images/logo.png') }}" alt="OGITECH COOP" class="h-20 mx-auto mb-4">
+                <!-- <img src="{{ asset('images/logo.png') }}" alt="OGITECH COOP" class="h-20 mx-auto mb-4"> -->
                 <h2 class="text-3xl font-bold text-purple-800">Reset Password</h2>
                 <p class="text-gray-600 mt-2">Enter your email to receive reset instructions</p>
             </div>
@@ -15,10 +15,10 @@
             <!-- Reset Card -->
             <div class="bg-white rounded-xl shadow-lg p-8">
                 @if (session('status'))
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
-                        <p class="font-medium">Success!</p>
-                        <p>{{ session('status') }}</p>
-                    </div>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+                    <p class="font-medium">Success!</p>
+                    <p>{{ session('status') }}</p>
+                </div>
                 @endif
 
                 <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
@@ -33,10 +33,10 @@
                             <input type="email" name="email"
                                 class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200 @error('email') border-red-500 @enderror"
                                 value="{{ old('email') }}"
-                                required autofocus>
+                                required autofocus style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                         @error('email')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 

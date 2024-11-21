@@ -85,3 +85,19 @@ Route::get('password/reset/{token}', [ResetPasswordController::class, 'showReset
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
 
+
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-email', function () {
+    try {
+        Mail::raw('This is a test email.', function ($message) {
+            $message->to('recipient@example.com') // Replace with a valid recipient
+                ->subject('Test Email');
+        });
+
+        return 'Email sent successfully!';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
