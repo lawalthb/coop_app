@@ -73,7 +73,7 @@
                         </a>
                     </div>
                     @else
-                    <a href="{{ route('dashboard') }}" class="nav-link">
+                    <a href="{{ route('member.dashboard') }}" class="nav-link">
                         <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
                     </a>
                     @endguest

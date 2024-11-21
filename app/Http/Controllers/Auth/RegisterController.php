@@ -121,6 +121,6 @@ class RegisterController extends Controller
 
         auth()->login($user);
 
-        return redirect()->route('dashboard')->with('success', 'Registration completed successfully!');
+        return redirect()->route('member.dashboard')->with('success', 'Registration completed successfully!');
     }
 }
