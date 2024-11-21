@@ -10,23 +10,44 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'title', 'surname', 'firstname', 'othername', 'home_address',
-        'department_id', 'faculty_id', 'phone_number', 'email', 'dob',
-        'nationality', 'state_id', 'lga_id', 'nok', 'nok_relationship',
-        'nok_address', 'marital_status', 'religion', 'nok_phone',
-        'monthly_savings', 'share_subscription', 'month_commence',
-        'staff_no', 'signature_image', 'date_join', 'admin_remark',
-        'admin_sign', 'admin_signdate', 'member_no', 'gensec_sign_image',
-        'president_sign', 'member_image', 'password', 'is_admin',
-        'registration_stage'
+        'title',
+        'firstname',
+        'surname',
+        'othername',
+        'email',
+        'password',
+        'phone_number',
+        'staff_no',
+        'dob',
+        'nationality',
+        'home_address',
+        'state_id',
+        'lga_id',
+        'faculty_id',
+        'department_id',
+        'nok',
+        'nok_relationship',
+        'nok_phone',
+        'nok_address',
+        'monthly_savings',
+        'share_subscription',
+        'month_commence',
+        'member_image',
+        'signature_image',
+        'admin_sign',
+        'status',
+        'is_admin',
     ];
 
-    protected $casts = [
-        'dob' => 'date',
-        'date_join' => 'date',
-        'admin_signdate' => 'datetime',
-        'is_admin' => 'boolean',
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
     public function department()
     {
@@ -36,15 +57,5 @@ class User extends Authenticatable
     public function faculty()
     {
         return $this->belongsTo(Faculty::class);
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
-
-    public function lga()
-    {
-        return $this->belongsTo(Lga::class);
     }
 }

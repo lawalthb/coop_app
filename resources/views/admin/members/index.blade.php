@@ -57,25 +57,39 @@
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-2 md:px-6 md:py-4 text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('admin.members.show', $member) }}" class="text-purple-600 hover:text-purple-900">
+                                        <a title="Click to View Details" href="{{ route('admin.members.show', $member) }}" class="text-purple-600 hover:text-purple-900">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @if($member->admin_sign === 'No')
                                         <form action="{{ route('admin.members.approve', $member) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-green-600 hover:text-green-900">
+                                            <button title="Click to Approve Member" type="submit" class="text-green-600 hover:text-green-900">
                                                 <i class="fas fa-check"></i>
                                             </button>
                                         </form>
                                         @endif
+                                        @if($member->admin_sign === 'Yes')
                                         <form action="{{ route('admin.members.suspend', $member) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-red-600 hover:text-red-900">
+                                            <button title="Click to Suspend Member" type="submit" class="text-red-600 hover:text-red-900">
                                                 <i class="fas fa-ban"></i>
                                             </button>
                                         </form>
+                                        @endif
+                                        @if (auth()->user()->id !== $member->id)
+
+
+                                        <form action="{{ route('admin.members.destroy', $member) }}" method="POST" class="inline"
+                                            onsubmit="return confirm('Are you sure you want to delete this member?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900" title="Delete Member">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

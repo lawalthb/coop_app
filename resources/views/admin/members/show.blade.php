@@ -10,8 +10,8 @@
                     <img class="h-20 w-20 rounded-full border-4 border-white" src="{{ asset('storage/' . $member->member_image) }}" alt="">
                 </div>
                 <div class="ml-6 text-white">
-                    <h2 class="text-2xl font-bold">{{ $member->title }} {{ $member->firstname }} {{ $member->surname }}</h2>
-                    <p class="text-purple-200">Staff ID: {{ $member->staff_no }}</p>
+                    <h2 class="text-2xl font-bold">{{ $member->title }} {{ $member->firstname }} {{ $member->othername }} {{ $member->surname }}</h2>
+                    <p class="text-purple-200">Member No.: {{ $member->member_no }}</p>
                 </div>
             </div>
         </div>
@@ -114,7 +114,29 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <!--  -->
+                        @forelse($member->transactions()->latest()->take(5)->get() as $transaction)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $transaction->created_at->format('M d, Y') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $transaction->type }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                ₦{{ number_format($transaction->amount, 2) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    {{ $transaction->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ ucfirst($transaction->status) }}
+                                </span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">No transactions found</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

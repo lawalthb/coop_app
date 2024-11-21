@@ -36,8 +36,8 @@ class MemberController extends Controller
 
     public function suspend(User $member)
     {
-        $member->update(['status' => 'suspended']);
-        return back()->with('success', 'Member suspended successfully');
+        $member->update(['admin_sign' => 'No']);
+        return back()->with('warning', 'Member suspended successfully');
     }
 
     public function activate(User $member)
@@ -45,4 +45,13 @@ class MemberController extends Controller
         $member->update(['status' => 'active']);
         return back()->with('success', 'Member activated successfully');
     }
+
+    public function destroy(User $member)
+    {
+        $member->delete();
+        return redirect()->route('admin.members')->with('danger', 'Member deleted successfully');
+    }
 }
+
+
+

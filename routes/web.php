@@ -77,6 +77,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::patch('/members/{member}/reject', [MemberController::class, 'reject'])->name('members.reject');
     Route::patch('/members/{member}/suspend', [MemberController::class, 'suspend'])->name('members.suspend');
     Route::patch('/members/{member}/activate', [MemberController::class, 'activate'])->name('members.activate');
+    Route::delete('/members/{member}', [MemberController::class, 'destroy'])->name('members.destroy');
+
     Route::get('/loans', [LoanController::class, 'index'])->name('loans');
     Route::get('/savings', [SavingController::class, 'index'])->name('savings');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
