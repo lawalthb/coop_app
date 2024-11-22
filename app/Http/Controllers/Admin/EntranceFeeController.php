@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\AccountActivatedEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\TransactionHelper;
 
 class EntranceFeeController extends Controller
 {
@@ -47,8 +48,12 @@ class EntranceFeeController extends Controller
 
         if ($request->has('approve_member')) {
             User::where('id', $request->user_id)->update(['admin_sign' => 'Yes']);
-            
+
             $member = User::where('id', $request->user_id)->first();
+
+            TransactionHelper::recordTransaction($request->user_id, 'entrance_fee', 0, $request->amount);
+
+
             Mail::to($member->email)->send(new AccountActivatedEmail($member));
 
         }
