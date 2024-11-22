@@ -8,6 +8,8 @@ use App\Models\Month;
 use App\Models\Year;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\AccountActivatedEmail;
+use Illuminate\Support\Facades\Mail;
 
 class EntranceFeeController extends Controller
 {
@@ -22,7 +24,7 @@ class EntranceFeeController extends Controller
 
     public function create()
     {
-        $members = User::where('is_admin', false)->get();
+        $members = User::where('is_admin', false)->where('admin_sign','No')->get();
         $months = Month::all();
         $years = Year::all();
 
@@ -42,6 +44,15 @@ class EntranceFeeController extends Controller
         $validated['posted_by'] = auth()->id();
 
         EntranceFee::create($validated);
+
+        if ($request->has('approve_member')) {
+            User::where('id', $request->user_id)->update(['admin_sign' => 'Yes']);
+            
+            $member = User::where('id', $request->user_id)->first();
+            Mail::to($member->email)->send(new AccountActivatedEmail($member));
+
+        }
+
 
         return redirect()->route('admin.entrance-fees')
             ->with('success', 'Entrance fee added successfully');
@@ -69,7 +80,7 @@ class EntranceFeeController extends Controller
 
         $entranceFee->update($validated);
 
-        return redirect()->route('admin.entrance-fees')
+        return redirect()->route('admin.member.entrance-fees')
             ->with('success', 'Entrance fee updated successfully');
     }
 

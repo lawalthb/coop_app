@@ -8,6 +8,12 @@
     <title>Admin Dashboard - {{ config('app.name') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    @yield('styles')
+
+
+
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -130,6 +136,8 @@
             </main>
         </div>
     </div>
+    @yield('scripts')
+
 </body>
 
 </html>
