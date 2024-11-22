@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\SavingController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\AdminProfileController;use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\EntranceFeeController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
@@ -68,6 +70,8 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+
     Route::get('/members', [MemberController::class, 'index'])->name('members');
     Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
     Route::patch('/members/{member}/approve', [MemberController::class, 'approve'])->name('members.approve');
@@ -78,6 +82,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/members/{member}/pdf', [MemberController::class, 'downloadPDF'])->name('members.pdf');
     Route::get('/members/{member}/edit', [MemberController::class, 'edit'])->name('members.edit');
     Route::put('/members/{member}', [MemberController::class, 'update'])->name('members.update');
+
+    Route::get('/member/entrance-fees', [EntranceFeeController::class, 'index'])->name('entrance-fees');
 
 
 
