@@ -10,14 +10,18 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('type'); // savings, loan, withdrawal
-            $table->decimal('amount', 10, 2);
-            $table->text('description')->nullable();
-            $table->string('status')->default('pending'); // pending, completed, failed
+            $table->foreignId('user_id')->constrained();
+            $table->string('type'); // entrance_fee, savings, shares, loan, withdrawal
+            $table->decimal('debit_amount', 15, 2)->default(0);
+            $table->decimal('credit_amount', 15, 2)->default(0);
+            $table->decimal('balance', 15, 2)->default(0);
             $table->string('reference')->unique();
+            $table->string('description');
+            $table->foreignId('posted_by')->constrained('users');
             $table->timestamp('transaction_date');
+            $table->string('status')->default('completed');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
