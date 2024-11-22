@@ -54,8 +54,13 @@ class EntranceFeeController extends Controller
             TransactionHelper::recordTransaction($request->user_id, 'entrance_fee', 0, $request->amount);
 
 
+
             Mail::to($member->email)->send(new AccountActivatedEmail($member));
 
+
+            TransactionHelper::recordTransaction($request->user_id, 'entrance_fee_used', $request->amount, 0);
+
+            
         }
 
 

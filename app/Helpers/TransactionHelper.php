@@ -21,6 +21,7 @@ class TransactionHelper
         if (!$description) {
             $description = match($type) {
                 'entrance_fee' => 'Entrance Fee Payment',
+                'entrance_fee_used' => 'Entrance Fee Accepted',
                 'savings' => 'Monthly Savings Contribution',
                 'shares' => 'Share Capital Contribution',
                 'loan' => 'Loan Disbursement',

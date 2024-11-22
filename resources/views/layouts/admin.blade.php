@@ -50,15 +50,17 @@
                     <span class="ml-3">Entrance Fee</span>
                 </a>
 
-
-                <a href="{{ route('admin.loans') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loans*') ? 'bg-purple-700' : '' }}">
-                    <i class="fas fa-money-bill-wave w-5"></i>
-                    <span class="ml-3">Loans</span>
-                </a>
                 <a href="{{ route('admin.savings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.savings*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-piggy-bank w-5"></i>
                     <span class="ml-3">Savings</span>
                 </a>
+
+                
+                <a href="{{ route('admin.loans') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loans*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-money-bill-wave w-5"></i>
+                    <span class="ml-3">Loans</span>
+                </a>
+
                 <a href="{{ route('admin.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.transactions*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
