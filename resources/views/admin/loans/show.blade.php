@@ -108,7 +108,39 @@
                         </div>
                     </div>
                 </div>
-
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Loan History</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Method</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Posted By</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @forelse($loan->repayments as $repayment)
+                                <tr>
+                                    <td class="px-4 py-3">{{ $repayment->payment_date->format('M d, Y') }}</td>
+                                    <td class="px-4 py-3">{{ $repayment->reference }}</td>
+                                    <td class="px-4 py-3">Repayment</td>
+                                    <td class="px-4 py-3">₦{{ number_format($repayment->amount, 2) }}</td>
+                                    <td class="px-4 py-3">{{ ucfirst($repayment->payment_method) }}</td>
+                                    <td class="px-4 py-3">{{ $repayment->postedBy->surname }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-3 text-center text-gray-500">No repayment history found</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <!-- Approval Information -->
                 @if($loan->status !== 'pending')
                 <div>
@@ -128,6 +160,23 @@
                 </div>
                 @endif
 
+                <div class="mt-6">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <span class="text-sm text-gray-600">Total Amount</span>
+                            <p class="text-xl font-bold text-green-600">₦{{ number_format($loan->total_amount, 2) }}</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <span class="text-sm text-gray-600">Total Paid</span>
+                            <p class="text-xl font-bold text-blue-600">₦{{ number_format($loan->repayments->sum('amount'), 2) }}</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <span class="text-sm text-gray-600">Balance</span>
+                            <p class="text-xl font-bold text-purple-600">₦{{ number_format($loan->total_amount - $loan->repayments->sum('amount'), 2) }}</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Add Repayment Link Here -->
                 @if($loan->status === 'approved')
                 <div class="flex justify-end">
@@ -138,7 +187,8 @@
                 @endif
 
                 <!-- Action Buttons -->
-                @if($loan->status === 'pending')                <div class="flex justify-end space-x-4 mt-6">
+
+                @if($loan->status === 'pending') <div class="flex justify-end space-x-4 mt-6">
                     <form action="{{ route('admin.loans.reject', $loan) }}" method="POST" class="inline-block">
                         @csrf
                         <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700" onclick="return confirm('Are you sure you want to reject this loan?')">
