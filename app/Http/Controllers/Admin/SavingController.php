@@ -15,14 +15,31 @@ use Illuminate\Support\Str;
 
 class SavingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $savings = Saving::with(['user', 'savingType', 'month', 'year'])
-            ->latest()
-            ->paginate(10);
+        $query = Saving::with(['user', 'savingType', 'month', 'year', 'postedBy']);
 
-        return view('admin.savings.index', compact('savings'));
+        if ($request->filled('month')) {
+            $query->where('month_id', $request->month);
+        }
+
+        if ($request->filled('year')) {
+            $query->where('year_id', $request->year);
+        }
+
+        if ($request->filled('type')) {
+            $query->where('saving_type_id', $request->type);
+        }
+
+        $savings = $query->latest()->paginate(10);
+
+        $months = Month::all();
+        $years = Year::all();
+        $savingTypes = SavingType::where('status', 'active')->get();
+
+        return view('admin.savings.index', compact('savings', 'months', 'years', 'savingTypes'));
     }
+
 
     public function create()
     {
@@ -43,29 +60,45 @@ class SavingController extends Controller
             'saving_type_id' => 'required|exists:saving_types,id',
             'month_id' => 'required|exists:months,id',
             'year_id' => 'required|exists:years,id',
+            'amount' => 'nullable|numeric|min:0',
             'remark' => 'nullable|string'
         ]);
 
         $user = User::find($request->user_id);
-        $validated['amount'] = $user->monthly_savings;
-        $validated['reference'] = 'SAV-' . date('Y') . '-' . Str::random(8);
-        $validated['posted_by'] = auth()->id();
+        $savingType = SavingType::find($request->saving_type_id);
 
-        $saving = Saving::create($validated);
+        // Use custom amount if provided, otherwise use monthly savings
+        $amount = $validated['amount'] ?? $user->monthly_savings;
 
-        // Record transaction
+        // Calculate interest if applicable
+        $interestAmount = ($amount * $savingType->interest_rate) / 100;
+        $totalAmount = $amount + $interestAmount;
+
+        $saving = Saving::create([
+            'user_id' => $user->id,
+            'saving_type_id' => $savingType->id,
+            'amount' => $totalAmount,
+            'month_id' => $validated['month_id'],
+            'year_id' => $validated['year_id'],
+            'reference' => 'SAV-' . date('Y') . '-' . Str::random(8),
+            'remark' => $validated['remark'],
+            'posted_by' => auth()->id()
+        ]);
+
+        // Record transaction with interest details
         TransactionHelper::recordTransaction(
             $user->id,
             'savings',
             0,
-            $validated['amount'],
+            $totalAmount,
             'completed',
-            'Monthly Savings Contribution'
+            'Monthly Savings Contribution (Interest: ' . $savingType->interest_rate . '%)'
         );
 
         return redirect()->route('admin.savings')
-            ->with('success', 'Savings entry created successfully');
+        ->with('success', 'Savings entry created successfully');
     }
+
 
     public function bulkCreate()
     {

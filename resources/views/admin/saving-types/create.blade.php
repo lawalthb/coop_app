@@ -37,7 +37,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="flex items-center">
-                                <input type="checkbox" name="is_mandatory" value="1" class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;" required>
+                                <input type="checkbox" name="is_mandatory" value="1" class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;" >
                                 <span class="ml-2 text-sm text-gray-600">Is Mandatory</span>
                             </label>
                         </div>
