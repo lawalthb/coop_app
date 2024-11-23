@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\EntranceFeeController;
 use App\Http\Controllers\Admin\SavingTypeController;
+use App\Http\Controllers\Admin\ShareController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -111,6 +112,15 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/savings/{saving}/edit', [SavingController::class, 'edit'])->name('savings.edit');
     Route::put('/savings/{saving}', [SavingController::class, 'update'])->name('savings.update');
     Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
+
+
+    //shares
+     Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
+    Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
+    Route::post('/shares', [ShareController::class, 'store'])->name('shares.store');
+    Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
+    Route::get('/shares/transfer', [ShareController::class, 'transfer'])->name('shares.transfer');
+    Route::post('/shares/transfer', [ShareController::class, 'processTransfer'])->name('shares.transfer.process');
 
 
 

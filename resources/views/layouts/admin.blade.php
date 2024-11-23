@@ -61,6 +61,11 @@
                     <span class="ml-3">Savings</span>
                 </a>
 
+                <a href="{{ route('admin.shares.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.shares*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-chart-pie w-5"></i>
+                    <span class="ml-3">Shares</span>
+                </a>
+
 
                 <a href="{{ route('admin.loans') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loans*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-money-bill-wave w-5"></i>
