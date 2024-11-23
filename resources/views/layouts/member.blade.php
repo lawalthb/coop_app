@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,13 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-purple-50">
         <!-- Mobile Menu Button and Welcome Text -->
         <div class="lg:hidden flex items-center justify-between w-full px-4 h-16 bg-white shadow-sm fixed top-0 left-0 z-40">
             <button id="mobile-menu-button" class="text-purple-600 hover:text-purple-700 focus:outline-none">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
             <span class="text-gray-800 font-medium">Welcome, {{ auth()->user()->firstname }}</span>
@@ -38,7 +40,7 @@
                         <i class="fas fa-home w-5"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
-                    <a href="{{ route('member.profile') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.profile') ? 'bg-purple-700' : '' }}">
+                    <a href="{{ route('profile.show') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.profile') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-user w-5"></i>
                         <span class="ml-3">Profile</span>
                     </a>
@@ -46,6 +48,13 @@
                         <i class="fas fa-piggy-bank w-5"></i>
                         <span class="ml-3">Savings</span>
                     </a>
+
+                    <a href="{{ route('member.shares') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.shares*') ? 'bg-purple-700' : '' }}">
+                        <i class="fas fa-chart-pie w-5"></i>
+                        <span class="ml-3">Shares</span>
+                    </a>
+
+
                     <a href="{{ route('member.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.transactions') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-exchange-alt w-5"></i>
                         <span class="ml-3">Transactions</span>
@@ -86,10 +95,10 @@
             <!-- Page Content -->
             <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
                 @if(!auth()->user()->admin_sign)
-                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
-                        <p class="font-bold">Account Pending Approval</p>
-                        <p>Your account is currently pending admin approval. Some features may be restricted.</p>
-                    </div>
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                    <p class="font-bold">Account Pending Approval</p>
+                    <p>Your account is currently pending admin approval. Some features may be restricted.</p>
+                </div>
                 @endif
 
                 @yield('content')
@@ -122,4 +131,5 @@
         });
     </script>
 </body>
+
 </html>
