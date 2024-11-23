@@ -27,3 +27,89 @@
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Member Information -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Member Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-gray-600">Name:</span>
+                            <span class="font-medium">{{ $share->user->surname }} {{ $share->user->firstname }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Staff Number:</span>
+                            <span class="font-medium">{{ $share->user->staff_no }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Details -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Share Details</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-gray-600">Number of Shares:</span>
+                            <span class="font-medium">{{ number_format($share->number_of_shares) }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Amount per Share:</span>
+                            <span class="font-medium">₦{{ number_format($share->amount_per_share, 2) }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Total Amount:</span>
+                            <span class="font-medium">₦{{ number_format($share->total_amount, 2) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Additional Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-gray-600">Posted By:</span>
+                            <span class="font-medium">{{ $share->postedBy->surname }} {{ $share->postedBy->firstname }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Posted Date:</span>
+                            <span class="font-medium">{{ $share->created_at->format('M d, Y H:i A') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Transactions -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Share Transactions</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Shares</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {{--
+                                @foreach($share->transactions as $transaction)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->created_at->format('M d, Y') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($transaction->transaction_type) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ number_format($transaction->number_of_shares) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($transaction->amount, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->reference }}</td>
+                                </tr>
+                                @endforeach
+                                --}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

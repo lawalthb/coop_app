@@ -8,28 +8,17 @@
     <title>Admin Dashboard - {{ config('app.name') }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    @yield('styles')
-
-
-
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
-    <!-- Add this right after the <body> tag -->
     <x-flash-messages />
     <div x-data="{ sidebarOpen: false }" class="flex min-h-screen bg-gray-100">
         <!-- Overlay -->
-        <div x-show="sidebarOpen"
-            @click="sidebarOpen = false"
-            class="fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity lg:hidden">
-        </div>
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 z-20 bg-black bg-opacity-50 transition-opacity lg:hidden"></div>
 
         <!-- Sidebar -->
-        <div :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
-            class="fixed inset-y-0 left-0 z-30 w-64 bg-purple-800 text-white transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+        <div :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}" class="fixed inset-y-0 left-0 z-30 w-64 min-w-[16rem] bg-purple-800 text-white transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
             <div class="p-6 border-b border-purple-700">
                 <h2 class="text-2xl font-bold">OGITECH COOP</h2>
             </div>
@@ -44,34 +33,31 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="ml-3">Members</span>
                 </a>
-
                 <a href="{{ route('admin.entrance-fees') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.entrance-fees*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-clipboard-check w-5"></i>
                     <span class="ml-3">Entrance Fee</span>
                 </a>
-
                 <a href="{{ route('admin.saving-types.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.saving-types*') ? 'bg-purple-700' : '' }}">
+
                     <i class="fas fa-coins w-5"></i>
                     <span class="ml-3">Saving Types</span>
                 </a>
-
-
                 <a href="{{ route('admin.savings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.savings*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-piggy-bank w-5"></i>
                     <span class="ml-3">Savings</span>
                 </a>
-
                 <a href="{{ route('admin.shares.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.shares*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-chart-pie w-5"></i>
                     <span class="ml-3">Shares</span>
                 </a>
-
-
-                <a href="{{ route('admin.loans') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loans*') ? 'bg-purple-700' : '' }}">
+                <a href="{{ route('admin.loan-types.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loan-types*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-list-alt w-5"></i>
+                    <span class="ml-3">Loan Types</span>
+                </a>
+                <a href="{{ route('admin.loans.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.loans*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-money-bill-wave w-5"></i>
                     <span class="ml-3">Loans</span>
                 </a>
-
                 <a href="{{ route('admin.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.transactions*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
@@ -88,12 +74,11 @@
         </div>
 
         <!-- Main Content Wrapper -->
-        <div class="flex-1 flex flex-col min-h-screen">
+        <div class="flex-1 flex flex-col min-h-screen min-w-0">
             <!-- Top Navigation -->
             <nav class="bg-white shadow-sm">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <!-- Left side with welcome message -->
                         <div class="flex items-center">
                             <div class="lg:hidden">
                                 <button @click="sidebarOpen = true" class="text-gray-500 hover:text-gray-700">
@@ -103,7 +88,6 @@
                             <h2 class="ml-4 text-xl text-gray-800">Welcome, {{ auth()->user()->firstname }}!</h2>
                         </div>
 
-                        <!-- Right side profile dropdown -->
                         <div class="flex items-center">
                             <div x-data="{ isOpen: false }" class="relative">
                                 <button @click="isOpen = !isOpen" class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 focus:outline-none">
@@ -114,15 +98,7 @@
                                     </svg>
                                 </button>
 
-                                <div x-show="isOpen"
-                                    @click.away="isOpen = false"
-                                    x-transition:enter="transition ease-out duration-100"
-                                    x-transition:enter-start="transform opacity-0 scale-95"
-                                    x-transition:enter-end="transform opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-75"
-                                    x-transition:leave-start="transform opacity-100 scale-100"
-                                    x-transition:leave-end="transform opacity-0 scale-95"
-                                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
+                                <div x-show="isOpen" @click.away="isOpen = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
                                     <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-user mr-2"></i> Profile
                                     </a>
@@ -144,13 +120,13 @@
             </nav>
 
             <!-- Main Content -->
-            <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8">
-                @yield('content')
+            <main class="flex-1 overflow-x-auto">
+                <div class="py-10 px-4 sm:px-6 lg:px-8">
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>
-    @yield('scripts')
-
 </body>
 
 </html>

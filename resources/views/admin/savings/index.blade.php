@@ -75,8 +75,8 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Amount</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Period</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
-                            <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Posted By</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Posted Date</th> -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Posted By</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Posted Date</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
@@ -93,8 +93,8 @@
                                     {{ ucfirst($saving->status) }}
                                 </span>
                             </td>
-                            <!-- <td class="px-6 py-4 whitespace-nowrap">{{ $saving->postedBy->surname }} {{ $saving->postedBy->firstname }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $saving->created_at->format('M d, Y H:i A') }}</td> -->
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $saving->postedBy->surname }} {{ $saving->postedBy->firstname }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $saving->created_at->format('M d, Y H:i A') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-3">
                                     <a href="{{ route('admin.savings.show', $saving) }}" class="text-blue-600 hover:text-blue-900" title="View">

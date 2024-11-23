@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\EntranceFeeController;
+use App\Http\Controllers\Admin\LoanRepaymentController;
+use App\Http\Controllers\Admin\LoanTypeController;
 use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Admin\ShareController;
 use App\Http\Controllers\Auth\LoginController;
@@ -103,7 +105,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/saving-types/{savingType}', [SavingTypeController::class, 'update'])->name('saving-types.update');
 
     //savings
-    Route::get('/savings', [SavingController::class, 'index'])->name('savings.index');
+    Route::get('/savings', [SavingController::class, 'index'])->name('savings');
     Route::get('/savings/create', [SavingController::class, 'create'])->name('savings.create');
     Route::post('/savings', [SavingController::class, 'store'])->name('savings.store');
     Route::get('/savings/bulk', [SavingController::class, 'bulkCreate'])->name('savings.bulk');
@@ -123,10 +125,27 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('/shares/transfer', [ShareController::class, 'processTransfer'])->name('shares.transfer.process');
 
 
+    // Admin Loan Management Routes
+
+        Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+        Route::get('/loans/create', [LoanController::class, 'create'])->name('loans.create');
+        Route::post('/loans', [LoanController::class, 'store'])->name('loans.store');
+        Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
+        Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
+        Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
+// Admin Loan Types Routes
+    Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
+    Route::get('/loan-types/create', [LoanTypeController::class, 'create'])->name('loan-types.create');
+    Route::post('/loan-types', [LoanTypeController::class, 'store'])->name('loan-types.store');
+    Route::get('/loan-types/{loanType}/edit', [LoanTypeController::class, 'edit'])->name('loan-types.edit');
+    Route::put('/loan-types/{loanType}', [LoanTypeController::class, 'update'])->name('loan-types.update');
+
+    //loan repayment
+    Route::get('/loans/{loan}/repayments/create', [LoanRepaymentController::class, 'create'])->name('loans.repayments.create');
+    Route::post('/loans/{loan}/repayments', [LoanRepaymentController::class, 'store'])->name('loans.repayments.store');
 
 
-    Route::get('/loans', [LoanController::class, 'index'])->name('loans');
-    Route::get('/savings', [SavingController::class, 'index'])->name('savings');
+
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
