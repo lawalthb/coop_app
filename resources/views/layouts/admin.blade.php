@@ -69,6 +69,12 @@
                     <i class="fas fa-chart-bar w-5"></i>
                     <span class="ml-3">Reports</span>
                 </a>
+
+                <a href="{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-vote-yea w-5"></i>
+                    <span class="ml-3">Vote</span>
+                </a>
+
                 <a href="{{ route('admin.settings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.settings*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-cog w-5"></i>
                     <span class="ml-3">Settings</span>
@@ -96,9 +102,9 @@
                             <a href="{{ route('notifications.index') }}" class="relative mr-4">
                                 <i class="fas fa-bell text-gray-600 text-xl"></i>
                                 @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
-                                    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                                        {{ auth()->user()->notifications()->whereNull('read_at')->count() }}
-                                    </span>
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                    {{ auth()->user()->notifications()->whereNull('read_at')->count() }}
+                                </span>
                                 @endif
                             </a>
 
@@ -113,7 +119,7 @@
                                 </button>
 
                                 <div x-show="isOpen" @click.away="isOpen = false" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50">
-                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
+                                    <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-user mr-2"></i> Profile
                                     </a>
                                     <a href="{{ route('admin.settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
@@ -139,6 +145,20 @@
                     @yield('content')
                 </div>
             </main>
+            <!-- Footer -->
+            <footer class="bg-white shadow-inner mt-auto">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-500 text-sm">
+                            © {{ date('Y') }} OGITECH COOP. All rights reserved.
+                        </p>
+                        <div class="flex items-center space-x-4 text-gray-400">
+                            <span class="text-sm">Version 1.0</span>
+                            <span class="text-sm">Powered by OGITECH COOP</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 </body>

@@ -104,7 +104,7 @@
                         @forelse($recentTransactions ?? [] as $transaction)
                         <tr>
                             <td class="px-6 py-4">{{ $transaction->user->firstname }}</td>
-                            <td class="px-6 py-4">₦{{ number_format($transaction->amount, 2) }}</td>
+                            <td class="px-6 py-4">₦{{ number_format($transaction->credit_amount, 2) }}</td>
                             <td class="px-6 py-4">{{ $transaction->type }}</td>
                         </tr>
                         @empty

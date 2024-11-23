@@ -28,6 +28,7 @@ use App\Http\Controllers\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -46,16 +47,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::get('/register/{stage}', [RegisterController::class, 'showRegistrationForm'])->name('register.show');
     Route::post('/register/{stage}', [RegisterController::class, 'processStep'])->name('register.step');
-    Route::get('/states/{state}/lgas', function ($state) {
-        return \App\Models\LGA::where('state_id', $state)
-            ->where('status', 'active')
-            ->get(['id', 'name']);
-    });
-    Route::get('/faculties/{faculty}/departments', function ($faculty) {
-        return \App\Models\Department::where('faculty_id', $faculty)
-            ->where('status', 'active')
-            ->get(['id', 'name']);
-    });
+
 });
 
 // Protected Routes
@@ -150,9 +142,14 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
     Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
 
+
+
+
+
+
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+
 });
 
 
@@ -193,4 +190,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+});
+
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put(
+    '/profile',
+    [ProfileController::class, 'update']
+)->name('profile.update');
+Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+
+
+Route::get('/states/{state}/lgas', function ($state) {
+    return \App\Models\LGA::where('state_id', $state)
+        ->where('status', 'active')
+        ->get(['id', 'name']);
+});
+Route::get('/faculties/{faculty}/departments', function ($faculty) {
+    return \App\Models\Department::where('faculty_id', $faculty)
+        ->where('status', 'active')
+        ->get(['id', 'name']);
 });

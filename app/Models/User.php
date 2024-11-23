@@ -65,6 +65,15 @@ public function notifications()
     return $this->hasMany(Notification::class);
 }
 
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class);
+    }
 
 
 
