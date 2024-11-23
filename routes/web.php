@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\EntranceFeeController;
+use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -52,7 +53,6 @@ Route::middleware('guest')->group(function () {
             ->where('status', 'active')
             ->get(['id', 'name']);
     });
-
 });
 
 // Protected Routes
@@ -72,7 +72,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     //Admin dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-//member management
+    //member management
     Route::get('/members', [MemberController::class, 'index'])->name('members');
     Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
     Route::patch('/members/{member}/approve', [MemberController::class, 'approve'])->name('members.approve');
@@ -92,6 +92,14 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/member/entrance-fees/{entranceFee}/edit', [EntranceFeeController::class, 'edit'])->name('entrance-fees.edit');
     Route::put('/member/entrance-fees/{entranceFee}', [EntranceFeeController::class, 'update'])->name('entrance-fees.update');
     Route::delete('/member/entrance-fees/{entranceFee}', [EntranceFeeController::class, 'destroy'])->name('entrance-fees.destroy');
+
+    // Admin Saving Types Routes
+    Route::get('/saving-types', [SavingTypeController::class, 'index'])->name('saving-types.index');
+    Route::get('/saving-types/create', [SavingTypeController::class, 'create'])->name('saving-types.create');
+    Route::post('/saving-types', [SavingTypeController::class, 'store'])->name('saving-types.store');
+    Route::get('/saving-types/{savingType}/edit', [SavingTypeController::class, 'edit'])->name('saving-types.edit');
+    Route::put('/saving-types/{savingType}', [SavingTypeController::class, 'update'])->name('saving-types.update');
+
 
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans');
@@ -134,4 +142,3 @@ Route::get('/test-email', function () {
         return 'Error: ' . $e->getMessage();
     }
 });
-
