@@ -85,6 +85,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/members/{member}', [MemberController::class, 'update'])->name('members.update');
 
 
+
     //entrance fee management
     Route::get('/member/entrance-fees', [EntranceFeeController::class, 'index'])->name('entrance-fees');
     Route::get('/member/entrance-fees/create', [EntranceFeeController::class, 'create'])->name('entrance-fees.create');
@@ -104,6 +105,13 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/savings', [SavingController::class, 'index'])->name('savings.index');
     Route::get('/savings/create', [SavingController::class, 'create'])->name('savings.create');
     Route::post('/savings', [SavingController::class, 'store'])->name('savings.store');
+    Route::get('/savings/bulk', [SavingController::class, 'bulkCreate'])->name('savings.bulk');
+    Route::post('/savings/bulk', [SavingController::class, 'bulkStore'])->name('savings.bulk.store');
+    Route::get('/savings/{saving}', [SavingController::class, 'show'])->name('savings.show');
+    Route::get('/savings/{saving}/edit', [SavingController::class, 'edit'])->name('savings.edit');
+    Route::put('/savings/{saving}', [SavingController::class, 'update'])->name('savings.update');
+    Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
+
 
 
 
