@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -64,6 +65,14 @@ class LoanController extends Controller
             'posted_by' => auth()->id()
         ]);
 
+        NotificationService::notify(
+            $loan->user_id,
+            'Loan Application Submitted',
+            'Your loan application has been submitted successfully.',
+            'loan_application',
+            ['loan_id' => $loan->id]
+        );
+
         return redirect()->route('admin.loans.index')
             ->with('success', 'Loan application submitted successfully');
     }
@@ -89,6 +98,14 @@ class LoanController extends Controller
             0,
             'completed',
             'Loan Disbursement - ' . $loan->reference
+        );
+
+        NotificationService::notify(
+            $loan->user_id,
+            'Loan Approved',
+            'Your loan application has been approved.',
+            'loan_approved',
+            ['loan_id' => $loan->id]
         );
 
         return back()->with('success', 'Loan approved successfully');

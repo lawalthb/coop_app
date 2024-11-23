@@ -59,4 +59,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Faculty::class);
     }
+
+public function notifications()
+{
+    return $this->hasMany(Notification::class);
+}
+
+
+
+
 }

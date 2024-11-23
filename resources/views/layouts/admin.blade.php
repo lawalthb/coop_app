@@ -62,6 +62,9 @@
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
                 </a>
+
+
+
                 <a href="{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-chart-bar w-5"></i>
                     <span class="ml-3">Reports</span>
@@ -76,6 +79,7 @@
         <!-- Main Content Wrapper -->
         <div class="flex-1 flex flex-col min-h-screen min-w-0">
             <!-- Top Navigation -->
+
             <nav class="bg-white shadow-sm">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -87,8 +91,18 @@
                             </div>
                             <h2 class="ml-4 text-xl text-gray-800">Welcome, {{ auth()->user()->firstname }}!</h2>
                         </div>
-
                         <div class="flex items-center">
+                            <!-- Notification Icon -->
+                            <a href="{{ route('notifications.index') }}" class="relative mr-4">
+                                <i class="fas fa-bell text-gray-600 text-xl"></i>
+                                @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
+                                    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                        {{ auth()->user()->notifications()->whereNull('read_at')->count() }}
+                                    </span>
+                                @endif
+                            </a>
+
+                            <!-- Existing Profile Dropdown -->
                             <div x-data="{ isOpen: false }" class="relative">
                                 <button @click="isOpen = !isOpen" class="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 focus:outline-none">
                                     <img src="{{ asset('storage/' . auth()->user()->member_image) }}" alt="Admin Avatar" class="w-8 h-8 rounded-full">
