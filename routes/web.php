@@ -117,7 +117,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 
     //shares
-     Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
+    Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
     Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
     Route::post('/shares', [ShareController::class, 'store'])->name('shares.store');
     Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
@@ -127,13 +127,13 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
     // Admin Loan Management Routes
 
-        Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
-        Route::get('/loans/create', [LoanController::class, 'create'])->name('loans.create');
-        Route::post('/loans', [LoanController::class, 'store'])->name('loans.store');
-        Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
-        Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
-        Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
-// Admin Loan Types Routes
+    Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+    Route::get('/loans/create', [LoanController::class, 'create'])->name('loans.create');
+    Route::post('/loans', [LoanController::class, 'store'])->name('loans.store');
+    Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
+    Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
+    Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
+    // Admin Loan Types Routes
     Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
     Route::get('/loan-types/create', [LoanTypeController::class, 'create'])->name('loan-types.create');
     Route::post('/loan-types', [LoanTypeController::class, 'store'])->name('loan-types.store');
@@ -145,8 +145,11 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('/loans/{loan}/repayments', [LoanRepaymentController::class, 'store'])->name('loans.repayments.store');
 
 
+    //transactions
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+    Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
 
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');

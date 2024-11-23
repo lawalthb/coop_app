@@ -108,4 +108,15 @@ class Transaction extends Model
             'description' => 'Loan Repayment'
         ]);
     }
+
+    public function loan()
+    {
+        return $this->belongsTo(Loan::class);
+    }
+
+    public function loanType()
+    {
+        return $this->belongsTo(LoanType::class);
+    }
+
 }
