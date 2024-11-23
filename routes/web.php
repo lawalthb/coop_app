@@ -100,6 +100,11 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/saving-types/{savingType}/edit', [SavingTypeController::class, 'edit'])->name('saving-types.edit');
     Route::put('/saving-types/{savingType}', [SavingTypeController::class, 'update'])->name('saving-types.update');
 
+    //savings
+    Route::get('/savings', [SavingController::class, 'index'])->name('savings.index');
+    Route::get('/savings/create', [SavingController::class, 'create'])->name('savings.create');
+    Route::post('/savings', [SavingController::class, 'store'])->name('savings.store');
+
 
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans');
