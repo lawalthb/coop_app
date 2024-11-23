@@ -49,4 +49,10 @@ class Loan extends Model
     {
         return $this->belongsTo(User::class, 'posted_by');
     }
+
+    public function repayments()
+    {
+        return $this->hasMany(LoanRepayment::class);
+    }
+
 }

@@ -38,26 +38,27 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Amount</label>
-                            <input type="number" name="amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" value="{{ $loan->monthly_payment }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Payment Date</label>
-                            <input type="date" name="payment_date" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="date" name="payment_date" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" value="{{ date('Y-m-d') }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Payment Method</label>
-                            <select name="payment_method" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
-                                <option value="cash">Cash</option>
+                            <select name="payment_method" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                                 <option value="bank_transfer">Bank Transfer</option>
+                                <option value="cash">Cash</option>
+
                                 <option value="deduction">Salary Deduction</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Notes</label>
-                            <textarea name="notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200"></textarea>
+                            <textarea name="notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;"></textarea>
                         </div>
                     </div>
 
