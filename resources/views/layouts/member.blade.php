@@ -54,6 +54,10 @@
                         <span class="ml-3">Shares</span>
                     </a>
 
+                    <a href="{{ route('member.loans.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.loans*') ? 'bg-purple-700' : '' }}">
+                        <i class="fas fa-money-bill-wave w-5"></i>
+                        <span class="ml-3">Loans</span>
+                    </a>
 
                     <a href="{{ route('member.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.transactions') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-exchange-alt w-5"></i>

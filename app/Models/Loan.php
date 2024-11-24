@@ -21,7 +21,12 @@ class Loan extends Model
         'purpose',
         'approved_by',
         'approved_at',
-        'posted_by'
+        'posted_by',
+        'guarantor_name',
+        'guarantor_phone',
+        'guarantor_address',
+        'guarantor_relationship',
+        'guarantor_member_no'
     ];
 
     protected $casts = [

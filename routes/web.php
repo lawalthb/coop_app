@@ -26,6 +26,7 @@ use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Member\MemberLoanController;
 use App\Http\Controllers\Member\MemberSavingsController;
 use App\Http\Controllers\Member\MemberShareController;
 use App\Http\Controllers\Member\SavingsController;
@@ -60,6 +61,15 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
     Route::get('/member/shares', [MemberShareController::class, 'index'])->name('member.shares');
+
+    Route::get('/member/loans', [MemberLoanController::class, 'index'])->name('member.loans.index');
+    Route::get('/member/loans/create', [MemberLoanController::class, 'create'])->name('member.loans.create');
+    Route::post('/member/loans', [MemberLoanController::class, 'store'])->name('member.loans.store');
+    Route::get('/member/loans/{loan}', [MemberLoanController::class, 'show'])->name('member.loans.show');
+
+    Route::get('/member/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
+    Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
+    Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
 
 
     Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
