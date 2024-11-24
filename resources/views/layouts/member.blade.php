@@ -48,6 +48,10 @@
                         <i class="fas fa-piggy-bank w-5"></i>
                         <span class="ml-3">Savings</span>
                     </a>
+                    <a href="{{ route('member.withdrawals.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.withdrawals.*') ? 'bg-purple-700' : '' }}">
+                        <i class="fas fa-hand-holding-usd w-5"></i>
+                        <span class="ml-3">Withdrawals</span>
+                    </a>
 
                     <a href="{{ route('member.shares') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.shares*') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-chart-pie w-5"></i>
@@ -61,16 +65,21 @@
 
                     <a href="{{ route('member.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.transactions') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-exchange-alt w-5"></i>
-                        <span class="ml-3">Transactions</span>
+                        <span class="ml-3">Statement</span>
                     </a>
                     <a href="{{ route('member.documents') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.documents') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-file-alt w-5"></i>
-                        <span class="ml-3">Documents</span>
+                        <span class="ml-3">Resources</span>
                     </a>
-                    <a href="{{ route('member.notifications') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.notifications') ? 'bg-purple-700' : '' }}">
+                    <a href="{{ route('notifications.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('notification') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-bell w-5"></i>
-                        <span class="ml-3">Notifications</span>
+                        <span class="ml-3">Notifications @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
+
+                            ({{ auth()->user()->notifications()->whereNull('read_at')->count() }})
+
+                            @endif </span>
                     </a>
+
                 </nav>
             </div>
         </div>
@@ -109,11 +118,17 @@
             </main>
 
             <!-- Footer -->
-            <footer class="bg-white shadow-inner py-4">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <p class="text-center text-gray-500 text-sm">
-                        © {{ date('Y') }} OGITECH COOP. All rights reserved.
-                    </p>
+            <footer class="bg-white shadow-inner mt-auto">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-500 text-sm">
+                            © {{ date('Y') }} OGITECH COOP. All rights reserved.
+                        </p>
+                        <div class="flex items-center space-x-4 text-gray-400">
+                            <span class="text-sm">Version 1.0</span>
+                            <span class="text-sm">Powered by OGITECH COOP</span>
+                        </div>
+                    </div>
                 </div>
             </footer>
         </div>

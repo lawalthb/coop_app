@@ -21,7 +21,6 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\MemberDocumentController;
-use App\Http\Controllers\MemberNotificationController;
 use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -29,6 +28,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Member\MemberLoanController;
 use App\Http\Controllers\Member\MemberSavingsController;
 use App\Http\Controllers\Member\MemberShareController;
+use App\Http\Controllers\Member\MemberWithdrawalController;
 use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -74,7 +74,7 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
     Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
     Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
-    Route::get('/member/notifications', [MemberNotificationController::class, 'index'])->name('member.notifications');
+ 
 
 });
 

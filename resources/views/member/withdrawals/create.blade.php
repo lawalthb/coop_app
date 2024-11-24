@@ -28,7 +28,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Savings Type</label>
-                            <select name="saving_type_id" class="w-full rounded-lg border-gray-300" required>
+                            <select name="saving_type_id" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                                 <option value="">Select Savings Type</option>
                                 @foreach($savingTypes as $type)
                                 <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -38,27 +38,27 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-                            <input type="number" name="amount" class="w-full rounded-lg border-gray-300" required>
+                            <input type="number" name="amount" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
-                            <input type="text" name="bank_name" class="w-full rounded-lg border-gray-300" required>
+                            <input type="text" name="bank_name" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-                            <input type="text" name="account_number" class="w-full rounded-lg border-gray-300" required>
+                            <input type="text" name="account_number" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
-                            <input type="text" name="account_name" class="w-full rounded-lg border-gray-300" required>
+                            <input type="text" name="account_name" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Withdrawal</label>
-                            <textarea name="reason" rows="3" class="w-full rounded-lg border-gray-300" required></textarea>
+                            <textarea name="reason" rows="3" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;"></textarea>
                         </div>
                     </div>
 

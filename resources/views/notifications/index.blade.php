@@ -1,4 +1,5 @@
-@extends('layouts.admin')
+@extends(auth()->user()->is_admin ? 'layouts.admin' : 'layouts.member')
+
 
 @section('content')
 <div class="min-h-screen bg-purple-50 py-8">

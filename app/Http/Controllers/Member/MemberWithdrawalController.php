@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\Saving;
 use App\Models\Transaction;
 use App\Models\SavingType;
+use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 
 class MemberWithdrawalController extends Controller
@@ -16,14 +18,15 @@ class MemberWithdrawalController extends Controller
 
         $balances = [];
         foreach ($savingTypes as $type) {
-            $deposits = Transaction::where('user_id', $user->id)
+            $deposits = Saving::where('user_id', $user->id)
                 ->where('saving_type_id', $type->id)
-                ->where('type', 'deposit')
+
                 ->sum('amount');
 
-            $withdrawals = Transaction::where('user_id', $user->id)
+            $withdrawals = Withdrawal::where('user_id', $user->id)
                 ->where('saving_type_id', $type->id)
-                ->where('type', 'withdrawal')
+
+
                 ->sum('amount');
 
             $balances[$type->id] = $deposits - $withdrawals;
@@ -46,14 +49,14 @@ class MemberWithdrawalController extends Controller
         $user = auth()->user();
 
         // Check available balance
-        $deposits = Transaction::where('user_id', $user->id)
-            ->where('saving_type_id', $validated['saving_type_id'])
-            ->where('type', 'deposit')
+        $deposits = Saving::where('user_id', $user->id)
+             ->where('saving_type_id', $validated['saving_type_id'])
+
             ->sum('amount');
 
-        $withdrawals = Transaction::where('user_id', $user->id)
-            ->where('saving_type_id', $validated['saving_type_id'])
-            ->where('type', 'withdrawal')
+        $withdrawals = Withdrawal::where('user_id', $user->id)
+             ->where('saving_type_id', $validated['saving_type_id'])
+
             ->sum('amount');
 
         $availableBalance = $deposits - $withdrawals;
@@ -62,10 +65,10 @@ class MemberWithdrawalController extends Controller
             return back()->withErrors(['amount' => 'Insufficient balance']);
         }
 
-        $withdrawal = Transaction::create([
+        $withdrawal = Withdrawal::create([
             'user_id' => $user->id,
             'saving_type_id' => $validated['saving_type_id'],
-            'type' => 'withdrawal',
+          
             'amount' => $validated['amount'],
             'reference' => 'WTH-' . strtoupper(uniqid()),
             'status' => 'pending',
@@ -80,8 +83,7 @@ class MemberWithdrawalController extends Controller
 
     public function index()
     {
-        $withdrawals = Transaction::where('user_id', auth()->id())
-            ->where('type', 'withdrawal')
+        $withdrawals = Withdrawal::where('user_id', auth()->id())
             ->with('savingType')
             ->latest()
             ->paginate(10);
