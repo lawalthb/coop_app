@@ -96,7 +96,8 @@
                     <thead>
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Member</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dr</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cr</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
                         </tr>
                     </thead>
@@ -104,6 +105,8 @@
                         @forelse($recentTransactions ?? [] as $transaction)
                         <tr>
                             <td class="px-6 py-4">{{ $transaction->user->firstname }}</td>
+                            <td class="px-6 py-4">₦{{ number_format($transaction->debit_amount, 2) }}</td>
+                           
                             <td class="px-6 py-4">₦{{ number_format($transaction->credit_amount, 2) }}</td>
                             <td class="px-6 py-4">{{ $transaction->type }}</td>
                         </tr>

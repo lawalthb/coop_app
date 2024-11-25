@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'OGITECH COOP') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_co.jpg') }}">
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="OGITECH Academic Staff Cooperative Society">
+    <meta property="og:description" content="Building financial futures together through cooperation and support">
+    <meta property="og:image" content="{{ asset('images/logo_co.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -63,11 +76,11 @@
                         <span class="ml-3">Loans</span>
                     </a>
 
-                    <a href="{{ route('member.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.transactions') ? 'bg-purple-700' : '' }}">
+                    <a href="#{{ route('member.transactions') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.transactions') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-exchange-alt w-5"></i>
                         <span class="ml-3">Statement</span>
                     </a>
-                    <a href="{{ route('member.documents') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.documents') ? 'bg-purple-700' : '' }}">
+                    <a href="#{{ route('member.documents') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.documents') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-file-alt w-5"></i>
                         <span class="ml-3">Resources</span>
                     </a>

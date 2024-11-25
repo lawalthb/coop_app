@@ -20,12 +20,12 @@ class AdminDashboardController extends Controller
 
         $recentMembers = User::where('is_admin', false)
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get();
 
         $recentTransactions = Transaction::with('user')
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get();
 
         return view('admin.dashboard', compact(

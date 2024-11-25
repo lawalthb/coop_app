@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Dashboard - {{ config('app.name') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_co.jpg') }}">
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="OGITECH Academic Staff Cooperative Society">
+    <meta property="og:description" content="Building financial futures together through cooperation and support">
+    <meta property="og:image" content="{{ asset('images/logo_co.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -65,17 +77,17 @@
 
 
 
-                <a href="{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
+                <a href="#{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-chart-bar w-5"></i>
                     <span class="ml-3">Reports</span>
                 </a>
 
-                <a href="{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
+                <a href="#{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-vote-yea w-5"></i>
                     <span class="ml-3">Vote</span>
                 </a>
 
-                <a href="{{ route('admin.settings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.settings*') ? 'bg-purple-700' : '' }}">
+                <a href="#{{ route('admin.settings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.settings*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-cog w-5"></i>
                     <span class="ml-3">Settings</span>
                 </a>
@@ -122,7 +134,7 @@
                                     <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-user mr-2"></i> Profile
                                     </a>
-                                    <a href="{{ route('admin.settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
+                                    <a href="#{{ route('admin.settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-cog mr-2"></i> Settings
                                     </a>
                                     <div class="border-t border-gray-100"></div>

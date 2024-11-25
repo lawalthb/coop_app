@@ -34,7 +34,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Amount per Share</label>
-                            <input type="number" name="amount_per_share" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
+                            <input type="number" name="amount_per_share" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" value="5000" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                     </div>
 

@@ -14,28 +14,28 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                        <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                     </div>
 
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Interest Rate (%)</label>
-                            <input type="number" name="interest_rate" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="interest_rate" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Maximum Duration (Months)</label>
-                            <input type="number" name="max_duration" min="1" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="max_duration" min="1" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Minimum Amount</label>
-                            <input type="number" name="minimum_amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="minimum_amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Maximum Amount</label>
-                            <input type="number" name="maximum_amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="maximum_amount" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
                     </div>
                 </div>

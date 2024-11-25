@@ -6,6 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OGITECH Cooperative - @yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_co.jpg') }}">
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="OGITECH Academic Staff Cooperative Society">
+    <meta property="og:description" content="Building financial futures together through cooperation and support">
+    <meta property="og:image" content="{{ asset('images/logo_co.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="OGITECH Academic Staff Cooperative Society">
+    <meta property="twitter:description" content="Building financial futures together through cooperation and support">
+    <meta property="twitter:image" content="{{ asset('images/logo_co.jpg') }}">
+    <meta property="twitter:image:width" content="1200">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
