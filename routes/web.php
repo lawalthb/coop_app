@@ -50,7 +50,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::get('/register/{stage}', [RegisterController::class, 'showRegistrationForm'])->name('register.show');
     Route::post('/register/{stage}', [RegisterController::class, 'processStep'])->name('register.step');
-
 });
 
 // Protected Routes
@@ -74,8 +73,6 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
     Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
     Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
- 
-
 });
 
 // Admin Routes
@@ -165,7 +162,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-
 });
 
 
@@ -219,7 +215,7 @@ Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->
 
 
 Route::get('/states/{state}/lgas', function ($state) {
-    return \App\Models\LGA::where('state_id', $state)
+    return \App\Models\Lga::where('state_id', $state)
         ->where('status', 'active')
         ->get(['id', 'name']);
 });
