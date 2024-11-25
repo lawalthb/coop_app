@@ -8,7 +8,7 @@
     <title>Admin Dashboard - {{ config('app.name') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo_co.jpg') }}">
 
-    <!-- Open Graph / WhatsApp -->
+    <!-- Open Graph / WhatsApp tes-->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="OGITECH Academic Staff Cooperative Society">
