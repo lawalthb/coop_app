@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: lawalthb/setup-php@15c43e89cdef867065b0213be354c2841860869e
+    - uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         php-version: '8.2'
     - uses: actions/checkout@v4
