@@ -15,7 +15,7 @@ class AdminDashboardController extends Controller
         $totalMembers = User::where('is_admin', false)->count();
         $totalSavings = Transaction::where('type', 'savings_deposit')->sum('credit_amount');
         $activeLoans = Loan::where('status', 'approved')->count();
-        $pendingApprovals = User::where('admin_sign', null)->count();
+        $pendingApprovals = User::where('admin_sign', 'No')->count();
 
         $recentMembers = User::where('is_admin', false)
             ->latest()
