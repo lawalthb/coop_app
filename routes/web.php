@@ -50,7 +50,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::get('/register/{stage}', [RegisterController::class, 'showRegistrationForm'])->name('register.show');
     Route::post('/register/{stage}', [RegisterController::class, 'processStep'])->name('register.step');
-});
+
+    Route::get('/states/{state}/lgas', [RegisterController::class, 'getLgas'])->name('getLgas');
+
+    Route::get('/faculties/{faculty}/departments', [RegisterController::class, 'getDepartments'])->name('getDepartments');
 
 // Protected Routes
 
@@ -214,13 +217,5 @@ Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->
 
 
 
-Route::get('/states/{state}/lgas', function ($state) {
-    return \App\Models\Lga::where('state_id', $state)
-        ->where('status', 'active')
-        ->get(['id', 'name']);
-});
-Route::get('/faculties/{faculty}/departments', function ($faculty) {
-    return \App\Models\Department::where('faculty_id', $faculty)
-        ->where('status', 'active')
-        ->get(['id', 'name']);
-});
+
+

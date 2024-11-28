@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\WelcomeEmail;
+use App\Models\Department;
+use App\Models\Lga;
 use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
@@ -134,7 +136,17 @@ class RegisterController extends Controller
         //auth()->login($user);
 
         return redirect()->route('login')->with('success', 'Registration completed successfully!
-      
+
          Please check your email to continue');
+    }
+    public function getLgas($stateId)
+    {
+        $lgas = Lga::where('state_id', $stateId)->get();
+        return response()->json($lgas);
+    }
+
+    public function getDepartments($facultyId){
+        $departments = Department::where('faculty_id', $facultyId)->get();
+        return response()->json($departments);
     }
 }
