@@ -32,6 +32,7 @@ use App\Http\Controllers\Member\MemberWithdrawalController;
 use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Mail;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -185,7 +186,7 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
 
 
-use Illuminate\Support\Facades\Mail;
+
 
 Route::get('/test-email', function () {
     try {
@@ -199,7 +200,7 @@ Route::get('/test-email', function () {
         return 'Error: ' . $e->getMessage();
     }
 });
-
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
