@@ -8,6 +8,7 @@ class MemberDashboardController extends Controller
 {
     public function index()
     {
+      
         $user = auth()->user();
 
         $totalSavings = 0; // Calculate from savings table

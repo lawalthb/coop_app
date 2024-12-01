@@ -25,7 +25,7 @@
     <meta property="twitter:description" content="Building financial futures together through cooperation and support">
     <meta property="twitter:image" content="{{ asset('images/logo_co.jpg') }}">
     <meta property="twitter:image:width" content="1200">
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -95,6 +95,9 @@
                     @else
                     <a href="{{ route('member.dashboard') }}" class="nav-link">
                         <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                    </a>
+                    <a href="{{ route('logout') }}" class="nav-link">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Logout
                     </a>
                     @endguest
                 </div>
