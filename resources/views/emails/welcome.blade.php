@@ -1,28 +1,35 @@
 @component('mail::message')
-#  OGUN STATE INSTITUTE OF TECHNOLOGY ACADEMIC STAFF IGBESA (ADO-ODO/OTA) COOPERATIVE MULTIPURPOSE SOCIETY LIMITED
+# OGUN STATE INSTITUTE OF TECHNOLOGY ACADEMIC STAFF IGBESA (ADO-ODO/OTA) COOPERATIVE MULTIPURPOSE SOCIETY LIMITED
+
 Welcome to OASCMS
 
 Dear {{ $user->title }} {{ $user->firstname }} {{ $user->surname }},
 
-Thank you for joining OGITECH Cooperative Society. Your membership application form number is {{ $user->member_no }}.
+Thank you for joining OGITECH Academic Cooperative Multipurpose Society.
+Your membership application form number is {{ $user->member_no }}.
 
 <br />
-Pay ₦2,000 as entrance fee to the society bank account.
+Please pay ₦2,000 as entrance fee to the Society's bank account details below.
 <br />
-Account Name: OGITECH Cooperative Society
+Account Name: OGITECH Academic Cooperative Multipurpose Society
 <br />
-Account Number: 0000000000
+Account Number: 8957020013
 <br />
-Bank: First Bank
+Bank: First City Monument Bank (FCMB)
 <br />
 
-Let your Member No. be the narration of the transaction.<br>
-Your account is currently pending admin approval. We will notify you once your account has been approved.
+
+Your account is currently pending the Management Committee approval. We will notify you once your account has been approved.
+
+
+General Secretary, OASCMS.
 
 @component('mail::button', ['url' => route('login')])
-Login to Your Account
+Kindly login to your account
 @endcomponent
 
 Best regards,<br>
-{{ config('app.name') }}
+General Secretary, OASCMS.
+
+© 2024 OASCMS.. All rights reserved.
 @endcomponent
