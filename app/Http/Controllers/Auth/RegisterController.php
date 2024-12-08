@@ -119,13 +119,16 @@ class RegisterController extends Controller
     {
         $data = $request->session()->get('registration_data');
         $data['password'] = Hash::make($data['password']);
-        $latestMember = User::orderBy('member_no', 'desc')->first();
-        $lastNumber = $latestMember ? intval(substr($latestMember->id, 7)) : 0;
-        $data['member_no'] = 'OASCMS' . '-Form-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-
         // Add declarations
-        $data['salary_deduction_agreement'] = true;
-        $data['membership_declaration'] = true;
+        $data['salary_deduction_agreement'] = $request->has('salary_deduction_agreement') ? true : false;
+        $data['membership_declaration'] = $request->has('membership_declaration') ? true : false;
+
+
+
+        $randomNumber = rand(1, 9999);
+        $data['member_no'] = 'OASCMS' . '-Form-' . $randomNumber;
+
+
 
 
         //dd($data['member_no']);
@@ -148,7 +151,7 @@ class RegisterController extends Controller
         } catch (\Exception $e) {
             // Handle any errors
             return redirect()->back()
-                ->with('error', 'Registration failed. Please try again.')
+                ->with('error', 'Registration failed. Please try again. ' . $e->getMessage())
                 ->withInput();
         }
     }

@@ -31,5 +31,5 @@ Kindly login to your account
 Best regards,<br>
 General Secretary, OASCMS.
 
-© 2024 OASCMS.. All rights reserved.
+© 2024 OASCMS.. All rights reserved.
 @endcomponent

@@ -35,7 +35,7 @@
                 fetch(`/faculties/${facultyId}/departments`)
                     .then(response => response.json())
                     .then(data => {
-                        departmentSelect.innerHTML = '<option value="">Select Department</option>';
+                        departmentSelect.innerHTML = '<option value="">Select Department</option><option value="47">None</option>';
                         data.forEach(department => {
                             departmentSelect.innerHTML += `<option value="${department.id}">${department.name}</option>`;
                         });

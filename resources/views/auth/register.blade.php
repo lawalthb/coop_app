@@ -17,24 +17,32 @@
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-purple-100">
                 <!-- Progress Steps -->
                 <div class="bg-purple-600 px-8 py-6">
-                    <div class="flex justify-between">
-                        @foreach(['Personal', 'Contact', 'Employment', 'Next of Kin', 'Financial', 'Documents'] as $stepName)
-                        <div class="flex flex-col items-center">
-                            <div class="w-12 h-12 rounded-full flex items-center justify-center {{ $stage == strtolower(str_replace(' ', '_', $stepName)) ? 'bg-white text-purple-600' : 'bg-purple-500 text-white' }} text-lg font-bold transition-all duration-300 transform hover:scale-110">
-                                {{ $loop->iteration }}
-                            </div>
-                            <span class="text-sm mt-2 text-white font-medium">{{ $stepName }}</span>
-                        </div>
-                        @if(!$loop->last)
-                        <div class="flex-1 flex items-center mx-4">
-                            <div class="h-1 w-full bg-purple-500 rounded">
-                                <div class="h-1 bg-white rounded transition-all duration-500" style="width: {{ $stage == strtolower(str_replace(' ', '_', $stepName)) ? '100%' : '0%' }}"></div>
-                            </div>
-                        </div>
-                        @endif
-                        @endforeach
-                    </div>
+                    <!-- ... existing progress steps code ... -->
                 </div>
+                <!-- Error Messages -->
+                @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-8 mt-6" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+                @endif
+
+                @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-8 mt-6" role="alert">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                <!-- Success Message -->
+                @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-8 mt-6" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+                @endif
+              
 
                 <!-- Form Content -->
                 <div class="p-8">
