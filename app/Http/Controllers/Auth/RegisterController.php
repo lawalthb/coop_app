@@ -94,6 +94,8 @@ class RegisterController extends Controller
                 'member_image' => 'required|image|max:2048',
                 'signature_image' => 'required|image|max:2048',
                 'password' => 'required|string|min:8|confirmed',
+                'salary_deduction_agreement' => 'required|accepted',
+                'membership_declaration' => 'required|accepted',
             ],
         ];
 
@@ -118,34 +120,47 @@ class RegisterController extends Controller
         $data = $request->session()->get('registration_data');
         $data['password'] = Hash::make($data['password']);
         $latestMember = User::orderBy('member_no', 'desc')->first();
-        $lastNumber = $latestMember ? intval(substr($latestMember->member_no, 7)) : 0;
-        $data['member_no'] = 'MEM' . date('Y') . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        $lastNumber = $latestMember ? intval(substr($latestMember->id, 7)) : 0;
+        $data['member_no'] = 'OASCMS' . '-Form-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+
+        // Add declarations
+        $data['salary_deduction_agreement'] = true;
+        $data['membership_declaration'] = true;
+
 
         //dd($data['member_no']);
         $data['date_join'] = now();
+        try {
+            $user = User::create($data);
 
-        $user = User::create($data);
-
-        // Send welcome email
-        Mail::to($user->email)->send(new WelcomeEmail($user));
+            // Send welcome email
+            Mail::to($user->email)->send(new WelcomeEmail($user));
 
 
 
-        $request->session()->forget('registration_data');
+            $request->session()->forget('registration_data');
 
-        //auth()->login($user);
+            //auth()->login($user);
 
-        return redirect()->route('login')->with('success', 'Registration completed successfully!
+            return redirect()->route('login')->with('success', 'Registration completed successfully!
 
          Please check your email to continue');
+        } catch (\Exception $e) {
+            // Handle any errors
+            return redirect()->back()
+                ->with('error', 'Registration failed. Please try again.')
+                ->withInput();
+        }
     }
+
     public function getLgas($stateId)
     {
         $lgas = Lga::where('state_id', $stateId)->get();
         return response()->json($lgas);
     }
 
-    public function getDepartments($facultyId){
+    public function getDepartments($facultyId)
+    {
         $departments = Department::where('faculty_id', $facultyId)->get();
         return response()->json($departments);
     }

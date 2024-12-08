@@ -38,6 +38,8 @@ class User extends Authenticatable
         'status',
         'is_admin',
         'member_no',
+        'salary_deduction_agreement',
+        'membership_declaration',
     ];
 
     protected $hidden = [

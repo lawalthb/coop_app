@@ -80,7 +80,7 @@
                             {{ $transaction->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                            {{ $transaction->type }}
+                            {{ $transaction->savingType->name }}
                         </td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                             ₦{{ number_format($transaction->amount, 2) }}

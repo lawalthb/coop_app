@@ -1,9 +1,10 @@
 @component('mail::message')
-# Welcome to OGITECH COOP
+#  OGUN STATE INSTITUTE OF TECHNOLOGY ACADEMIC STAFF IGBESA (ADO-ODO/OTA) COOPERATIVE MULTIPURPOSE SOCIETY LIMITED
+Welcome to OASCMS
 
 Dear {{ $user->title }} {{ $user->firstname }} {{ $user->surname }},
 
-Thank you for joining OGITECH Cooperative Society. Your membership number is {{ $user->member_no }}.
+Thank you for joining OGITECH Cooperative Society. Your membership application form number is {{ $user->member_no }}.
 
 <br />
 Pay ₦2,000 as entrance fee to the society bank account.

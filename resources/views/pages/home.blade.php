@@ -103,7 +103,7 @@
         <div class="grid md:grid-cols-3 gap-8">
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex items-center mb-4">
-                    <img src="{{ asset('images/pro.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
+                    <img src="{{ asset('images/eletu.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
                     <div class="ml-4">
                         <h4 class="font-bold">John D.</h4>
                         <p class="text-sm text-gray-600">Faculty Member</p>
@@ -114,7 +114,7 @@
             <!-- Add 2 more success stories -->
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex items-center mb-4">
-                    <img src="{{ asset('images/pro.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
+                    <img src="{{ asset('images/eletu.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
                     <div class="ml-4">
                         <h4 class="font-bold">John D.</h4>
                         <p class="text-sm text-gray-600">Faculty Member</p>
@@ -125,7 +125,7 @@
 
             <div class="bg-white rounded-lg shadow p-6">
                 <div class="flex items-center mb-4">
-                    <img src="{{ asset('images/pro.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
+                    <img src="{{ asset('images/eletu.jpg') }}" alt="Member" class="w-16 h-16 rounded-full">
                     <div class="ml-4">
                         <h4 class="font-bold">John D.</h4>
                         <p class="text-sm text-gray-600">Faculty Member</p>
@@ -178,23 +178,24 @@
 <div class="bg-purple-50 py-16">
     <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold text-purple-800 text-center mb-12">Our Executive Team</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- President -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+        <!-- Grid container with responsive columns -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- President card spanning 2 columns on large screens -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center sm:col-span-2 lg:col-span-3">
                 <div class="p-4">
-                    <img src="{{ asset('images/president.jpg') }}" alt="President" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <img src="{{ asset('images/president.jpg') }}" alt="President" class="w-48 h-48 rounded-full mx-auto object-cover">
                 </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-purple-800">Mr. Ilo, Hammed Owolabi</h3>
-                    <p class="text-purple-600 font-semibold mb-2">President</p>
-                    <p class="text-gray-600 text-sm">Leading with vision and integrity</p>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-purple-800">Mr. Ilo, Hammed Owolabi</h3>
+                    <p class="text-purple-600 font-semibold mb-4 text-lg">President</p>
+                    <p class="text-gray-600">Leading with vision and integrity</p>
                 </div>
             </div>
 
-            <!-- General Secretary -->
+            <!-- Other 4 executives in 2x2 grid -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
                 <div class="p-4">
-                    <img src="{{ asset('images/secretary.jpg') }}" alt="Secretary" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <img src="{{ asset('images/eletu.jpg') }}" alt="Secretary" class="w-32 h-32 rounded-full mx-auto object-cover">
                 </div>
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-purple-800">Mr. Eletu, Ahmed Ajiboye</h3>
@@ -202,11 +203,9 @@
                     <p class="text-gray-600 text-sm">Ensuring efficient administration</p>
                 </div>
             </div>
-
-            <!-- Treasurer -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
                 <div class="p-4">
-                    <img src="{{ asset('images/treasurer.jpg') }}" alt="Treasurer" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <img src="{{ asset('images/akinola.jpg') }}" alt="Treasurer" class="w-32 h-32 rounded-full mx-auto object-cover">
                 </div>
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-purple-800">Engr. Akinola, Akinyemi Adedeji</h3>
@@ -214,16 +213,24 @@
                     <p class="text-gray-600 text-sm">Managing financial stability</p>
                 </div>
             </div>
-
-            <!-- PRO -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
                 <div class="p-4">
-                    <img src="{{ asset('images/pro.jpg') }}" alt="PRO" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <img src="{{ asset('images/ajayi.jpg') }}" alt="PRO" class="w-32 h-32 rounded-full mx-auto object-cover">
                 </div>
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-purple-800">Mr. Ajayi, John Olarewaju</h3>
                     <p class="text-purple-600 font-semibold mb-2">Public Relations Officer</p>
                     <p class="text-gray-600 text-sm">Fostering community relations</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+                <div class="p-4">
+                    <img src="{{ asset('images/sadiq.jpg') }}" alt="PRO" class="w-32 h-32 rounded-full mx-auto object-cover">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-purple-800">Mr. Moshood, Obasanjo Sadiq</h3>
+                    <p class="text-purple-600 font-semibold mb-2">Welfare Officer</p>
+                    <p class="text-gray-600 text-sm">Wellbeing of society members</p>
                 </div>
             </div>
         </div>
