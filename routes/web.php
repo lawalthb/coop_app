@@ -32,6 +32,7 @@ use App\Http\Controllers\Member\MemberWithdrawalController;
 use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileUpdateController;
 use Illuminate\Support\Facades\Mail;
 
 // Public Pages
@@ -57,7 +58,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/faculties/{faculty}/departments', [RegisterController::class, 'getDepartments'])->name('getDepartments');
 
     // Protected Routes
-
+//member routes
     Route::middleware(['auth', 'admin_sign'])->group(function () {
         Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
         Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
@@ -76,6 +77,9 @@ Route::middleware('guest')->group(function () {
 
         Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
         Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
+
+    Route::post('/profile/request-update', [ProfileUpdateController::class, 'requestUpdate'])->name('profile.request-update');
+
     });
 
     // Admin Routes

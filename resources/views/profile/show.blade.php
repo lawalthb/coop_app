@@ -22,7 +22,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-gray-900">{{ $user->title }} {{ $user->surname }} {{ $user->firstname }}</h3>
-                        <p class="text-gray-600">Staff No: {{ $user->staff_no }}</p>
+                        <p class="text-gray-600">Member No: {{ $user->member_no }}</p>
                         <p class="text-gray-600">{{ $user->department->name }}, {{ $user->faculty->name }}</p>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
 
-                    
+
                     <div>
                         <h4 class="text-lg font-semibold text-gray-900 mb-4">Next of Kin</h4>
                         <div class="space-y-3">
