@@ -45,6 +45,14 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="ml-3">Members</span>
                 </a>
+               
+                <a href="{{ route('admin.profile-updates.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.profile-updates.index*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-user-edit w-5"></i>
+                    <span class="ml-3">Update Requests</span>
+                </a>
+
+
+                </a>
                 <a href="{{ route('admin.entrance-fees') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.entrance-fees*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-clipboard-check w-5"></i>
                     <span class="ml-3">Entrance Fee</span>
@@ -76,12 +84,6 @@
                 </a>
 
 
-
-                <a href="#{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
-                    <i class="fas fa-chart-bar w-5"></i>
-                    <span class="ml-3">Reports</span>
-                </a>
-
                 <a href="#{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-vote-yea w-5"></i>
                     <span class="ml-3">Vote</span>
@@ -111,6 +113,7 @@
                         </div>
                         <div class="flex items-center">
                             <!-- Notification Icon -->
+
                             <a href="{{ route('notifications.index') }}" class="relative mr-4">
                                 <i class="fas fa-bell text-gray-600 text-xl"></i>
                                 @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)

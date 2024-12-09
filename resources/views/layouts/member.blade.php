@@ -18,7 +18,7 @@
     <meta property="og:image:height" content="630">
 
 
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -86,11 +86,11 @@
                     </a>
                     <a href="{{ route('notifications.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('notification') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-bell w-5"></i>
-                        <span class="ml-3">Notifications @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
-
+                        <span class="ml-3">Notifications
+                            @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
                             ({{ auth()->user()->notifications()->whereNull('read_at')->count() }})
-
-                            @endif </span>
+                            @endif
+                        </span>
                     </a>
 
                 </nav>

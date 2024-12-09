@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\User;
+use App\Notifications\LoanStatusNotification;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+
 class LoanController extends Controller
 {
     public function index()
@@ -89,7 +91,6 @@ class LoanController extends Controller
             'approved_by' => auth()->id(),
             'approved_at' => now()
         ]);
-
         // Record transaction
         TransactionHelper::recordTransaction(
             $loan->user_id,
@@ -100,14 +101,8 @@ class LoanController extends Controller
             'Loan Disbursement - ' . $loan->reference
         );
 
-        NotificationService::notify(
-            $loan->user_id,
-            'Loan Approved',
-            'Your loan application has been approved.',
-            'loan_approved',
-            ['loan_id' => $loan->id]
-        );
-
+        $user = $loan->user;
+        $user->notify(new LoanStatusNotification($loan));
         return back()->with('success', 'Loan approved successfully');
     }
 

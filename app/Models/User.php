@@ -62,10 +62,12 @@ class User extends Authenticatable
         return $this->belongsTo(Faculty::class);
     }
 
-public function notifications()
-{
-    return $this->hasMany(Notification::class);
-}
+    public function notifications()
+    {
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')
+        ->orderBy('created_at', 'desc');
+    }
+
 
     public function state()
     {
@@ -76,7 +78,10 @@ public function notifications()
     {
         return $this->belongsTo(Lga::class);
     }
-
+    public function profileUpdateRequests()
+    {
+        return $this->hasMany(ProfileUpdateRequest::class);
+    }
 
 
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
-
 class NotificationController extends Controller
 {
     public function index()
@@ -17,17 +15,14 @@ class NotificationController extends Controller
 
     public function markAsRead($id)
     {
-        $notification = Notification::findOrFail($id);
-        $notification->update(['read_at' => now()]);
+        auth()->user()->notifications()->findOrFail($id)->markAsRead();
 
         return back();
     }
 
     public function markAllAsRead()
     {
-        auth()->user()->notifications()
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        auth()->user()->unreadNotifications->markAsRead();
 
         return back();
     }

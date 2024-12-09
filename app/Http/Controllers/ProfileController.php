@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\State;
@@ -18,10 +19,11 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        $states = State::all();
-        return view('profile.edit', compact('user', 'states'));
-    }
+        $states = State::where('status', 'active')->get();
+        $faculties = Faculty::where('status', 'active')->get();
 
+        return view('profile.edit', compact('user', 'states', 'faculties'));
+    }
     public function update(Request $request)
     {
         $user = auth()->user();
