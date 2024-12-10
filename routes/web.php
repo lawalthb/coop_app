@@ -34,7 +34,6 @@ use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileUpdateController;
-use App\Http\Controllers\ProfileUpdateController;
 use Illuminate\Support\Facades\Mail;
 
 // Public Pages
@@ -59,27 +58,27 @@ Route::get('/states/{state}/lgas', [RegisterController::class, 'getLgas'])->name
 
 Route::get('/faculties/{faculty}/departments', [RegisterController::class, 'getDepartments'])->name('getDepartments');
 
-    // Protected Routes
+// Protected Routes
 
-    Route::middleware(['auth', 'admin_sign'])->group(function () {
-        Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
-        Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
-        Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
-        Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
-        Route::get('/member/shares', [MemberShareController::class, 'index'])->name('member.shares');
-        Route::get('/member/loans', [MemberLoanController::class, 'index'])->name('member.loans.index');
-        Route::get('/member/loans/create', [MemberLoanController::class, 'create'])->name('member.loans.create');
-        Route::post('/member/loans', [MemberLoanController::class, 'store'])->name('member.loans.store');
-        Route::get('/member/loans/{loan}', [MemberLoanController::class, 'show'])->name('member.loans.show');
+Route::middleware(['auth', 'admin_sign'])->group(function () {
+    Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+    Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
+    Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+    Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
+    Route::get('/member/shares', [MemberShareController::class, 'index'])->name('member.shares');
+    Route::get('/member/loans', [MemberLoanController::class, 'index'])->name('member.loans.index');
+    Route::get('/member/loans/create', [MemberLoanController::class, 'create'])->name('member.loans.create');
+    Route::post('/member/loans', [MemberLoanController::class, 'store'])->name('member.loans.store');
+    Route::get('/member/loans/{loan}', [MemberLoanController::class, 'show'])->name('member.loans.show');
 
     Route::get('/member/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
     Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
     Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
 
 
-        Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
-        Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
-    });
+    Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
+    Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
+});
 
 // Admin Routes
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {

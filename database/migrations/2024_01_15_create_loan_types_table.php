@@ -15,6 +15,8 @@ return new class extends Migration
             $table->integer('max_duration');
             $table->decimal('minimum_amount', 15, 2);
             $table->decimal('maximum_amount', 15, 2);
+            $table->enum('saved_percentage', ['50', '100', '150', '200', '250', '300', 'None'])->default('none');
+            $table->integer('no_guarantors')->default(0);
             $table->string('status')->default('active');
             $table->timestamps();
         });
