@@ -50,7 +50,7 @@
                 @endforelse
             </div>
             <div class="px-6 py-4">
-                {{ $notifications->links() }}
+                {{ auth()->user()->notifications->links() }}
             </div>
         </div>
     </div>
