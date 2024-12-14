@@ -14,7 +14,7 @@
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
+                        <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
 
                     <div>
@@ -25,12 +25,12 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Interest Rate (%)</label>
-                            <input type="number" name="interest_rate" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;" required>
+                            <input type="number" name="interest_rate" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;padding: 10px; " required readonly value="0">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Minimum Balance</label>
-                            <input type="number" name="minimum_balance" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
+                            <input type="number" name="minimum_balance" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Withdrawal Restriction (Days)</label>
-                        <input type="number" name="withdrawal_restriction_days" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;" required>
+                        <input type="number" name="withdrawal_restriction_days" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;" required value="0">
                     </div>
                 </div>
 

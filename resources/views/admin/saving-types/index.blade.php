@@ -15,7 +15,7 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest Rate</th>
+                    <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest Rate</th> -->
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Min. Balance</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -26,7 +26,7 @@
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $type->name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $type->code }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $type->interest_rate }}%</td>
+                    <!-- <td class="px-6 py-4 whitespace-nowrap">{{ $type->interest_rate }}%</td> -->
                     <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($type->minimum_balance, 2) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $type->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
