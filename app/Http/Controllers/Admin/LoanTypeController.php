@@ -10,7 +10,7 @@ class LoanTypeController extends Controller
 {
     public function index()
     {
-        $loanTypes = LoanType::latest()->paginate(10);
+        $loanTypes = LoanType::all();
         return view('admin.loan-types.index', compact('loanTypes'));
     }
 
@@ -22,17 +22,33 @@ class LoanTypeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:loan_types',
-            'interest_rate' => 'required|numeric|min:0',
-            'max_duration' => 'required|integer|min:1',
+            'name' => 'required|string|max:255',
+            'required_active_savings_months' => 'required|integer|min:6',
+            'savings_multiplier' => 'required|numeric|min:1',
+            'interest_rate_12_months' => 'required|numeric|min:0|max:100',
+            'interest_rate_18_months' => 'required|numeric|min:0|max:100',
+            'max_duration_months' => 'required|integer|min:1|max:18',
             'minimum_amount' => 'required|numeric|min:0',
             'maximum_amount' => 'required|numeric|gt:minimum_amount',
+            'allow_early_payment' => 'boolean',
+           
+            'no_guarantors' => 'required|integer|min:0',
+        ], [
+            'name.required' => 'The loan type name is required',
+            'required_active_savings_months.min' => 'Minimum required savings period is 6 months',
+            'savings_multiplier.min' => 'Savings multiplier must be at least 1',
+            'maximum_amount.gt' => 'Maximum amount must be greater than minimum amount',
+            'no_guarantors.required' => 'Number of guarantors is required',
         ]);
 
-        LoanType::create($validated);
-
-        return redirect()->route('admin.loan-types.index')
+        try {
+            LoanType::create($validated);
+            return redirect()->route('admin.loan-types.index')
             ->with('success', 'Loan type created successfully');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->withErrors(['error' => 'Failed to create loan type. Please try again.']);
+        }
     }
 
     public function edit(LoanType $loanType)
@@ -43,17 +59,20 @@ class LoanTypeController extends Controller
     public function update(Request $request, LoanType $loanType)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:loan_types,name,' . $loanType->id,
-            'interest_rate' => 'required|numeric|min:0',
-            'max_duration' => 'required|integer|min:1',
+            'name' => 'required|string|max:255',
+            'required_active_savings_months' => 'required|integer|min:6',
+            'savings_multiplier' => 'required|numeric|min:1',
+            'interest_rate_12_months' => 'required|numeric|min:0|max:100',
+            'interest_rate_18_months' => 'required|numeric|min:0|max:100',
+            'max_duration_months' => 'required|integer|min:1|max:18',
             'minimum_amount' => 'required|numeric|min:0',
             'maximum_amount' => 'required|numeric|gt:minimum_amount',
-            'status' => 'required|in:active,inactive',
+            'allow_early_payment' => 'boolean',
+            'saved_percentage' => 'required|in:50,100,150,200,250,300,None',
+            'no_guarantors' => 'required|integer|min:0',
         ]);
 
         $loanType->update($validated);
-
-        return redirect()->route('admin.loan-types.index')
-            ->with('success', 'Loan type updated successfully');
+        return redirect()->route('admin.loan-types.index')->with('success', 'Loan type updated successfully');
     }
 }

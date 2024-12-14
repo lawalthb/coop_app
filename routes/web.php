@@ -26,6 +26,7 @@ use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Member\LoanCalculatorController;
 use App\Http\Controllers\Member\MemberLoanController;
 use App\Http\Controllers\Member\MemberSavingsController;
 use App\Http\Controllers\Member\MemberShareController;
@@ -78,6 +79,11 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
     Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
     Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
+
+
+    Route::get('/member/loan-calculator', [LoanCalculatorController::class, 'index'])->name('member.loan-calculator');
+    Route::post('/member/loan-calculator/check', [LoanCalculatorController::class, 'checkEligibility'])->name('member.loan-calculator.check');
+
 });
 
 // Admin Routes
@@ -147,8 +153,10 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
     Route::get('/loan-types/create', [LoanTypeController::class, 'create'])->name('loan-types.create');
     Route::post('/loan-types', [LoanTypeController::class, 'store'])->name('loan-types.store');
-    Route::get('/loan-types/{loanType}/edit', [LoanTypeController::class, 'edit'])->name('loan-types.edit');
-    Route::put('/loan-types/{loanType}', [LoanTypeController::class, 'update'])->name('loan-types.update');
+    // Route::get('/loan-types/{loanType}/edit', [LoanTypeController::class, 'edit'])->name('loan-types.edit');
+    // Route::put('/loan-types/{loanType}', [LoanTypeController::class, 'update'])->name('loan-types.update');
+    Route::resource('loan-types', LoanTypeController::class);
+
 
     //loan repayment
     Route::get('/loans/{loan}/repayments/create', [LoanRepaymentController::class, 'create'])->name('loans.repayments.create');
@@ -170,8 +178,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 
 
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports');
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+
 });
 
 

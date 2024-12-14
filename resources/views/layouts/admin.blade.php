@@ -45,7 +45,7 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="ml-3">Members</span>
                 </a>
-               
+
                 <a href="{{ route('admin.profile-updates.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.profile-updates.index*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-user-edit w-5"></i>
                     <span class="ml-3">Update Requests</span>
@@ -84,12 +84,8 @@
                 </a>
 
 
-                <a href="#{{ route('admin.reports') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.reports*') ? 'bg-purple-700' : '' }}">
-                    <i class="fas fa-vote-yea w-5"></i>
-                    <span class="ml-3">Vote</span>
-                </a>
 
-                <a href="#{{ route('admin.settings') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.settings*') ? 'bg-purple-700' : '' }}">
+                <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
                     <i class="fas fa-cog w-5"></i>
                     <span class="ml-3">Settings</span>
                 </a>
@@ -137,7 +133,7 @@
                                     <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-user mr-2"></i> Profile
                                     </a>
-                                    <a href="#{{ route('admin.settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-cog mr-2"></i> Settings
                                     </a>
                                     <div class="border-t border-gray-100"></div>
