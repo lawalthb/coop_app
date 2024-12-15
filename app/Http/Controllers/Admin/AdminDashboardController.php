@@ -13,7 +13,7 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $totalMembers = User::where('is_admin', false)->count();
+        $totalMembers = User::where('is_admin', false)->where('admin_sign', 'Yes')->count();
         $totalSavings = Saving::sum('amount');
         $activeLoans = Loan::where('status', 'approved')->count();
         $pendingApprovals = User::where('admin_sign', 'No')->count();

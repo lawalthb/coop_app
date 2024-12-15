@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
+
 return new class extends Migration
 {
     public function up()
@@ -45,7 +47,7 @@ return new class extends Migration
         // 5. Create users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('title', ['Arc.', 'Bldr.', 'Dr.', 'Engr.', 'Mr.', 'Mrs.', 'Ms.', 'Pharm.', 'Prof.', 'Pst.', 'Rev.']);
+            $table->enum('title', ['Arc.', 'Bldr.', 'Dr.', 'Engr.', 'Mr.', 'Mrs.', 'Ms.', 'Pharm.', 'Prof.', 'Pst.', 'Rev.', 'Surv', 'Qs.', 'Tpl',  'Esv.']);
             $table->string('surname');
             $table->string('firstname');
             $table->string('othername')->nullable();
@@ -100,4 +102,8 @@ return new class extends Migration
         Schema::dropIfExists('departments');
         Schema::dropIfExists('faculties');
     }
+
+    // Add this after creating all tables
+
 };
+

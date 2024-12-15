@@ -6,7 +6,7 @@
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="px-6 py-4 bg-purple-600">
                 <h2 class="text-xl font-semibold text-white">Request Profile Update</h2>
-                <h2 class="text-xl font-semibold text-white">Request Profile Update</h2>
+
             </div>
 
             <form action="{{ route('profile.request-update') }}" method="POST" enctype="multipart/form-data" class="p-6">
@@ -253,9 +253,6 @@
     </div>
 </div>
 </div>
-
-@push('scripts')
-
-@endpush
+        </div>
 
 @endsection

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminProfileUpdateController;
 use App\Http\Controllers\Admin\EntranceFeeController;
 use App\Http\Controllers\Admin\LoanRepaymentController;
 use App\Http\Controllers\Admin\LoanTypeController;
+use App\Http\Controllers\Admin\ResourceController;
 use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Admin\ShareController;
 use App\Http\Controllers\Auth\LoginController;
@@ -84,6 +85,10 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/loan-calculator', [LoanCalculatorController::class, 'index'])->name('member.loan-calculator');
     Route::post('/member/loan-calculator/check', [LoanCalculatorController::class, 'checkEligibility'])->name('member.loan-calculator.check');
 
+
+    Route::get('resources', [ResourceController::class, 'index'])->name('member.resources.index');
+    Route::get('resources/{resource}/download', [ResourceController::class, 'download'])->name('member.resources.download');
+
 });
 
 // Admin Routes
@@ -155,7 +160,9 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('/loan-types', [LoanTypeController::class, 'store'])->name('loan-types.store');
     // Route::get('/loan-types/{loanType}/edit', [LoanTypeController::class, 'edit'])->name('loan-types.edit');
     // Route::put('/loan-types/{loanType}', [LoanTypeController::class, 'update'])->name('loan-types.update');
-    Route::resource('loan-types', LoanTypeController::class);
+
+
+    Route::resource('resources', ResourceController::class);
 
 
     //loan repayment
@@ -172,7 +179,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/profile-updates/{request}', [AdminProfileUpdateController::class, 'show'])->name('profile-updates.show');
     Route::post('/profile-updates/{request}/approve', [AdminProfileUpdateController::class, 'approve'])->name('profile-updates.approve');
     Route::post('/profile-updates/{request}/reject', [AdminProfileUpdateController::class, 'reject'])->name('profile-updates.reject');
-
+    Route::resource('resources', ResourceController::class);
 
 
 
@@ -181,6 +188,9 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
 
 });
 
+
+Route::post('/profile/request-update', [ProfileController::class, 'requestUpdate'])
+    ->name('profile.request-update');
 
 
 // Password Reset Routes

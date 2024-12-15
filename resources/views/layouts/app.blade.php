@@ -74,9 +74,7 @@
                     <a href="{{ route('services') }}" class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}">
                         <i class="fas fa-hand-holding-usd mr-1"></i> Services
                     </a>
-                    <a href="{{ route('resources') }}" class="nav-link {{ request()->routeIs('resources') ? 'active' : '' }}">
-                        <i class="fas fa-book mr-1"></i> Resources
-                    </a>
+                   
                     <a href="{{ route('events') }}" class="nav-link {{ request()->routeIs('events') ? 'active' : '' }}">
                         <i class="fas fa-calendar-alt mr-1"></i> Events
                     </a>

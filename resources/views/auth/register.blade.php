@@ -67,7 +67,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
                         <select name="title" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
-                            @foreach(['Arc.', 'Bldr.', 'Dr.', 'Engr.', 'Mr.', 'Mrs.', 'Ms.', 'Pharm.', 'Prof.', 'Pst.', 'Rev.'] as $title)
+                            @foreach(['Arc.', 'Bldr.', 'Dr.', 'Engr.', 'Mr.', 'Mrs.', 'Ms.', 'Pharm.', 'Prof.', 'Pst.', 'Rev.', 'Surv.', 'Qs.', 'Tpl.', 'Esv.'] as $title)
                             <option value="{{ $title }}">{{ $title }}</option>
                             @endforeach
                         </select>
@@ -81,8 +81,8 @@
                         <input type="text" name="firstname" class="block w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                     <div class="mb-5">
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Facebook</label>
-                        <input type="text" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Optional" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                        <label for="othername" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Othername</label>
+                        <input type="text" id="othername" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Optional" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
@@ -97,7 +97,7 @@
                 @elseif($stage == 'contact')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Home Address</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Home Address (Full Residential Address)</label>
                         <textarea name="home_address" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;"></textarea>
                     </div>
                     <div>
@@ -111,6 +111,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
                         <select name="state_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                            <option value="">Select State</option>
                             @foreach($states as $state)
                             <option value="{{ $state->id }}">{{ $state->name }}</option>
                             @endforeach
@@ -132,7 +133,7 @@
                         <input type="text" name="staff_no" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Faculty</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">SCHOOL/DIRECTORATE/CENTRE</label>
                         <select name="faculty_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                             @foreach($faculties as $faculty)
                             <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -140,7 +141,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">DEPARTMENT/UNIT</label>
                         <select name="department_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                             <!-- Will be populated via JavaScript -->
                         </select>
@@ -150,7 +151,7 @@
                 @elseif($stage == 'next_of_kin')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Next of Kin Name</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Next of Kin Full Name</label>
                         <input type="text" name="nok" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                     <div>
@@ -171,11 +172,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Savings Amount</label>
-                        <input type="number" name="monthly_savings" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">₦</span>
+                            <input type="number" name="monthly_savings" value="{{ old('monthly_savings') }}" class="w-full pl-8 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding-top: 10px;  padding-bottom: 10px; font-size: 16px; border-radius: 5px;">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Share Subscription Amount</label>
-                        <input type="number" name="share_subscription" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-gray-500">₦</span>
+                            <input type="number" name="share_subscription" value="{{ old('share_subscription') }}" class="w-full pl-8 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;padding-top: 10px;  padding-bottom: 10px;  font-size: 16px; border-radius: 5px;">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Month to Commence</label>
@@ -202,18 +209,53 @@
                         <input type="password" name="password_confirmation" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                 </div>
-                @endif
 
-                <div class="mt-8 flex justify-between">
-                    @if($stage != 'personal')
-                    <button type="button" onclick="window.history.back()" class="bg-slate-600-600 text-white px-6 py-2 rounded hover:bg-slate-700" style="margin: 20px; background-color: grey;"> Previous</button>
-                    @else
-                    <div></div>
+                <!-- Declarations Section -->
+                <div class="mt-8 space-y-6">
+                    <!-- Salary Deduction Declaration -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="salary_deduction_agreement" id="salary_deduction" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" required>
+                            </div>
+                            <div class="flex-1">
+                                <label for="salary_deduction" class="font-medium text-gray-700">AUTHORITY TO DEDUCT FROM SALARY</label>
+                                <p class="text-gray-500 mt-1">
+                                    Please deduct from my monthly salary the sum as stated on my application form and as amended from time to time either via official communication or via other forms of communication. To be credited in my account with OGITECH Academic Staff Cooperative multipurpose Society with effect from the month of application.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Membership Declaration -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="membership_declaration" id="membership_declaration" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" required>
+                            </div>
+                            <div class="flex-1">
+                                <label for="membership_declaration" class="font-medium text-gray-700">DECLARATION</label>
+                                <p class="text-gray-500 mt-1">
+                                    I hereby apply for enrolment as member of the above-named Society and promised to abide by the rules and regulations as contained in the bye-laws and as amended from time to time and any other provisions as the case may be.
+                                </p>
+                                <p class="text-gray-500 mt-2">
+                                    I do solemnly declare that the information provided above, in this application, is true and correct.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     @endif
-                    <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700" style="margin: 20px;">
-                        {{ $stage == 'documents' ? 'Complete Registration' : 'Next' }}
-                    </button>
-                </div>
+
+                    <div class="mt-8 flex justify-between">
+                        @if($stage != 'personal')
+                        <button type="button" onclick="window.history.back()" class="bg-slate-600-600 text-white px-6 py-2 rounded hover:bg-slate-700" style="margin: 20px; background-color: grey;"> Previous</button>
+                        @else
+                        <div></div>
+                        @endif
+                        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700" style="margin: 20px;">
+                            {{ $stage == 'documents' ? 'Complete Registration' : 'Next' }}
+                        </button>
+                    </div>
             </form>
         </div>
     </div>
