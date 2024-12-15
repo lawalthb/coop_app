@@ -28,7 +28,6 @@ class LoanCalculatorController extends Controller
         $eligibility = [
             'eligible' => true,
             'messages' => [],
-            'loan_details' => []
         ];
 
         // Check savings duration
@@ -50,7 +49,7 @@ class LoanCalculatorController extends Controller
         $totalAmount = $validated['amount'] + $totalInterest;
         $monthlyRepayment = $totalAmount / $validated['duration'];
 
-        $eligibility['loan_details'] = [
+        $loanDetails = [
             'principal' => $validated['amount'],
             'interest_rate' => $interestRate,
             'total_interest' => $totalInterest,
@@ -59,6 +58,6 @@ class LoanCalculatorController extends Controller
             'duration' => $validated['duration']
         ];
 
-        return response()->json($eligibility);
+        return view('member.loan-calculator.results', compact('eligibility', 'loanDetails', 'loanType'));
     }
 }

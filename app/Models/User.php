@@ -83,4 +83,44 @@ class User extends Authenticatable
         return $this->hasMany(ProfileUpdateRequest::class);
     }
 
+    public function getSavingsDuration()
+    {
+        // Get the latest loan date if exists
+        $lastLoanDate = $this->loans()
+            ->where('status', 'active')
+            ->orWhere('status', 'completed')
+            ->latest()
+            ->first()?->created_at;
+
+        // Query savings after the last loan or all savings if no previous loan
+        $activeSavings = $this->savings()
+            ->where('status', 'active')
+            ->when($lastLoanDate, function ($query) use ($lastLoanDate) {
+                return $query->where('created_at', '>', $lastLoanDate);
+            })
+            ->orderBy('created_at')
+            ->get();
+
+        if ($activeSavings->isEmpty()) {
+            return 0;
+        }
+
+        // Get first and last saving dates
+        $firstSaving = $activeSavings->first()->created_at;
+        $lastSaving = $activeSavings->last()->created_at;
+
+        // Calculate months between first and last saving
+        return $firstSaving->diffInMonths($lastSaving) + 1;
+    }
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    public function savings()
+    {
+        return $this->hasMany(Saving::class);
+    }
+
 }
+

@@ -85,6 +85,8 @@ return new class extends Migration
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users');
             $table->rememberToken();
+            $table->boolean('salary_deduction_agreement')->default(false);
+            $table->boolean('membership_declaration')->default(false);
             $table->timestamps();
         });
     }

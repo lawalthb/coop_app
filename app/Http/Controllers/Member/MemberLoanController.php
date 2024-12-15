@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Loan;
+use App\Models\LoanGuarantor;
 use App\Models\LoanType;
+use App\Models\Notification;
+use App\Models\User;
+use App\Notifications\LoanGuarantorRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
 
 class MemberLoanController extends Controller
 {
@@ -28,11 +33,13 @@ class MemberLoanController extends Controller
 
         return view('member.loans.index', compact('activeLoans', 'loanHistory', 'availableLoanTypes'));
     }
-
     public function create()
     {
-        $loanTypes = LoanType::all();
-        return view('member.loans.create', compact('loanTypes'));
+        $loanTypes = LoanType::where('status', 'active')->get();
+        $members = User::where('is_admin', 0)
+            ->where('id', '!=', auth()->id())
+            ->get();
+        return view('member.loans.create', compact('loanTypes', 'members'));
     }
 
     public function store(Request $request)
@@ -42,12 +49,18 @@ class MemberLoanController extends Controller
             'amount' => 'required|numeric|min:1000',
             'duration' => 'required|integer|min:1',
             'purpose' => 'required|string|max:500',
-            'guarantor_name' => 'required|string',
-            'guarantor_phone' => 'required|string',
-            'guarantor_address' => 'required|string',
+            'guarantor_ids' => 'required|array',
+            'guarantor_ids.*' => 'required|exists:users,id'
         ]);
 
         $loanType = LoanType::find($validated['loan_type_id']);
+
+        // Validate number of guarantors matches loan type requirement
+        if (count($validated['guarantor_ids']) !== $loanType->no_guarantors) {
+            return back()->withInput()->withErrors([
+                'guarantor_ids' => "This loan type requires exactly {$loanType->no_guarantors} guarantor(s)"
+            ]);
+        }
 
         // Calculate loan details
         $interestAmount = ($validated['amount'] * $loanType->interest_rate * $validated['duration']) / 100;
@@ -66,22 +79,31 @@ class MemberLoanController extends Controller
             'monthly_payment' => $monthlyPayment,
             'duration' => $validated['duration'],
             'purpose' => $validated['purpose'],
-            'guarantor_name' => $validated['guarantor_name'],
-            'guarantor_phone' => $validated['guarantor_phone'],
-            'guarantor_address' => $validated['guarantor_address'],
             'start_date' => $startDate,
             'end_date' => $endDate,
             'status' => 'pending',
-            'posted_by' => auth()->user()->id,
+            'posted_by' => auth()->id(),
         ]);
 
-        return redirect()->route('member.loans.index')->with('success', 'Loan application submitted successfully');
-    }
+        // Create guarantor records and send notifications
+        foreach ($validated['guarantor_ids'] as $guarantorId) {
+            LoanGuarantor::create([
+                'loan_id' => $loan->id,
+                'user_id' => $guarantorId,
+                'status' => 'pending'
+            ]);
 
+            $guarantor = User::find($guarantorId);
+            Notification::send($guarantor, new LoanGuarantorRequest($loan));
+        }
+
+        return redirect()->route('member.loans.index')
+            ->with('success', 'Loan application submitted successfully. Waiting for guarantor approval.');
+    }
 
     public function show(Loan $loan)
     {
-      //  $this->authorize('view', $loan);
+        //  $this->authorize('view', $loan);
 
         $repayments = $loan->repayments()
             ->latest()

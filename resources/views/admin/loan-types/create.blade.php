@@ -81,7 +81,7 @@
                             <span class="ml-2 text-sm text-gray-600">Allow Early Payment</span>
                         </label>
                     </div>
-                    
+
 
 
                     <div class="flex justify-end gap-4">
