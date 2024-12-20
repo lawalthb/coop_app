@@ -25,12 +25,12 @@
                     @csrf
 
                     <div>
-                        <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <label class="block text-gray-700 font-medium mb-2">Email or Member Number</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <i class="fas fa-envelope text-gray-400"></i>
                             </span>
-                            <input type="email" name="email"
+                            <input type="text" name="email"
                                 class="w-full pl-10 pr-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200 @error('email') border-red-500 @enderror"
                                 required autofocus style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
