@@ -24,7 +24,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\MemberDocumentController;
 use App\Http\Controllers\MemberProfileController;
-use App\Http\Controllers\MemberTransactionController;
+use App\Http\Controllers\Member\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Member\LoanCalculatorController;
@@ -36,6 +36,7 @@ use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileUpdateController;
+
 use Illuminate\Support\Facades\Mail;
 
 // Public Pages
@@ -77,6 +78,10 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
     Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
 
+
+    //passbook routes
+    Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions.index');
+    Route::get('/member/transactions/{transaction}', [MemberTransactionController::class, 'show'])->name('member.transactions.show');
 
 
 
@@ -234,5 +239,5 @@ Route::get('/members/pdf', [ProfileController::class, 'downloadPdf'])->name('mem
 Route::get('/members/authority-deduct', [ProfileController::class, 'authorityDeduct'])->name('members.authority-deduct');
 
 
-Route::get('/members/authority-deductm', [ProfileController::class, 'authorityDeduct'])->name('member.transactions');
+
 Route::get('/members/authority-deductm2', [ProfileController::class, 'authorityDeduct'])->name('member.documents');
