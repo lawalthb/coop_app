@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <div class="min-h-screen bg-purple-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
@@ -12,35 +14,72 @@
             </a>
         </div>
 
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-sm font-medium text-gray-500">Total Credits</h3>
+                <p class="text-2xl font-bold text-green-600">₦{{ number_format($totalCredits, 2) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-sm font-medium text-gray-500">Total Debits</h3>
+                <p class="text-2xl font-bold text-red-600">₦{{ number_format($totalDebits, 2) }}</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-sm font-medium text-gray-500">Net Balance</h3>
+                <p class="text-2xl font-bold text-purple-600">₦{{ number_format($totalCredits - $totalDebits, 2) }}</p>
+            </div>
+        </div>
         <!-- Filters -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-            <form action="{{ route('admin.transactions.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Start Date</label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}" class="mt-1 block w-full rounded-md border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding-left: 5px; ">
+            <form action="{{ route('admin.transactions.index') }}" method="GET">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Searchable Member Select -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Member</label>
+                        <select name="user_id" class="select2 w-full rounded-lg border-gray-300" style="width: 100%; border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
+                            <option value="">All Members</option>
+                            @foreach($members as $member)
+                            <option value="{{ $member->id }}" {{ request('user_id') == $member->id ? 'selected' : '' }}>
+                                {{ $member->surname }} {{ $member->firstname }} ({{ $member->member_no }})
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}"
+                            class="w-full rounded-lg border-gray-300 " style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}"
+                            class="w-full rounded-lg border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Transaction Type</label>
+                        <select name="type" class="w-full rounded-lg border-gray-300 select" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                            <option value="">All Types</option>
+                            <option value="savings" {{ request('type') === 'savings' ? 'selected' : '' }}>savings</option>
+                            <option value="withdraw" {{ request('type') === 'withdraw' ? 'selected' : '' }}>withdraws</option>
+                            <option value="loan" {{ request('type') === 'loan' ? 'selected' : '' }}>loans</option>
+                            <option value="loan_interest" {{ request('type') === 'loan_interest' ? 'selected' : '' }}>Loan Interest</option>
+                            <option value="expenses" {{ request('type') === 'expenses' ? 'selected' : '' }}>Expenses</option>
+                            <option value="income" {{ request('type') === 'income' ? 'selected' : '' }}>Income</option>
+                        </select>
+
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">End Date</label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full rounded-md border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding-left: 5px; ">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Type</label>
-                    <select name="type" class="mt-1 block w-full rounded-md border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding-left: 5px; ">
-                        <option value="">All Types</option>
-                        <option value="loan_disbursement" {{ request('type') === 'loan_disbursement' ? 'selected' : '' }}>Loan Disbursement</option>
-                        <option value="loan_repayment" {{ request('type') === 'loan_repayment' ? 'selected' : '' }}>Loan Repayment</option>
-                        <option value="savings_deposit" {{ request('type') === 'savings_deposit' ? 'selected' : '' }}>Savings Deposit</option>
-                        <option value="savings_withdrawal" {{ request('type') === 'savings_withdrawal' ? 'selected' : '' }}>Savings Withdrawal</option>
-                    </select>
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="w-full bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-                        Filter
+
+                <div class="mt-4 flex justify-end">
+                    <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                        <i class="fas fa-filter mr-2"></i>Apply Filters
                     </button>
                 </div>
             </form>
         </div>
-
         <!-- Transactions Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
@@ -67,8 +106,8 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->reference }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->user->surname }} {{ $transaction->user->firstname }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ ucwords(str_replace('_', ' ', $transaction->type)) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($transaction->debit_amount, 2) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($transaction->credit_amount, 2) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-600">₦{{ number_format($transaction->debit_amount, 2) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-red-600">₦{{ number_format($transaction->credit_amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                     {{ $transaction->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
@@ -87,6 +126,20 @@
                         </tr>
                         @endforelse
                     </tbody>
+                    <tfoot class="bg-gray-50 font-semibold">
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-right">Total:</td>
+                            <td class="px-6 py-4 text-green-600">₦{{ number_format($transactions->sum('credit_amount'), 2) }}</td>
+                            <td class="px-6 py-4 text-red-600">₦{{ number_format($transactions->sum('debit_amount'), 2) }}</td>
+                            <td colspan="2" class="px-6 py-4">
+                                Balance:
+                                <span class="{{ $transactions->sum('credit_amount') - $transactions->sum('debit_amount') >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                                    ₦{{ number_format($transactions->sum('credit_amount') - $transactions->sum('debit_amount'), 2) }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
                 </table>
             </div>
             <div class="px-6 py-4">
@@ -95,4 +148,15 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: 'Search member...',
+            allowClear: true
+        });
+    });
+</script>
+
 @endsection

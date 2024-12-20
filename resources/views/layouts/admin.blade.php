@@ -84,7 +84,10 @@
                     <span class="ml-3">Transactions</span>
                 </a>
 
-
+                <a href="{{ route('admin.resources.index')}}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.resources*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-exchange-alt w-5"></i>
+                    <span class="ml-3">Resources</span>
+                </a>
 
                 <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
                     <i class="fas fa-cog w-5"></i>
