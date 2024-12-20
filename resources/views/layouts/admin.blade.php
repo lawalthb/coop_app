@@ -83,10 +83,15 @@
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
                 </a>
-
                 <a href="{{ route('admin.resources.index')}}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.resources*') ? 'bg-purple-700' : '' }}">
-                    <i class="fas fa-exchange-alt w-5"></i>
+                    <i class="fas fa-file-alt w-5"></i>
                     <span class="ml-3">Resources</span>
+                </a>
+
+                <a href="{{ route('admin.faqs.index') }}"
+                    class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.faqs.*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-question-circle w-5 h-5 mr-3"></i>
+                    <span>FAQ Management</span>
                 </a>
 
                 <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">

@@ -96,27 +96,21 @@
            </div>
        </div>
 
-       <!-- FAQs Section -->
-       <div class="max-w-4xl mx-auto">
-           <div class="flex items-center justify-center gap-4 mb-8">
-               <i class="fas fa-question-circle text-4xl text-purple-600"></i>
-               <h2 class="text-3xl font-bold text-purple-800">Frequently Asked Questions</h2>
-           </div>
-           <div class="space-y-4">
-               <div class="bg-purple-50 p-6 rounded-xl shadow">
-                   <h3 class="text-xl font-bold text-purple-800 mb-2">How do I apply for membership?</h3>
-                   <p class="text-gray-700">Download the membership form, fill it out completely, and submit it to our office with the required documents.</p>
-               </div>
-               <div class="bg-purple-50 p-6 rounded-xl shadow">
-                   <h3 class="text-xl font-bold text-purple-800 mb-2">What are the loan requirements?</h3>
-                   <p class="text-gray-700">Members must have saved for at least 3 months and maintain regular monthly savings to qualify for loans.</p>
-               </div>
-               <div class="bg-purple-50 p-6 rounded-xl shadow">
-                   <h3 class="text-xl font-bold text-purple-800 mb-2">How are dividends calculated?</h3>
-                   <p class="text-gray-700">Dividends are calculated based on your share capital and patronage of the cooperative's services throughout the year.</p>
-               </div>
-           </div>
-       </div>
+<!-- FAQs Section -->
+<div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-center gap-4 mb-8">
+        <i class="fas fa-question-circle text-4xl text-purple-600"></i>
+        <h2 class="text-3xl font-bold text-purple-800">Frequently Asked Questions</h2>
+    </div>
+    <div class="space-y-4">
+        @foreach($faqs as $faq)
+        <div class="bg-purple-50 p-6 rounded-xl shadow">
+            <h3 class="text-xl font-bold text-purple-800 mb-2">{{ $faq->question }}</h3>
+            <p class="text-gray-700">{{ $faq->answer }}</p>
+        </div>
+        @endforeach
+    </div>
+</div>
    </div>
 </div>
 @endsection

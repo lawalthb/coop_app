@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminProfileUpdateController;
 use App\Http\Controllers\Admin\EntranceFeeController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LoanRepaymentController;
 use App\Http\Controllers\Admin\LoanTypeController;
 use App\Http\Controllers\Admin\ResourceController;
@@ -180,8 +181,15 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/profile-updates/{request}', [AdminProfileUpdateController::class, 'show'])->name('profile-updates.show');
     Route::post('/profile-updates/{request}/approve', [AdminProfileUpdateController::class, 'approve'])->name('profile-updates.approve');
     Route::post('/profile-updates/{request}/reject', [AdminProfileUpdateController::class, 'reject'])->name('profile-updates.reject');
+    //resources
     Route::resource('resources', ResourceController::class);
-});
+    //faq
+    Route::resource('faqs', FaqController::class);
+});//end of admin routes
+
+
+
+
 
 
 Route::post('/profile/request-update', [ProfileUpdateController::class, 'requestUpdate'])

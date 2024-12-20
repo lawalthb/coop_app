@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
+
 class PageController extends Controller
 {
     public function home()
@@ -18,11 +20,15 @@ class PageController extends Controller
     {
         return view('pages.services');
     }
-
     public function resources()
     {
-        return view('pages.resources');
+        $faqs = Faq::where('status', 'active')
+            ->orderBy('order')
+            ->get();
+
+        return view('pages.resources', compact('faqs'));
     }
+
 
     public function events()
     {
