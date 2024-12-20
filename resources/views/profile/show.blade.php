@@ -72,7 +72,14 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="flex space-x-4 mt-4">
+                    <a href="{{ route('members.pdf', auth()->user()->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Download Membership Form
+                    </a>
+                    <a href="{{ route('members.authority-deduct', auth()->user()->id) }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Download Authority to Deduct
+                    </a>
+                </div>
                 <!-- Change Password Section -->
                 <div class="mt-8 pt-8 border-t border-gray-200">
                     <h4 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h4>

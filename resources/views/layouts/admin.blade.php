@@ -41,6 +41,10 @@
                     <i class="fas fa-tachometer-alt w-5"></i>
                     <span class="ml-3">Dashboard</span>
                 </a>
+                <a href="{{ route('admin.entrance-fees') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.entrance-fees*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-clipboard-check w-5"></i>
+                    <span class="ml-3">Entrance Fee</span>
+                </a>
                 <a href="{{ route('admin.members') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.members*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-users w-5"></i>
                     <span class="ml-3">Members</span>
@@ -53,10 +57,7 @@
 
 
                 </a>
-                <a href="{{ route('admin.entrance-fees') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.entrance-fees*') ? 'bg-purple-700' : '' }}">
-                    <i class="fas fa-clipboard-check w-5"></i>
-                    <span class="ml-3">Entrance Fee</span>
-                </a>
+
                 <a href="{{ route('admin.saving-types.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.saving-types*') ? 'bg-purple-700' : '' }}">
 
                     <i class="fas fa-coins w-5"></i>

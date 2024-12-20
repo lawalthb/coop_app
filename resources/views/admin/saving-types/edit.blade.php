@@ -19,12 +19,12 @@
                     <div class="grid grid-cols-1 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" name="name" value="{{ $savingType->name }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="text" name="name" value="{{ $savingType->name }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Description</label>
-                            <textarea name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">{{ $savingType->description }}</textarea>
+                            <textarea name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">{{ $savingType->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -35,12 +35,12 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Interest Rate (%)</label>
-                            <input type="number" name="interest_rate" step="0.01" value="{{ $savingType->interest_rate }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="interest_rate" step="0.01" value="{{ $savingType->interest_rate }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Minimum Balance</label>
-                            <input type="number" name="minimum_balance" step="0.01" value="{{ $savingType->minimum_balance }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <label class="block text-sm font-medium text-gray-700">Minimum Amount</label>
+                            <input type="number" name="minimum_balance" step="0.01" value="{{ $savingType->minimum_balance }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Withdrawal Restriction (Days)</label>
-                            <input type="number" name="withdrawal_restriction_days" value="{{ $savingType->withdrawal_restriction_days }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <input type="number" name="withdrawal_restriction_days" value="{{ $savingType->withdrawal_restriction_days }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                 <div class="space-y-6 mb-8">
                     <h3 class="text-lg font-medium text-gray-900">Status</h3>
                     <div>
-                        <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                             <option value="active" {{ $savingType->status === 'active' ? 'selected' : '' }}>Active</option>
                             <option value="inactive" {{ $savingType->status === 'inactive' ? 'selected' : '' }}>Inactive</option>
                         </select>

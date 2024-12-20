@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Saving;
 use App\Models\Transaction;
 use App\Models\SavingType;
+use App\Models\Year;
 use Illuminate\Http\Request;
 
 class MemberSavingsController extends Controller
@@ -33,9 +34,10 @@ class MemberSavingsController extends Controller
             ->get();
 
         // Calculate current month's total payments
+        $current_year_id = Year::where('year', now()->year)->first()->id;
         $currentMonthTotal = Saving::where('user_id', $user->id)
-        ->whereMonth('created_at', now()->month)
-        ->whereYear('created_at', now()->year)
+        ->whereMonth('month_id', now()->month)
+        ->whereYear('year_id',$current_year_id)
         ->sum('amount');
 
         return view('member.savings.index', compact(

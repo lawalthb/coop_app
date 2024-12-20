@@ -14,7 +14,7 @@
                     <!-- Member Selection -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Select Member</label>
-                        <select name="user_id" id="member-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                        <select name="user_id" id="member-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;" >
                             <option value="">Select a member</option>
                             @foreach($members as $member)
                                 <option value="{{ $member->id }}" data-monthly="{{ $member->monthly_savings }}">
@@ -28,11 +28,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Default Monthly Amount</label>
-                            <input type="text" id="default-amount" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly>
+                            <input type="text" id="default-amount" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Custom Amount</label>
-                            <input type="number" name="amount" id="custom-amount" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                            <input type="number" name="amount" id="custom-amount" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                             <p class="mt-1 text-sm text-gray-500">Leave blank to use default monthly amount</p>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Saving Type</label>
-                            <select name="saving_type_id" id="saving-type" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required>
+                            <select name="saving_type_id" id="saving-type" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                                 @foreach($savingTypes as $type)
                                     <option value="{{ $type->id }}" data-interest="{{ $type->interest_rate }}">
                                         {{ $type->name }} ({{ $type->interest_rate }}% Interest)
@@ -51,7 +51,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Interest Rate</label>
-                            <input type="text" id="interest-rate" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly>
+                            <input type="text" id="interest-rate" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
 

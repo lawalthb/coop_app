@@ -131,6 +131,11 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">LGA</label>
                         <select name="lga_id" class="w-full rounded-lg border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 5px">
+                            @foreach($lgas as $lga)
+                            <option value="{{ $lga->id }}" {{ old('lga_id', $user->lga_id) == $lga->id ? 'selected' : '' }}>
+                                {{ $lga->name }}
+                            </option>
+                            @endforeach
                             <!-- Will be populated via JavaScript -->
                         </select>
                     </div>
@@ -152,6 +157,11 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
                         <select name="department_id" class="w-full rounded-lg border-gray-300" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 5px">
+                            @foreach($departments as $department)
+                            <option value="{{ $department->id }}" {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>
+                                {{ $department->name }}
+                            </option>
+                            @endforeach
                             <!-- Will be populated via JavaScript -->
                         </select>
                     </div>
@@ -253,6 +263,6 @@
     </div>
 </div>
 </div>
-        </div>
+</div>
 
 @endsection

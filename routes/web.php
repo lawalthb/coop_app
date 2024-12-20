@@ -61,7 +61,7 @@ Route::get('/states/{state}/lgas', [RegisterController::class, 'getLgas'])->name
 Route::get('/faculties/{faculty}/departments', [RegisterController::class, 'getDepartments'])->name('getDepartments');
 
 // Protected Routes
-
+//member routes
 Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
     Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
@@ -78,8 +78,6 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
 
 
-    Route::get('/member/transactions', [MemberTransactionController::class, 'index'])->name('member.transactions');
-    Route::get('/member/documents', [MemberDocumentController::class, 'index'])->name('member.documents');
 
 
     Route::get('/member/loan-calculator', [LoanCalculatorController::class, 'index'])->name('member.loan-calculator');
@@ -88,13 +86,12 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
     Route::get('resources', [ResourceController::class, 'index'])->name('member.resources.index');
     Route::get('resources/{resource}/download', [ResourceController::class, 'download'])->name('member.resources.download');
-
 });
 
 // Admin Routes
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
-    //Admin dashboard
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
 
     //member management
     Route::get('/members', [MemberController::class, 'index'])->name('members');
@@ -107,6 +104,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/members/{member}/pdf', [MemberController::class, 'downloadPDF'])->name('members.pdf');
     Route::get('/members/{member}/edit', [MemberController::class, 'edit'])->name('members.edit');
     Route::put('/members/{member}', [MemberController::class, 'update'])->name('members.update');
+    Route::get('/members/{member}/authority-deduct', [MemberController::class, 'authorityDeduct'])->name('members.authority-deduct');
+
 
 
 
@@ -155,11 +154,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
     Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
     // Admin Loan Types Routes
-    Route::get('/loan-types', [LoanTypeController::class, 'index'])->name('loan-types.index');
-    Route::get('/loan-types/create', [LoanTypeController::class, 'create'])->name('loan-types.create');
-    Route::post('/loan-types', [LoanTypeController::class, 'store'])->name('loan-types.store');
-    // Route::get('/loan-types/{loanType}/edit', [LoanTypeController::class, 'edit'])->name('loan-types.edit');
-    // Route::put('/loan-types/{loanType}', [LoanTypeController::class, 'update'])->name('loan-types.update');
+    Route::resource('loan-types', LoanTypeController::class);
 
 
     Route::resource('resources', ResourceController::class);
@@ -180,16 +175,10 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::post('/profile-updates/{request}/approve', [AdminProfileUpdateController::class, 'approve'])->name('profile-updates.approve');
     Route::post('/profile-updates/{request}/reject', [AdminProfileUpdateController::class, 'reject'])->name('profile-updates.reject');
     Route::resource('resources', ResourceController::class);
-
-
-
-
-
-
 });
 
 
-Route::post('/profile/request-update', [ProfileController::class, 'requestUpdate'])
+Route::post('/profile/request-update', [ProfileUpdateController::class, 'requestUpdate'])
     ->name('profile.request-update');
 
 
@@ -238,3 +227,12 @@ Route::put(
     [ProfileController::class, 'update']
 )->name('profile.update');
 Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+
+
+Route::get('/members/pdf', [ProfileController::class, 'downloadPdf'])->name('members.pdf');
+Route::get('/members/authority-deduct', [ProfileController::class, 'authorityDeduct'])->name('members.authority-deduct');
+
+
+Route::get('/members/authority-deductm', [ProfileController::class, 'authorityDeduct'])->name('member.transactions');
+Route::get('/members/authority-deductm2', [ProfileController::class, 'authorityDeduct'])->name('member.documents');

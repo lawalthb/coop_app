@@ -80,8 +80,16 @@ class MemberController extends Controller
 
     public function downloadPDF(User $member)
     {
+        //return view('admin.members.pdf', compact('member'));
+
         $pdf = PDF::loadView('admin.members.pdf', compact('member'));
         return $pdf->download($member->surname . '_' . $member->firstname . '_details.pdf');
+    }
+
+    public function authorityDeduct(User $member)
+    {
+        $pdf = PDF::loadView('admin.members.authority-deduct', compact('member'));
+        return $pdf->download('authority-deduct-' . $member->member_no . '.pdf');
     }
 
 

@@ -31,7 +31,7 @@ class LoanTypeController extends Controller
             'minimum_amount' => 'required|numeric|min:0',
             'maximum_amount' => 'required|numeric|gt:minimum_amount',
             'allow_early_payment' => 'boolean',
-           
+
             'no_guarantors' => 'required|integer|min:0',
         ], [
             'name.required' => 'The loan type name is required',
@@ -44,7 +44,7 @@ class LoanTypeController extends Controller
         try {
             LoanType::create($validated);
             return redirect()->route('admin.loan-types.index')
-            ->with('success', 'Loan type created successfully');
+                ->with('success', 'Loan type created successfully');
         } catch (\Exception $e) {
             return back()->withInput()
                 ->withErrors(['error' => 'Failed to create loan type. Please try again.']);
@@ -74,5 +74,18 @@ class LoanTypeController extends Controller
 
         $loanType->update($validated);
         return redirect()->route('admin.loan-types.index')->with('success', 'Loan type updated successfully');
+    }
+
+
+    public function show(LoanType $loanType)
+    {
+        return view('admin.loan-types.show', compact('loanType'));
+    }
+
+    public function destroy(LoanType $loanType)
+    {
+        $loanType->delete();
+        return redirect()->route('admin.loan-types.index')
+            ->with('success', 'Loan type deleted successfully');
     }
 }

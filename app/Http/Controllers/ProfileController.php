@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Faculty;
+use App\Models\Lga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\State;
+use PDF;
 
 class ProfileController extends Controller
 {
@@ -20,9 +23,11 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         $states = State::where('status', 'active')->get();
+        $lgas = Lga::where('status', 'active')->get();
+        $departments = Department::where('status', 'active')->get();
         $faculties = Faculty::where('status', 'active')->get();
 
-        return view('profile.edit', compact('user', 'states', 'faculties'));
+        return view('profile.edit', compact('user', 'states', 'faculties', 'lgas', 'departments'));
     }
     public function update(Request $request)
     {
@@ -65,5 +70,19 @@ class ProfileController extends Controller
         ]);
 
         return back()->with('success', 'Password updated successfully');
+    }
+
+    public function downloadPdf()
+    {
+        $member = auth()->user();
+        $pdf = PDF::loadView('admin.members.pdf', compact('member'));
+        return $pdf->download('membership-form-' . $member->member_no . '.pdf');
+    }
+
+    public function authorityDeduct()
+    {
+        $member = auth()->user();
+        $pdf = PDF::loadView('admin.members.authority-deduct', compact('member'));
+        return $pdf->download('authority-deduct-' . $member->member_no . '.pdf');
     }
 }

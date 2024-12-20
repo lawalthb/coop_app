@@ -31,6 +31,9 @@
                     </button>
                 </form>
                 @endif
+                <a href="{{ route('admin.members.authority-deduct', $member->id) }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    Download Authority to Deduct
+                </a>
 
                 @if($member->status !== 'suspended')
                 <form action="{{ route('admin.members.suspend', $member) }}" method="POST">
