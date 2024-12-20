@@ -32,6 +32,7 @@ use App\Http\Controllers\Member\MemberLoanController;
 use App\Http\Controllers\Member\MemberSavingsController;
 use App\Http\Controllers\Member\MemberShareController;
 use App\Http\Controllers\Member\MemberWithdrawalController;
+use App\Http\Controllers\Member\MemberResourceController;
 use App\Http\Controllers\Member\SavingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -89,8 +90,8 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::post('/member/loan-calculator/check', [LoanCalculatorController::class, 'checkEligibility'])->name('member.loan-calculator.check');
 
 
-    Route::get('resources', [ResourceController::class, 'index'])->name('member.resources.index');
-    Route::get('resources/{resource}/download', [ResourceController::class, 'download'])->name('member.resources.download');
+    Route::get('/member/resources', [MemberResourceController::class, 'index'])->name('member.resources.index');
+    Route::get('/member/resources/{resource}/download', [MemberResourceController::class, 'download'])->name('member.resources.download');
 });
 
 // Admin Routes

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Resource;
 use Illuminate\Support\Facades\Storage;
 
-class ResourceController extends Controller
+class MemberResourceController extends Controller
 {
     public function index()
     {

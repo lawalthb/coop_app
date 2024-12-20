@@ -80,7 +80,7 @@
                         <i class="fas fa-exchange-alt w-5"></i>
                         <span class="ml-3">Passbook</span>
                     </a>
-                    <a href="#{{ route('member.documents') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.documents') ? 'bg-purple-700' : '' }}">
+                    <a href="{{ route('member.resources.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.resources*') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-file-alt w-5"></i>
                         <span class="ml-3">Resources</span>
                     </a>
