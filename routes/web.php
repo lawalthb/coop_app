@@ -9,11 +9,13 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminProfileUpdateController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\EntranceFeeController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LoanRepaymentController;
 use App\Http\Controllers\Admin\LoanTypeController;
 use App\Http\Controllers\Admin\ResourceController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Admin\ShareController;
 use App\Http\Controllers\Auth\LoginController;
@@ -185,7 +187,17 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::resource('resources', ResourceController::class);
     //faq
     Route::resource('faqs', FaqController::class);
-});//end of admin routes
+
+
+    //admin management
+    Route::resource('admins', AdminUserController::class);
+    Route::resource('roles', RoleController::class);
+
+    Route::get('/admin/roles', function () {
+        return view('admin.roles.index');
+    })->name('admin.roles.index');
+
+}); //end of admin routes
 
 
 

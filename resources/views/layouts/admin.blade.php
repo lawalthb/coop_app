@@ -34,7 +34,6 @@
             <div class="p-6 border-b border-purple-700">
                 <h2 class="text-2xl font-bold">OGITECH COOP</h2>
             </div>
-
             <nav class="mt-6">
                 <div class="px-4 py-2 text-purple-200 text-sm uppercase tracking-wider">Admin</div>
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.dashboard') ? 'bg-purple-700' : '' }}">
@@ -94,10 +93,34 @@
                     <span>FAQ Management</span>
                 </a>
 
-                <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
-                    <i class="fas fa-cog w-5"></i>
-                    <span class="ml-3">Settings</span>
-                </a>
+              
+                <!-- Add these items to your sidebar navigation -->
+                <div class="space-y-1">
+                    <!-- Existing sidebar items -->
+
+                    <!-- Admin Management Section -->
+                    <div class="border-t border-gray-200 pt-4">
+                        <h3 class="px-4 text-xs font-semibold text-white-500 uppercase tracking-wider">
+                            System Administration
+                        </h3>
+
+                        <a href="{{ route('admin.admins.index') }}"
+                            class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.admins.*') ? 'bg-purple-700' : '' }}">
+                            <i class="fas fa-users-cog w-5 h-5 mr-3"></i>
+                            <span>Admin Users</span>
+                        </a>
+
+                        <a href="{{ route('admin.roles.index') }}"
+                            class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.roles.*') ? 'bg-purple-700' : '' }}">
+                            <i class="fas fa-user-shield w-5 h-5 mr-3"></i>
+                            <span>Roles & Permissions</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
+                            <i class="fas fa-cog w-5"></i>
+                            <span class="ml-3">Settings</span>
+                        </a>
+                    </div>
+                </div>
             </nav>
         </div>
 

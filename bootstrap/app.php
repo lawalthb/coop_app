@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckAdminApproval;
+use App\Http\Middleware\CheckPermission;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     $middleware->alias([
         'admin_sign' => CheckAdminApproval::class,
         'is_admin' => AdminMiddleware::class,
+        'permission' =>CheckPermission::class,
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

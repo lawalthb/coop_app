@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
            AdminSeeder::class,
            MonthSeeder::class,
            YearSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

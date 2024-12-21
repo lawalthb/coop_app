@@ -121,6 +121,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Saving::class);
     }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
-}
+    public function hasPermission($permission)
+    {
+        return $this->roles->some(function($role) use ($permission) {
+            return $role->hasPermission($permission);
+        });
+    }
+    }
+
+
+
 
