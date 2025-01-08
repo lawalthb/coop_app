@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class LoanGuarantorRequest extends Notification
@@ -19,19 +20,22 @@ class LoanGuarantorRequest extends Notification
 
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+
+        return ['database', 'mail'];
     }
 
     public function toMail($notifiable)
     {
-        $url = route('member.guarantor.respond', $this->loan->id);
+
 
         return (new MailMessage)
             ->subject('Loan Guarantor Request')
-            ->line('You have been selected as a guarantor for a loan application.')
-            ->line("Loan Amount: ₦" . number_format($this->loan->amount, 2))
-            ->line("Duration: {$this->loan->duration} months")
-            ->action('Respond to Request', $url)
+
+
+
+
+            ->line('You have been requested to be a guarantor for a loan.')
+            ->action('View Request', route('member.loans.show', $this->loan))
             ->line('Please review and respond to this request.');
     }
 
@@ -39,9 +43,11 @@ class LoanGuarantorRequest extends Notification
     {
         return [
             'loan_id' => $this->loan->id,
-            'borrower_name' => $this->loan->user->name,
-            'amount' => $this->loan->amount,
-            'duration' => $this->loan->duration
+
+
+
+            'message' => 'You have been requested to be a guarantor for a loan',
+            'action_url' => route('member.loans.show', $this->loan)
         ];
     }
 }

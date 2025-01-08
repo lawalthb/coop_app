@@ -46,9 +46,13 @@ class LoanController extends Controller
         ]);
 
         $loanType = LoanType::find($request->loan_type_id);
-
+if($validated['duration'] > 12 ){
+$loan_interest = $loanType->interest_rate_18_months;
+}else{
+$loan_interest = $loanType->interest_rate_12_months;
+}
         // Calculate loan details
-        $interestAmount = ($validated['amount'] * $loanType->interest_rate * $validated['duration']) / 100;
+        $interestAmount = ($validated['amount'] * $loan_interest * $validated['duration']) / 100;
         $totalAmount = $validated['amount'] + $interestAmount;
         $monthlyPayment = $totalAmount / $validated['duration'];
 

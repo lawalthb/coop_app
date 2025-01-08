@@ -82,7 +82,7 @@
                     </div>
                     <div class="mb-5">
                         <label for="othername" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Othername</label>
-                        <input type="text" id="othername" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Optional" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                        <input type="text" id="othername" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Optional" style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
@@ -98,7 +98,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Home Address (Full Residential Address)</label>
-                        <textarea name="home_address" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;"></textarea>
+                        <textarea name="home_address" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;" placeholder="house number, street , bus stop, road, lga, state"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
@@ -109,7 +109,7 @@
                         <input type="email" name="email" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;" placeholder="will be used for login">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">State of Origin</label>
                         <select name="state_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                             <option value="">Select State</option>
                             @foreach($states as $state)

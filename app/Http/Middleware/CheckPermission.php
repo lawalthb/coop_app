@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -9,7 +8,7 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next, $permission)
     {
-        if (!auth()->check() || !auth()->user()->role->hasPermission($permission)) {
+        if (!auth()->check() || !auth()->user()->hasPermission($permission)) {
             abort(403, 'Unauthorized action.');
         }
 

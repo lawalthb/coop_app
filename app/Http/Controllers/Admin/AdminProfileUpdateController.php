@@ -29,14 +29,28 @@ class AdminProfileUpdateController extends Controller
         $user = $request->user;
 
         // Update user profile with requested changes
-        $user->update($request->only([
-            'title', 'surname', 'firstname', 'othername', 'home_address',
-            'department_id', 'faculty_id', 'phone_number', 'email', 'dob',
-            'nationality', 'state_id', 'lga_id', 'nok', 'nok_relationship',
-            'nok_address', 'marital_status', 'religion', 'nok_phone',
-            'monthly_savings', 'share_subscription', 'month_commence',
-            'staff_no', 'signature_image', 'date_join', 'member_image'
-        ]));
+        // $user->update($request->only([
+        //     'title', 'surname', 'firstname', 'othername', 'home_address',
+        //     'department_id', 'faculty_id', 'phone_number', 'email', 'dob',
+        //     'nationality', 'state_id', 'lga_id', 'nok', 'nok_relationship',
+        //     'nok_address', 'marital_status', 'religion', 'nok_phone',
+        //     'monthly_savings', 'share_subscription', 'month_commence',
+        //     'staff_no', 'signature_image', 'date_join', 'member_image'
+        // ]));
+
+        $data = $request->getAttributes();
+
+
+        // Remove unnecessary fields
+        unset($data['id'], $data['user_id'], $data['created_at'], $data['updated_at'], $data['status'], $data['admin_remarks']);
+
+        // Only update fields that have values
+        $updateData = array_filter($data, function ($value) {
+            return !is_null($value);
+        });
+
+
+        $request->user->update($updateData);
 
         $request->update(['status' => 'approved']);
 

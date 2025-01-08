@@ -81,7 +81,7 @@ class SavingController extends Controller
             'month_id' => $validated['month_id'],
             'year_id' => $validated['year_id'],
             'reference' => 'SAV-' . date('Y') . '-' . Str::random(8),
-            'remark' => $validated['remark'],
+            'remark' => $validated['remark'] . "- New Loan",
             'posted_by' => auth()->id()
         ]);
 
@@ -96,7 +96,7 @@ class SavingController extends Controller
         );
 
         return redirect()->route('admin.savings')
-        ->with('success', 'Savings entry created successfully');
+            ->with('success', 'Savings entry created successfully');
     }
 
 
@@ -147,7 +147,7 @@ class SavingController extends Controller
         }
 
         return redirect()->route('admin.savings')
-        ->with('success', 'Bulk savings entries created successfully');
+            ->with('success', 'Bulk savings entries created successfully');
     }
 
     public function show(Saving $saving)
@@ -187,7 +187,7 @@ class SavingController extends Controller
             ]);
 
         return redirect()->route('admin.savings')
-        ->with('success', 'Savings entry and related transaction updated successfully');
+            ->with('success', 'Savings entry and related transaction updated successfully');
     }
 
     public function destroy(Saving $saving)
@@ -205,5 +205,4 @@ class SavingController extends Controller
         return redirect()->route('admin.savings')
             ->with('success', 'Savings entry and related transaction deleted successfully');
     }
-
 }

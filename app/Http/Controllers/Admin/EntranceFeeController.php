@@ -25,7 +25,7 @@ class EntranceFeeController extends Controller
 
     public function create()
     {
-        $members = User::where('is_admin', false)->where('admin_sign','No')->get();
+        $members = User::where('is_admin', false)->where('admin_sign', 'No')->get();
         $months = Month::all();
         $years = Year::all();
 
@@ -47,22 +47,33 @@ class EntranceFeeController extends Controller
         EntranceFee::create($validated);
 
         if ($request->has('approve_member')) {
-            User::where('id', $request->user_id)->update(['admin_sign' => 'Yes']);
+
+            $lastMember = User::whereNotNull('member_no')
+                ->orderByRaw('CAST(SUBSTRING_INDEX(member_no, "/", -1) AS UNSIGNED) DESC')
+                ->first();
+
+            $nextNumber = '0001';
+            if ($lastMember) {
+                $currentNumber = (int)substr($lastMember->member_no, -4);
+                $nextNumber = str_pad($currentNumber + 1, 4, '0', STR_PAD_LEFT);
+            }
+
+            // Update user with new member number
+            User::where('id', $request->user_id)->update([
+                'admin_sign' => 'Yes',
+                'member_no' => 'OASCMS-' . '0081',
+                'is_approved' => 1,
+                'approved_at' => now(),
+                'approved_by' => auth()->id(),
+
+            ]);
 
             $member = User::where('id', $request->user_id)->first();
 
             TransactionHelper::recordTransaction($request->user_id, 'entrance_fee', 0, $request->amount);
 
-
-
             Mail::to($member->email)->send(new AccountActivatedEmail($member));
-
-
-            TransactionHelper::recordTransaction($request->user_id, 'entrance_fee_used', $request->amount, 0);
-
-            
         }
-
 
         return redirect()->route('admin.entrance-fees')
             ->with('success', 'Entrance fee added successfully');
@@ -74,8 +85,10 @@ class EntranceFeeController extends Controller
         $months = Month::all();
         $years = Year::all();
 
-        return view('admin.entrance-fees.edit',
-            compact('entranceFee', 'members', 'months', 'years'));
+        return view(
+            'admin.entrance-fees.edit',
+            compact('entranceFee', 'members', 'months', 'years')
+        );
     }
 
     public function update(Request $request, EntranceFee $entranceFee)

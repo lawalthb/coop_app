@@ -12,6 +12,9 @@ class AdminUserController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->hasPermission('view_users')) {
+            abort(403);
+        }
         $admins = User::where('is_admin', true)->with('roles')->get();
         return view('admin.admins.index', compact('admins'));
     }

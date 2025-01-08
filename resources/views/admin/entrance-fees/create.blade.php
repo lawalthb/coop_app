@@ -34,9 +34,9 @@
 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Select Member</label>
+                        <label class="block text-sm font-medium text-gray-700">Select Aspirant Member</label>
                         <select name="user_id" class="member-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
-                            <option value="">Select a member</option>
+                            <option value="">Select </option>
                             @foreach($members as $member)
                             <option value="{{ $member->id }}">
                                 {{ $member->surname }} {{ $member->firstname }} - {{ $member->member_no }}

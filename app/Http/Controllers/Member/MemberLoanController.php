@@ -61,9 +61,14 @@ class MemberLoanController extends Controller
                 'guarantor_ids' => "This loan type requires exactly {$loanType->no_guarantors} guarantor(s)"
             ]);
         }
-
+        $loanType = LoanType::find($request->loan_type_id);
+        if ($validated['duration'] > 12) {
+            $loan_interest = $loanType->interest_rate_18_months;
+        } else {
+            $loan_interest = $loanType->interest_rate_12_months;
+        }
         // Calculate loan details
-        $interestAmount = ($validated['amount'] * $loanType->interest_rate * $validated['duration']) / 100;
+        $interestAmount = ($validated['amount'] * $loan_interest ) / 100;
         $totalAmount = $validated['amount'] + $interestAmount;
         $monthlyPayment = $totalAmount / $validated['duration'];
         $startDate = now();
@@ -94,7 +99,7 @@ class MemberLoanController extends Controller
             ]);
 
             $guarantor = User::find($guarantorId);
-            Notification::send($guarantor, new LoanGuarantorRequest($loan));
+            $guarantor->notify(new LoanGuarantorRequest($loan));
         }
 
         return redirect()->route('member.loans.index')
@@ -117,5 +122,45 @@ class MemberLoanController extends Controller
         if (!auth()->user()->can($ability, $arguments)) {
             abort(403);
         }
+    }
+
+    public function respondToGuarantorRequest(Request $request, Loan $loan)
+    {
+        $validated = $request->validate([
+            'response' => 'required|in:approved,rejected',
+            'reason' => 'required_if:response,rejected|string|nullable'
+        ]);
+
+        $guarantor = LoanGuarantor::where('loan_id', $loan->id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $guarantor->update([
+            'status' => $validated['response'],
+            'comment' => $validated['reason']
+        ]);
+
+        return redirect()->route('member.guarantor-requests')->with('success', 'Response submitted successfully');
+    }
+
+    public function guarantorRequests()
+    {
+        $guarantorRequests = LoanGuarantor::where('user_id', auth()->id())
+            ->with(['loan.user'])
+            ->latest()
+            ->get();
+
+        return view('member.loans.guarantor-requests', compact('guarantorRequests'));
+    }
+
+
+    public function showGuarantorRequest(Loan $loan)
+    {
+        // Verify the authenticated user is a guarantor for this loan
+        $guarantorRequest = LoanGuarantor::where('loan_id', $loan->id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        return view('member.loans.guarantor-response', compact('loan', 'guarantorRequest'));
     }
 }

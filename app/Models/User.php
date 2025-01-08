@@ -65,7 +65,7 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable')
-        ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc');
     }
 
 
@@ -82,7 +82,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProfileUpdateRequest::class);
     }
-
     public function getSavingsDuration()
     {
         // Get the latest loan date if exists
@@ -92,26 +91,19 @@ class User extends Authenticatable
             ->latest()
             ->first()?->created_at;
 
-        // Query savings after the last loan or all savings if no previous loan
+        // Query active savings (not used for loan)
         $activeSavings = $this->savings()
-            ->where('status', 'active')
+            ->whereNot('remark', 'used_for_loan')
             ->when($lastLoanDate, function ($query) use ($lastLoanDate) {
                 return $query->where('created_at', '>', $lastLoanDate);
             })
-            ->orderBy('created_at')
+            ->select('month_id')
+            ->distinct()
             ->get();
 
-        if ($activeSavings->isEmpty()) {
-            return 0;
-        }
-
-        // Get first and last saving dates
-        $firstSaving = $activeSavings->first()->created_at;
-        $lastSaving = $activeSavings->last()->created_at;
-
-        // Calculate months between first and last saving
-        return $firstSaving->diffInMonths($lastSaving) + 1;
+        return $activeSavings->count();
     }
+
     public function loans()
     {
         return $this->hasMany(Loan::class);
@@ -123,17 +115,29 @@ class User extends Authenticatable
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(\App\Models\Role::class);
     }
 
     public function hasPermission($permission)
     {
-        return $this->roles->some(function($role) use ($permission) {
+        return $this->roles->some(function ($role) use ($permission) {
             return $role->hasPermission($permission);
         });
     }
+
+
+    public function pendingGuarantorRequests()
+    {
+        return $this->hasMany(LoanGuarantor::class, 'user_id')
+        ->where('status', 'pending')
+        ->with('loan');
     }
 
+    public function guarantorRequests()
+    {
+        return $this->hasMany(LoanGuarantor::class, 'user_id');
+    }
 
+}
 
 

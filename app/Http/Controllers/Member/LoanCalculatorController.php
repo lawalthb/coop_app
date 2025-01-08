@@ -37,7 +37,21 @@ class LoanCalculatorController extends Controller
             $eligibility['messages'][] = "You need {$loanType->required_active_savings_months} months of active savings. Current: {$savingsDuration} months";
         }
 
-        // Check maximum amount
+        // Calculate total active savings
+        $totalActiveSavings = $member->savings()
+            ->whereNot('remark', 'used_for_loan')
+            ->sum('amount');
+
+        // Check maximum amount based on savings multiplier
+        $maxLoanBasedOnSavings = $totalActiveSavings * $loanType->savings_multiplier;
+        if ($validated['amount'] > $maxLoanBasedOnSavings) {
+            $eligibility['eligible'] = false;
+            $eligibility['messages'][] = "Based on your active savings of ₦" . number_format($totalActiveSavings, 2) .
+                                       ", you can borrow up to ₦" . number_format($maxLoanBasedOnSavings, 2) .
+                                       " (". $loanType->savings_multiplier . "x your savings)";
+        }
+
+        // Check maximum amount from loan type
         if ($validated['amount'] > $loanType->maximum_amount) {
             $eligibility['eligible'] = false;
             $eligibility['messages'][] = "Requested amount exceeds maximum allowed amount of ₦" . number_format($loanType->maximum_amount, 2);
@@ -60,4 +74,6 @@ class LoanCalculatorController extends Controller
 
         return view('member.loan-calculator.results', compact('eligibility', 'loanDetails', 'loanType'));
     }
+
+
 }

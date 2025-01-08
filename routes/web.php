@@ -95,10 +95,18 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
     Route::get('/member/resources', [MemberResourceController::class, 'index'])->name('member.resources.index');
     Route::get('/member/resources/{resource}/download', [MemberResourceController::class, 'download'])->name('member.resources.download');
-});
+
+    Route::post('member/guarantor/{loan}/respond', [MemberLoanController::class, 'respondToGuarantorRequest'])
+    ->name('member.guarantor.respond');
+    Route::get('/member/guarantor-requests', [MemberLoanController::class, 'guarantorRequests'])
+    ->name('member.guarantor-requests');
+    Route::get('/member/guarantor/{loan}/show', [MemberLoanController::class, 'showGuarantorRequest'])
+    ->name('member.guarantor.show');
+
+});//end of member routes
 
 // Admin Routes
-Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')->name('admin.')->group(function () {
     route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
 

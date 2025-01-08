@@ -36,38 +36,118 @@
                                 <div class="border-b pb-2">
                                     <p class="text-sm font-medium text-gray-600">{{ ucfirst(str_replace('_', ' ', $field)) }}</p>
                                     <div class="flex items-center space-x-4">
-                                        <div class="text-blue-600">
-                                            <span class="text-sm">Current:</span>
-                                            <span class="font-medium">{{ $request->user->$field ?? 'Not set' }}</span>
-                                        </div>
-                                        @if($request->user->$field != $newValue && $newValue)
-                                            <span class="text-gray-400">→</span>
-                                            <div class="text-red-600">
-                                                <span class="text-sm">Requested:</span>
-                                                <span class="font-medium">{{ $newValue }}</span>
+                                        @if($field === 'department_id')
+                                            <div class="text-blue-600">
+                                                <span class="text-sm">Current:</span>
+                                                <span class="font-medium">{{ $request->user->department->name ?? 'Not set' }}</span>
                                             </div>
-                                        @endif
+                                            @if($request->user->department_id != $newValue && $newValue)
+                                                <span class="text-gray-400">→</span>
+                                                <div class="text-red-600">
+                                                    <span class="text-sm">Requested:</span>
+                                                    <span class="font-medium">{{ \App\Models\Department::find($newValue)->name }}</span>
+                                                </div>
+                                            @endif
+                                        @elseif($field === 'faculty_id')
+                                            <div class="text-blue-600">
+                                                <span class="text-sm">Current:</span>
+                                                <span class="font-medium">{{ $request->user->faculty->name ?? 'Not set' }}</span>
+                                            </div>
+                                            @if($request->user->faculty_id != $newValue && $newValue)
+                                                <span class="text-gray-400">→</span>
+                                                <div class="text-red-600">
+                                                    <span class="text-sm">Requested:</span>
+                                                    <span class="font-medium">{{ \App\Models\Faculty::find($newValue)->name }}</span>
+                                                </div>
+                                            @endif
+                                        @elseif($field === 'state_id')
+                                            <div class="text-blue-600">
+                                                <span class="text-sm">Current:</span>
+                                                <span class="font-medium">{{ $request->user->state->name ?? 'Not set' }}</span>
+                                            </div>
+                                            @if($request->user->state_id != $newValue && $newValue)
+                                                <span class="text-gray-400">→</span>
+                                                <div class="text-red-600">
+                                                    <span class="text-sm">Requested:</span>
+                                                    <span class="font-medium">{{ \App\Models\State::find($newValue)->name }}</span>
+                                                </div>
+                                            @endif
+                                        @elseif($field === 'lga_id')
+                                            <div class="text-blue-600">
+                                                <span class="text-sm">Current:</span>
+                                                <span class="font-medium">{{ $request->user->lga->name ?? 'Not set' }}</span>
+                                            </div>
+                                            @if($request->user->lga_id != $newValue && $newValue)
+                                                <span class="text-gray-400">→</span>
+                                                <div class="text-red-600">
+                                                    <span class="text-sm">Requested:</span>
+                                                    <span class="font-medium">{{ \App\Models\Lga::find($newValue)->name }}</span>
+                                                </div>
+                                            @endif
+                                        @elseif($field === 'member_image')
+    <div class="text-blue-600">
+        <span class="text-sm">Current:</span>
+        <a href="{{ asset('storage/' . $request->user->member_image) }}" target="_blank" class="text-blue-600 hover:underline">
+            <img src="{{ asset('storage/' . $request->user->member_image) }}" alt="Current Member Image" class="w-16 h-16 object-cover rounded">
+        </a>
+    </div>
+    @if($request->user->member_image != $newValue && $newValue)
+        <span class="text-gray-400">→</span>
+        <div class="text-red-600">
+            <span class="text-sm">Requested:</span>
+            <a href="{{ asset('storage/' . $newValue) }}" target="_blank" class="text-blue-600 hover:underline">
+                <img src="{{ asset('storage/' . $newValue) }}" alt="New Member Image" class="w-16 h-16 object-cover rounded">
+            </a>
+        </div>
+    @endif
+@elseif($field === 'signature_image')
+    <div class="text-blue-600">
+        <span class="text-sm">Current:</span>
+        <a href="{{ asset('storage/' . $request->user->signature_image) }}" target="_blank" class="text-blue-600 hover:underline">
+            <img src="{{ asset('storage/' . $request->user->signature_image) }}" alt="Current Signature" class="w-16 h-16 object-cover rounded">
+        </a>
+    </div>
+    @if($request->user->signature_image != $newValue && $newValue)
+        <span class="text-gray-400">→</span>
+        <div class="text-red-600">
+            <span class="text-sm">Requested:</span>
+            <a href="{{ asset('storage/' . $newValue) }}" target="_blank" class="text-blue-600 hover:underline">
+                <img src="{{ asset('storage/' . $newValue) }}" alt="New Signature" class="w-16 h-16 object-cover rounded">
+            </a>
+        </div>
+    @endif
+@else
+    <div class="text-blue-600">
+        <span class="text-sm">Current:</span>
+        <span class="font-medium">{{ $request->user->$field ?? 'Not set' }}</span>
+    </div>
+    @if($request->user->$field != $newValue && $newValue)
+        <span class="text-gray-400">→</span>
+        <div class="text-red-600">
+            <span class="text-sm">Requested:</span>
+            <span class="font-medium">{{ $newValue }}</span>
+        </div>
+    @endif                                        @endif
                                     </div>
                                 </div>
                             @endif
-                        @endforeach
-                    </div>
+                        @endforeach                    </div>
                 </div>
 
                 @if($request->status === 'pending')
-                    <!-- Action Buttons -->
-                    <div class="flex justify-end space-x-4">
-                        <button onclick="document.getElementById('rejectModal').classList.remove('hidden')"
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                            Reject
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-4">
+                    <button onclick="document.getElementById('rejectModal').classList.remove('hidden')"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        Reject
+                    </button>
+                    <form action="{{ route('admin.profile-updates.approve', $request) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            Approve
                         </button>
-                        <form action="{{ route('admin.profile-updates.approve', $request) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                                Approve
-                            </button>
-                        </form>
-                    </div>
+                    </form>
+                </div>
                 @endif
             </div>
         </div>
@@ -87,7 +167,7 @@
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')"
-                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
                         Cancel
                     </button>
                     <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">

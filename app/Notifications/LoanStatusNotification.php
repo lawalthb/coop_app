@@ -27,7 +27,7 @@ class LoanStatusNotification extends Notification
         return (new MailMessage)
             ->subject('Loan Application Status Update')
             ->line('Your loan application status has been updated to: ' . $this->loan->status)
-            ->action('View Loan Details', route('loans.show', $this->loan->id))
+            ->action('View Loan Details', route('member.loans.show', $this->loan->id))
             ->line('Thank you for using our cooperative services.');
     }
 

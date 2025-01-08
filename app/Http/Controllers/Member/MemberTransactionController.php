@@ -11,15 +11,16 @@ class MemberTransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::where('user_id', auth()->id())
+        ->whereNot('type', 'entrance_fee')
             ->latest()
             ->paginate(15);
 
         $totalCredits = Transaction::where('user_id', auth()->id())
-          
+            ->whereNot('type', 'entrance_fee')
             ->sum('credit_amount');
 
         $totalDebits = Transaction::where('user_id', auth()->id())
-
+            ->whereNot('type', 'entrance_fee')
             ->sum('debit_amount');
 
         return view('member.transactions.index', compact('transactions', 'totalCredits', 'totalDebits'));

@@ -63,7 +63,7 @@
                         </div>
                         <div>
                             <span class="text-gray-600">Interest Rate:</span>
-                            <span class="font-medium">{{ $loan->loanType->interest_rate }}%</span>
+                            <span class="font-medium">{{ $loan->amount/$loan->interest_amount  }}%</span>
                         </div>
                         <div>
                             <span class="text-gray-600">Principal Amount:</span>
@@ -159,7 +159,36 @@
                     </div>
                 </div>
                 @endif
-
+                <h3 class="text-lg font-medium mb-4">Guarantors</h3>
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Response Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($loan->guarantors as $guarantor)
+                            <tr>
+                                <td class="px-6 py-4">{{ $guarantor->user->surname }} {{ $guarantor->user->firstname }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            {{ $guarantor->status === 'approved' ? 'bg-green-100 text-green-800' :
+                               ($guarantor->status === 'rejected' ? 'bg-red-100 text-red-800' :
+                               'bg-yellow-100 text-yellow-800') }}">
+                                        {{ ucfirst($guarantor->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">{{ $guarantor->updated_at->format('M d, Y H:i') }}</td>
+                                <td class="px-6 py-4">{{ $guarantor->comment }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 <div class="mt-6">
                     <div class="grid grid-cols-3 gap-4">
                         <div class="bg-green-50 p-4 rounded-lg">
@@ -176,7 +205,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Add Repayment Link Here -->
                 @if($loan->status === 'approved')
                 <div class="flex justify-end">
@@ -207,4 +236,7 @@
         </div>
     </div>
 </div>
+
+
+
 @endsection

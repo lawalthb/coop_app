@@ -93,7 +93,7 @@
                     <span>FAQ Management</span>
                 </a>
 
-              
+
                 <!-- Add these items to your sidebar navigation -->
                 <div class="space-y-1">
                     <!-- Existing sidebar items -->
@@ -104,17 +104,21 @@
                             System Administration
                         </h3>
 
+                        @if(auth()->user()->hasPermission('view_users'))
                         <a href="{{ route('admin.admins.index') }}"
                             class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.admins.*') ? 'bg-purple-700' : '' }}">
                             <i class="fas fa-users-cog w-5 h-5 mr-3"></i>
                             <span>Admin Users</span>
                         </a>
+                        @endif
 
+                        @if(auth()->user()->hasPermission('view_roles'))
                         <a href="{{ route('admin.roles.index') }}"
                             class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.roles.*') ? 'bg-purple-700' : '' }}">
                             <i class="fas fa-user-shield w-5 h-5 mr-3"></i>
                             <span>Roles & Permissions</span>
                         </a>
+                        @endif
                         <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
                             <i class="fas fa-cog w-5"></i>
                             <span class="ml-3">Settings</span>

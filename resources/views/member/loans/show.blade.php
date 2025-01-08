@@ -34,15 +34,52 @@
                     </div>
                 </div>
 
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Guarantor Information</h3>
-                    <div class="space-y-3">
-                        <p><span class="text-gray-600">Name:</span> {{ $loan->guarantor_name }}</p>
-                        <p><span class="text-gray-600">Phone:</span> {{ $loan->guarantor_phone }}</p>
-                        <p><span class="text-gray-600">Address:</span> {{ $loan->guarantor_address }}</p>
-                    </div>
-                </div>
-            </div>
+
+
+
+
+
+
+
+
+
+                  <div>
+                      <h3 class="text-lg font-semibold text-gray-800 mb-4">Guarantor Information</h3>
+                      <div class="overflow-x-auto">
+                          <table class="min-w-full divide-y divide-gray-200">
+                              <thead class="bg-gray-50">
+                                  <tr>
+                                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Updated</th>
+                                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Remarks</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="bg-white divide-y divide-gray-200">
+                                  @forelse($loan->guarantors as $guarantor)
+                                      <tr>
+                                          <td class="px-6 py-4">{{ $guarantor->user->surname }} {{ $guarantor->user->firstname }}</td>
+                                          <td class="px-6 py-4">
+                                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                  {{ $guarantor->status === 'approved' ? 'bg-green-100 text-green-800' :
+                                                   ($guarantor->status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                                   'bg-yellow-100 text-yellow-800') }}">
+                                                  {{ ucfirst($guarantor->status) }}
+                                              </span>
+                                          </td>
+                                          <td class="px-6 py-4">{{ $guarantor->updated_at->format('M d, Y H:i') }}</td>
+                                          <td class="px-6 py-4">{{ $guarantor->remarks }}</td>
+                                      </tr>
+                                  @empty
+                                      <tr>
+                                          <td colspan="4" class="px-6 py-4 text-center text-gray-500">No guarantors found</td>
+                                      </tr>
+                                  @endforelse
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
 
             <!-- Repayment History -->
             <div>

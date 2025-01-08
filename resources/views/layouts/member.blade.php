@@ -88,9 +88,20 @@
                         <i class="fas fa-bell w-5"></i>
                         <span class="ml-3">Notifications
                             @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
-                            ({{ auth()->user()->notifications()->whereNull('read_at')->count() }})
-                            @endif
+                            <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full"> {{ auth()->user()->notifications()->whereNull('read_at')->count() }}</span>
+                                @endif
+                            </span>
+                    </a>
+                    <!-- Add this to your member sidebar navigation -->
+                    <a href="{{ route('member.guarantor-requests') }}"
+                        class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('member.guarantor-requests*') ? 'bg-purple-700' : '' }}">
+                        <i class="fas fa-handshake w-5 h-5 mr-3"></i>
+                        <span>Guarantor Requests</span>
+                        @if(auth()->user()->pendingGuarantorRequests()->count() > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            {{ auth()->user()->pendingGuarantorRequests()->count() }}
                         </span>
+                        @endif
                     </a>
 
                 </nav>

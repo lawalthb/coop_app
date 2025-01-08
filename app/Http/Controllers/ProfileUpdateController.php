@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileUpdateController extends Controller
 {
-
     public function requestUpdate(Request $request)
     {
         $user = auth()->user();
@@ -40,6 +39,8 @@ class ProfileUpdateController extends Controller
             'month_commence' => 'nullable|string',
             'staff_no' => 'nullable|string',
             'date_join' => 'nullable|date',
+            'member_image' => 'nullable|image|max:2048',
+            'signature_image' => 'nullable|image|max:2048',
         ]);
 
         // Handle file uploads
