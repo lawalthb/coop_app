@@ -2,112 +2,109 @@
 
 @section('content')
 <div class="min-h-screen bg-purple-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="px-6 py-4 bg-purple-600 flex justify-between items-center">
-                <h2 class="text-xl font-semibold text-white">Share Details</h2>
-                <a href="{{ route('admin.shares.index') }}" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                    <i class="fas fa-arrow-left mr-2"></i>Back
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold">Share Purchase Details</h2>
+                <a href="{{ route('admin.shares.index') }}" class="text-purple-600 hover:text-purple-700">
+                    <i class="fas fa-arrow-left mr-1"></i>Back to List
                 </a>
             </div>
 
-            <div class="p-6 space-y-6">
-                <!-- Certificate Information -->
-                <div class="bg-purple-50 p-4 rounded-lg">
-                    <h3 class="text-lg font-semibold text-purple-800 mb-2">Certificate Information</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-gray-600">Certificate Number:</span>
-                            <span class="font-medium">{{ $share->certificate_number }}</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-600">Status:</span>
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Certificate Number</h3>
+                        <p class="mt-1">{{ $share->certificate_number }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Status</h3>
+                        <p class="mt-1">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                {{ $share->status === 'approved' ? 'bg-green-100 text-green-800' :
+                                   ($share->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
                                 {{ ucfirst($share->status) }}
                             </span>
-                        </div>
+                        </p>
                     </div>
                 </div>
 
-                <!-- Member Information -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Member Information</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-gray-600">Name:</span>
-                            <span class="font-medium">{{ $share->user->surname }} {{ $share->user->firstname }}</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-600">Staff Number:</span>
-                            <span class="font-medium">{{ $share->user->staff_no }}</span>
-                        </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Member</h3>
+                        <p class="mt-1">{{ $share->user->surname }} {{ $share->user->firstname }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Share Type</h3>
+                        <p class="mt-1">{{ $share->shareType->name }}</p>
                     </div>
                 </div>
 
-                <!-- Share Details -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Share Details</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-gray-600">Number of Shares:</span>
-                            <span class="font-medium">{{ number_format($share->number_of_shares) }}</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-600">Amount per Share:</span>
-                            <span class="font-medium">₦{{ number_format($share->amount_per_share, 2) }}</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-600">Total Amount:</span>
-                            <span class="font-medium">₦{{ number_format($share->total_amount, 2) }}</span>
-                        </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Number of Units</h3>
+                        <p class="mt-1">{{ $share->number_of_units }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Unit Price</h3>
+                        <p class="mt-1">₦{{ number_format($share->unit_price, 2) }}</p>
                     </div>
                 </div>
 
-                <!-- Additional Information -->
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Additional Information</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <span class="text-gray-600">Posted By:</span>
-                            <span class="font-medium">{{ $share->postedBy->surname }} {{ $share->postedBy->firstname }}</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-600">Posted Date:</span>
-                            <span class="font-medium">{{ $share->created_at->format('M d, Y H:i A') }}</span>
-                        </div>
+                    <h3 class="text-sm font-medium text-gray-500">Total Amount Paid</h3>
+                    <p class="mt-1">₦{{ number_format($share->amount_paid, 2) }}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Posted By</h3>
+                        <p class="mt-1">{{ $share->postedBy->surname }} {{ $share->postedBy->firstname }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Posted Date</h3>
+                        <p class="mt-1">{{ $share->created_at->format('M d, Y H:i A') }}</p>
                     </div>
                 </div>
 
-                <!-- Share Transactions -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Share Transactions</h3>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Shares</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reference</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                {{--
-                                @foreach($share->transactions as $transaction)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->created_at->format('M d, Y') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst($transaction->transaction_type) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ number_format($transaction->number_of_shares) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($transaction->amount, 2) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $transaction->reference }}</td>
-                                </tr>
-                                @endforeach
-                                --}}
-                            </tbody>
-                        </table>
+                @if($share->approved_by)
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Approved/Rejected By</h3>
+                        <p class="mt-1">{{ $share->approvedBy->surname }} {{ $share->approvedBy->firstname }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Approval Date</h3>
+                        <p class="mt-1">{{ $share->approved_at->format('M d, Y H:i A') }}</p>
                     </div>
                 </div>
+                @endif
+
+                @if($share->remark)
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Remark</h3>
+                    <p class="mt-1">{{ $share->remark }}</p>
+                </div>
+                @endif
+
+                @if($share->status === 'pending')
+                <div class="flex justify-end space-x-4">
+                    <form action="{{ route('admin.shares.approve', $share) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                            onclick="return confirm('Are you sure you want to approve this share purchase?')">
+                            Approve
+                        </button>
+                    </form>
+                    <form action="{{ route('admin.shares.reject', $share) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                            onclick="return confirm('Are you sure you want to reject this share purchase?')">
+                            Reject
+                        </button>
+                    </form>
+                </div>
+                @endif
             </div>
         </div>
     </div>

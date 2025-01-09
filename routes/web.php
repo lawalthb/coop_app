@@ -165,13 +165,22 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
 
 
 
-    //shares
-    Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
-    Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
-    Route::post('/shares', [ShareController::class, 'store'])->name('shares.store');
-    Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
-    Route::get('/shares/transfer', [ShareController::class, 'transfer'])->name('shares.transfer');
-    Route::post('/shares/transfer', [ShareController::class, 'processTransfer'])->name('shares.transfer.process');
+    // Share Types
+    Route::resource('/share-types', ShareTypeController::class)->names([
+        'index' => 'share-types.index',
+        'create' => 'share-types.create',
+        'store' => 'share-types.store',
+        'edit' => 'share-types.edit',
+        'update' => 'share-types.update',
+    ]);
+    // Shares
+    Route::get('/admin/shares', [ShareController::class, 'index'])->name('admin.shares.index');
+    Route::get('/admin/shares/create', [ShareController::class, 'create'])->name('admin.shares.create');
+    Route::post('/admin/shares', [ShareController::class, 'store'])->name('admin.shares.store');
+    Route::get('/admin/shares/{share}', [ShareController::class, 'show'])->name('admin.shares.show');
+    Route::post('/admin/shares/{share}/approve', [ShareController::class, 'approve'])->name('admin.shares.approve');
+    Route::post('/admin/shares/{share}/reject', [ShareController::class, 'reject'])->name('admin.shares.reject');
+
 
 
     //loan import
@@ -180,7 +189,7 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::post('/loans/process-import', [LoanController::class, 'processImport'])->name('loans.process-import');
     Route::get('/loans/download-format', [LoanController::class, 'downloadFormat'])->name('loans.download-format');
 
-    
+
 
     // Admin Loan Management Routes
 
@@ -229,7 +238,8 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::get('/admin/roles', function () {
         return view('admin.roles.index');
     })->name('admin.roles.index');
-}); //end of admin routes
+});
+ //end of admin routes
 
 
 

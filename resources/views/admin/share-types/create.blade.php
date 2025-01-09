@@ -1,0 +1,78 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="min-h-screen bg-purple-50 py-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-6">Create New Share Type</h2>
+
+            <form action="{{ route('admin.share-types.store') }}" method="POST">
+                @csrf
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" name="name" value="{{ old('name') }}" required
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Price Per Unit</label>
+                        <input type="number" step="0.01" name="price_per_unit" value="{{ old('price_per_unit') }}" required
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Units</label>
+                            <input type="number" name="minimum_units" value="{{ old('minimum_units', 1) }}" required
+                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Units</label>
+                            <input type="number" name="maximum_units" value="{{ old('maximum_units') }}"
+                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dividend Rate (%)</label>
+                        <input type="number" step="0.01" name="dividend_rate" value="{{ old('dividend_rate', 0) }}" required
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <div>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="is_transferable" value="1" {{ old('is_transferable') ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-purple-600 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                <span class="ml-2">Transferable</span>
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="has_voting_rights" value="1" {{ old('has_voting_rights') ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-purple-600 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                <span class="ml-2">Voting Rights</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea name="description" rows="3"
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">{{ old('description') }}</textarea>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                            Create Share Type
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection

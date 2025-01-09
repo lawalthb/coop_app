@@ -8,17 +8,35 @@ class Share extends Model
 {
     protected $fillable = [
         'user_id',
-        'number_of_shares',
-        'amount_per_share',
-        'total_amount',
+        'share_type_id',
         'certificate_number',
+        'number_of_units',
+        'amount_paid',
+        'unit_price',
         'status',
-        'posted_by'
+        'approved_by',
+        'approved_at',
+        'posted_by',
+        'remark'
+    ];
+
+    protected $casts = [
+        'approved_at' => 'datetime'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function shareType()
+    {
+        return $this->belongsTo(ShareType::class);
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function postedBy()

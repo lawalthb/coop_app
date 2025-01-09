@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Share;
-use App\Models\ShareTransaction;
+use App\Models\ShareType;
 use App\Models\User;
+use App\Helpers\TransactionHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class ShareController extends Controller
 {
     public function index()
     {
-        $shares = Share::with(['user', 'postedBy'])
+        $shares = Share::with(['user', 'shareType', 'approvedBy', 'postedBy'])
             ->latest()
             ->paginate(10);
 
@@ -25,44 +26,45 @@ class ShareController extends Controller
         $members = User::where('is_admin', false)
             ->where('admin_sign', 'Yes')
             ->get();
+        $shareTypes = ShareType::where('status', 'active')->get();
 
-        return view('admin.shares.create', compact('members'));
+        return view('admin.shares.create', compact('members', 'shareTypes'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'number_of_shares' => 'required|integer|min:1',
-            'amount_per_share' => 'required|numeric|min:0',
+            'share_type_id' => 'required|exists:share_types,id',
+            'number_of_units' => 'required|integer|min:1',
             'remark' => 'nullable|string'
         ]);
 
-        $totalAmount = $validated['number_of_shares'] * $validated['amount_per_share'];
+        $shareType = ShareType::find($request->share_type_id);
+        $amountPaid = $shareType->price_per_unit * $validated['number_of_units'];
 
-        // Create share record
         $share = Share::create([
             'user_id' => $validated['user_id'],
-            'number_of_shares' => $validated['number_of_shares'],
-            'amount_per_share' => $validated['amount_per_share'],
-            'total_amount' => $totalAmount,
+            'share_type_id' => $validated['share_type_id'],
             'certificate_number' => 'SHR-' . date('Y') . '-' . Str::random(8),
-            'posted_by' => auth()->id()
+            'number_of_units' => $validated['number_of_units'],
+            'amount_paid' => $amountPaid,
+            'unit_price' => $shareType->price_per_unit,
+            'posted_by' => auth()->id(),
+            'remark' => $validated['remark']
         ]);
 
-        // Record share transaction
-        ShareTransaction::create([
-            'user_id' => $validated['user_id'],
-            'transaction_type' => 'purchase',
-            'number_of_shares' => $validated['number_of_shares'],
-            'amount' => $totalAmount,
-            'reference' => 'STX-' . date('Y') . '-' . Str::random(8),
-            'remark' => $validated['remark'],
-            'posted_by' => auth()->id()
-        ]);
+        TransactionHelper::recordTransaction(
+            $validated['user_id'],
+            'share_purchase',
+            $amountPaid,
+            0,
+            'pending',
+            'Share Purchase - ' . $share->certificate_number
+        );
 
         return redirect()->route('admin.shares.index')
-            ->with('success', 'Shares allocated successfully');
+            ->with('success', 'Share purchase recorded successfully');
     }
 
     public function show(Share $share)
@@ -70,66 +72,43 @@ class ShareController extends Controller
         return view('admin.shares.show', compact('share'));
     }
 
-    public function transfer()
+    public function approve(Share $share)
     {
-        $members = User::where('is_admin', false)
-            ->where('admin_sign', 'Yes')
-            ->get();
+        $share->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now()
+        ]);
 
-        return view('admin.shares.transfer', compact('members'));
+        // Update transaction status
+        TransactionHelper::updateTransactionStatus(
+            $share->user_id,
+            'share_purchase',
+            $share->amount_paid,
+            'completed',
+            'Share Purchase Approved - ' . $share->certificate_number
+        );
+
+        return back()->with('success', 'Share purchase approved successfully');
     }
 
-    public function processTransfer(Request $request)
+    public function reject(Share $share)
     {
-        $validated = $request->validate([
-            'from_user_id' => 'required|exists:users,id',
-            'to_user_id' => 'required|exists:users,id|different:from_user_id',
-            'number_of_shares' => 'required|integer|min:1',
-            'remark' => 'nullable|string'
+        $share->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now()
         ]);
 
-        $fromShare = Share::where('user_id', $validated['from_user_id'])->firstOrFail();
-        $toShare = Share::where('user_id', $validated['to_user_id'])->first();
+        // Update transaction status
+        TransactionHelper::updateTransactionStatus(
+            $share->user_id,
+            'share_purchase',
+            $share->amount_paid,
+            'rejected',
+            'Share Purchase Rejected - ' . $share->certificate_number
+        );
 
-        if ($fromShare->number_of_shares < $validated['number_of_shares']) {
-            return back()->with('error', 'Insufficient shares for transfer');
-        }
-
-        // Update shares for sender
-        $fromShare->update([
-            'number_of_shares' => $fromShare->number_of_shares - $validated['number_of_shares'],
-            'total_amount' => ($fromShare->number_of_shares - $validated['number_of_shares']) * $fromShare->amount_per_share
-        ]);
-
-        // Update or create shares for receiver
-        if ($toShare) {
-            $toShare->update([
-                'number_of_shares' => $toShare->number_of_shares + $validated['number_of_shares'],
-                'total_amount' => ($toShare->number_of_shares + $validated['number_of_shares']) * $toShare->amount_per_share
-            ]);
-        } else {
-            Share::create([
-                'user_id' => $validated['to_user_id'],
-                'number_of_shares' => $validated['number_of_shares'],
-                'amount_per_share' => $fromShare->amount_per_share,
-                'total_amount' => $validated['number_of_shares'] * $fromShare->amount_per_share,
-                'certificate_number' => 'SHR-' . date('Y') . '-' . Str::random(8),
-                'posted_by' => auth()->id()
-            ]);
-        }
-
-        // Record transfer transaction
-        ShareTransaction::create([
-            'user_id' => $validated['from_user_id'],
-            'transaction_type' => 'transfer',
-            'number_of_shares' => $validated['number_of_shares'],
-            'amount' => $validated['number_of_shares'] * $fromShare->amount_per_share,
-            'reference' => 'STX-' . date('Y') . '-' . Str::random(8),
-            'remark' => $validated['remark'],
-            'posted_by' => auth()->id()
-        ]);
-
-        return redirect()->route('admin.shares.index')
-            ->with('success', 'Shares transferred successfully');
+        return back()->with('success', 'Share purchase rejected');
     }
 }
