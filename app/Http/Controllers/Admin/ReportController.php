@@ -8,6 +8,16 @@ use App\Models\Transaction;
 use App\Models\Share;
 use App\Models\Loan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
+use App\Exports\MembersExport;
+use App\Exports\AdminsExport;
+use App\Exports\EntranceFeesExport;
+use App\Exports\SavingsExport;
+use App\Exports\SharesExport;
+use App\Exports\LoansExport;
+use App\Exports\TransactionsExport;
+
 
 class ReportController extends Controller
 {
@@ -17,7 +27,7 @@ class ReportController extends Controller
         return view('admin.reports.index');
     }
 
-    
+
     public function members(Request $request)
     {
         $members = User::where('is_admin', false)
@@ -35,6 +45,21 @@ class ReportController extends Controller
 
         return view('admin.reports.members', compact('members'));
     }
+
+
+    // Add these methods for each report type
+    public function membersExcel()
+    {
+        return Excel::download(new MembersExport, 'members-report.xlsx');
+    }
+
+    public function membersPdf()
+    {
+        $members = User::where('is_admin', false)->get();
+        $pdf = PDf::loadView('admin.reports.members-pdf', compact('members'));
+        return $pdf->download('members-report.pdf');
+    }
+
 
     public function admins()
     {

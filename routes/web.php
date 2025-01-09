@@ -264,6 +264,11 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
         Route::get('/shares', [ReportController::class, 'shares'])->name('shares');
         Route::get('/loans', [ReportController::class, 'loans'])->name('loans');
         Route::get('/transactions', [ReportController::class, 'transactions'])->name('transactions');
+
+        Route::get('/members/excel', [ReportController::class, 'membersExcel'])->name('members.excel');
+        Route::get('/members/pdf', [ReportController::class, 'membersPdf'])->name('members.pdf');
+
+
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
