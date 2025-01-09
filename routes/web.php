@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ResourceController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Admin\ShareController;
+use App\Http\Controllers\Admin\ShareTypeController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -174,12 +175,12 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
         'update' => 'share-types.update',
     ]);
     // Shares
-    Route::get('/admin/shares', [ShareController::class, 'index'])->name('admin.shares.index');
-    Route::get('/admin/shares/create', [ShareController::class, 'create'])->name('admin.shares.create');
-    Route::post('/admin/shares', [ShareController::class, 'store'])->name('admin.shares.store');
-    Route::get('/admin/shares/{share}', [ShareController::class, 'show'])->name('admin.shares.show');
-    Route::post('/admin/shares/{share}/approve', [ShareController::class, 'approve'])->name('admin.shares.approve');
-    Route::post('/admin/shares/{share}/reject', [ShareController::class, 'reject'])->name('admin.shares.reject');
+    Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
+    Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
+    Route::post('/shares', [ShareController::class, 'store'])->name('shares.store');
+    Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
+    Route::post('/shares/{share}/approve', [ShareController::class, 'approve'])->name('shares.approve');
+    Route::post('/shares/{share}/reject', [ShareController::class, 'reject'])->name('shares.reject');
 
 
 

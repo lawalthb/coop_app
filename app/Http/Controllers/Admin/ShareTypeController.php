@@ -45,14 +45,13 @@ class ShareTypeController extends Controller
 
     public function update(Request $request, ShareType $shareType)
     {
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'price_per_unit' => 'required|numeric|min:0',
             'minimum_units' => 'required|integer|min:1',
             'maximum_units' => 'nullable|integer|min:1',
             'dividend_rate' => 'required|numeric|min:0',
-            'is_transferable' => 'boolean',
-            'has_voting_rights' => 'boolean',
             'status' => 'required|in:active,inactive',
             'description' => 'nullable|string'
         ]);
@@ -62,4 +61,21 @@ class ShareTypeController extends Controller
         return redirect()->route('admin.share-types.index')
             ->with('success', 'Share type updated successfully');
     }
+    public function destroy(ShareType $shareType)
+    {
+        if ($shareType->shares()->exists()) {
+            return redirect()
+                ->route('admin.share-types.index')
+                ->with('error', 'This share type cannot be deleted because it is being used by members');
+        }
+
+        $shareType->delete();
+
+        return redirect()
+            ->route('admin.share-types.index')
+            ->with('success', 'Share type deleted successfully');
+    }
+
 }
+
+

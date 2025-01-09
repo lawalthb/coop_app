@@ -7,19 +7,19 @@ use App\Models\Transaction;
 class TransactionHelper
 {
 
-  //  use App\Helpers\TransactionHelper;
+    //  use App\Helpers\TransactionHelper;
 
-// Record entrance fee
-//TransactionHelper::recordTransaction($userId, 'entrance_fee', 0, 5000);
+    // Record entrance fee
+    //TransactionHelper::recordTransaction($userId, 'entrance_fee', 0, 5000);
 
-// Record withdrawal
-//TransactionHelper::recordTransaction($userId, 'withdrawal', 10000, 0);
+    // Record withdrawal
+    //TransactionHelper::recordTransaction($userId, 'withdrawal', 10000, 0);
 
     public static function recordTransaction($userId, $type, $debitAmount = 0, $creditAmount = 0, $status = 'completed', $description = null)
     {
         // Set default description based on type if not provided
         if (!$description) {
-            $description = match($type) {
+            $description = match ($type) {
                 'entrance_fee' => 'Entrance Fee Payment',
                 'entrance_fee_used' => 'Entrance Fee Accepted',
                 'savings' => 'Monthly Savings Contribution',
@@ -40,4 +40,28 @@ class TransactionHelper
             'status' => $status
         ]);
     }
+
+    public static function updateTransactionStatus($userId, $type, $amount, $status, $description)
+    {
+        $transaction = Transaction::where([
+            'user_id' => $userId,
+            'type' => $type,
+        ])
+            ->where(function ($query) use ($amount) {
+                $query->where('debit_amount', $amount)
+                    ->orWhere('credit_amount', $amount);
+            })
+            ->latest()
+            ->first();
+
+        if ($transaction) {
+            $transaction->update([
+                'status' => $status,
+                'description' => $description
+            ]);
+        }
+
+        return true;
+    }
+
 }

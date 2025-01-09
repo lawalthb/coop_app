@@ -41,9 +41,19 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.share-types.edit', $type) }}" class="text-indigo-600 hover:text-indigo-900">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <div class="flex items-center space-x-4">
+                                    <a href="{{ route('admin.share-types.edit', $type) }}" class="text-indigo-600 hover:text-indigo-900">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <form action="{{ route('admin.share-types.destroy', $type) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this share type?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty

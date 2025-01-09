@@ -12,39 +12,39 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
                         <input type="text" name="name" value="{{ old('name') }}" required
-                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Price Per Unit</label>
                         <input type="number" step="0.01" name="price_per_unit" value="{{ old('price_per_unit') }}" required
-                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Units</label>
                             <input type="number" name="minimum_units" value="{{ old('minimum_units', 1) }}" required
-                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Units</label>
                             <input type="number" name="maximum_units" value="{{ old('maximum_units') }}"
-                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Dividend Rate (%)</label>
                         <input type="number" step="0.01" name="dividend_rate" value="{{ old('dividend_rate', 0) }}" required
-                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
 
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-4" style="display: none;">
                         <div>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" name="is_transferable" value="1" {{ old('is_transferable') ? 'checked' : '' }}
+                                <input type="checkbox" checked name="is_transferable" value="1" {{ old('is_transferable') ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-purple-600 focus:border-purple-500 focus:ring focus:ring-purple-200">
                                 <span class="ml-2">Transferable</span>
                             </label>
@@ -52,7 +52,7 @@
 
                         <div>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" name="has_voting_rights" value="1" {{ old('has_voting_rights') ? 'checked' : '' }}
+                                <input type="checkbox" checked name="has_voting_rights" value="1" {{ old('has_voting_rights') ? 'checked' : '' }}
                                     class="rounded border-gray-300 text-purple-600 focus:border-purple-500 focus:ring focus:ring-purple-200">
                                 <span class="ml-2">Voting Rights</span>
                             </label>
@@ -62,7 +62,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea name="description" rows="3"
-                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200">{{ old('description') }}</textarea>
+                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="flex justify-end">
