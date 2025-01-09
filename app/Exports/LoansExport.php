@@ -2,25 +2,39 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
+use App\Models\Loan;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class LoansExport implements FromArray, WithHeadings
+class LoansExport implements FromCollection, WithHeadings
 {
-    protected $headers;
-
-    public function __construct(array $headers)
+    public function collection()
     {
-        $this->headers = $headers;
-    }
-
-    public function array(): array
-    {
-        return [];
+        return Loan::with(['user', 'loanType'])
+            ->get()
+            ->map(function ($loan) {
+                return [
+                    'date' => $loan->created_at->format('Y-m-d'),
+                    'reference' => $loan->reference,
+                    'member' => $loan->user->surname . ' ' . $loan->user->firstname,
+                    'loan_type' => $loan->loanType->name,
+                    'amount' => $loan->amount,
+                    'balance' => $loan->balance,
+                    'status' => $loan->status,
+                ];
+            });
     }
 
     public function headings(): array
     {
-        return $this->headers;
+        return [
+            'Date',
+            'Reference',
+            'Member',
+            'Loan Type',
+            'Amount',
+            'Balance',
+            'Status'
+        ];
     }
 }

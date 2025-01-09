@@ -268,7 +268,20 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
         Route::get('/members/excel', [ReportController::class, 'membersExcel'])->name('members.excel');
         Route::get('/members/pdf', [ReportController::class, 'membersPdf'])->name('members.pdf');
 
+        // Excel exports
+        Route::get('/admins/excel', [ReportController::class, 'adminsExcel'])->name('admins.excel');
+        Route::get('/entrance-fees/excel', [ReportController::class, 'entranceFeesExcel'])->name('entrance-fees.excel');
+        Route::get('/shares/excel', [ReportController::class, 'sharesExcel'])->name('shares.excel');
+        Route::get('/loans/excel', [ReportController::class, 'loansExcel'])->name('loans.excel');
+        Route::get('/transactions/excel', [ReportController::class, 'transactionsExcel'])->name('transactions.excel');
 
+        // PDF exports
+        Route::get('/admins/pdf', [ReportController::class, 'adminsPdf'])->name('admins.pdf');
+        Route::get('/entrance-fees/pdf', [ReportController::class, 'entranceFeesPdf'])->name('entrance-fees.pdf');
+        Route::get('/shares/pdf', [ReportController::class, 'sharesPdf'])->name('shares.pdf');
+        Route::get('/loans/pdf', [ReportController::class, 'loansPdf'])->name('loans.pdf');
+        Route::get('/transactions/pdf', [ReportController::class, 'transactionsPdf'])->name('transactions.pdf');
+        
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
