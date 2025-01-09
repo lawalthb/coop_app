@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\LoansExport;
 use App\Helpers\TransactionHelper;
 use App\Http\Controllers\Controller;
+use App\Imports\LoansImport;
 use App\Models\Loan;
 use App\Models\LoanType;
 use App\Models\User;
@@ -12,6 +14,7 @@ use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LoanController extends Controller
 {
@@ -120,4 +123,43 @@ $loan_interest = $loanType->interest_rate_12_months;
 
         return back()->with('success', 'Loan rejected');
     }
+
+
+    public function import()
+    {
+      
+        return view('admin.loans.import');
+    }
+
+    public function processImport(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xlsx,xls'
+        ]);
+
+        $file = $request->file('file');
+
+        Excel::import(new LoansImport, $file);
+
+        return redirect()->route('admin.loans.index')
+        ->with('success', 'Loans data imported successfully');
+    }
+
+    public function downloadFormat()
+    {
+        $headers = [
+            'Member Email',
+            'Loan Type ID',
+            'Amount',
+            'Duration',
+            'Start Date',
+            'Purpose'
+        ];
+
+        return Excel::download(new LoansExport($headers), 'loans_import_format.xlsx');
+    }
+
+
 }
+
+

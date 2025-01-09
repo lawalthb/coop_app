@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SavingsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Saving;
 use App\Models\User;
@@ -9,9 +10,11 @@ use App\Models\Month;
 use App\Models\Year;
 use App\Models\SavingType;
 use App\Helpers\TransactionHelper;
+use App\Imports\SavingsImport;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SavingController extends Controller
 {
@@ -205,4 +208,43 @@ class SavingController extends Controller
         return redirect()->route('admin.savings')
             ->with('success', 'Savings entry and related transaction deleted successfully');
     }
-}
+
+    public function import()
+    {
+
+        return view('admin.savings.import');
+    }
+
+    public function processImport(Request $request)
+    {
+
+        $request->validate([
+            'file' => 'required|mimes:csv,xlsx,xls'
+        ]);
+
+        $file = $request->file('file');
+
+        // Process the imported file
+        Excel::import(new SavingsImport, $file);
+
+        return redirect()->route('admin.savings')
+        ->with('success', 'Savings data imported successfully');
+    }
+    public function downloadFormat()
+    {
+        $headers = [
+            'Member Email',
+            'Saving Type ID',
+            'Amount',
+            'Month ID',
+            'Year ID'
+        ];
+
+        $filename = 'savings_import_format.xlsx';
+
+        return Excel::download(new SavingsExport($headers), $filename);
+    }
+    }
+
+
+

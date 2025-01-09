@@ -13,6 +13,9 @@
                 <a href="{{ route('admin.savings.bulk') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
                     <i class="fas fa-users mr-2"></i>Post Bulk Savings
                 </a>
+                <a href="{{ route('admin.savings.import') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-file-import mr-2"></i>Import Savings
+                </a>
             </div>
         </div>
 

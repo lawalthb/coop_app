@@ -97,16 +97,15 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/resources/{resource}/download', [MemberResourceController::class, 'download'])->name('member.resources.download');
 
     Route::post('member/guarantor/{loan}/respond', [MemberLoanController::class, 'respondToGuarantorRequest'])
-    ->name('member.guarantor.respond');
+        ->name('member.guarantor.respond');
     Route::get('/member/guarantor-requests', [MemberLoanController::class, 'guarantorRequests'])
-    ->name('member.guarantor-requests');
+        ->name('member.guarantor-requests');
     Route::get('/member/guarantor/{loan}/show', [MemberLoanController::class, 'showGuarantorRequest'])
-    ->name('member.guarantor.show');
-
-});//end of member routes
+        ->name('member.guarantor.show');
+}); //end of member routes
 
 // Admin Routes
-Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin')->name('admin.')->group(function () {
     route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
 
@@ -141,6 +140,17 @@ Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')
     Route::get('/saving-types/{savingType}/edit', [SavingTypeController::class, 'edit'])->name('saving-types.edit');
     Route::put('/saving-types/{savingType}', [SavingTypeController::class, 'update'])->name('saving-types.update');
 
+
+    //savings import
+    Route::get('/savings/import', [SavingController::class, 'import'])->name('savings.import');
+
+    Route::post('/savings/process-import', [SavingController::class, 'processImport'])->name('savings.process-import');
+
+    Route::get('/savings/download-format', [SavingController::class, 'downloadFormat'])
+    ->name('savings.download-format');
+
+
+
     //savings
     Route::get('/savings', [SavingController::class, 'index'])->name('savings');
     Route::get('/savings/create', [SavingController::class, 'create'])->name('savings.create');
@@ -153,6 +163,8 @@ Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')
     Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
 
 
+
+
     //shares
     Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
     Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
@@ -162,6 +174,14 @@ Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')
     Route::post('/shares/transfer', [ShareController::class, 'processTransfer'])->name('shares.transfer.process');
 
 
+    //loan import
+
+    Route::get('/loans/import', [LoanController::class, 'import'])->name('loans.import');
+    Route::post('/loans/process-import', [LoanController::class, 'processImport'])->name('loans.process-import');
+    Route::get('/loans/download-format', [LoanController::class, 'downloadFormat'])->name('loans.download-format');
+
+    
+
     // Admin Loan Management Routes
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
@@ -170,8 +190,13 @@ Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')
     Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
     Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
     Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
+
+
+
+
     // Admin Loan Types Routes
     Route::resource('loan-types', LoanTypeController::class);
+
 
 
     Route::resource('resources', ResourceController::class);
@@ -204,7 +229,6 @@ Route::middleware(['auth','is_admin', 'permission:view_roles'])->prefix('admin')
     Route::get('/admin/roles', function () {
         return view('admin.roles.index');
     })->name('admin.roles.index');
-
 }); //end of admin routes
 
 

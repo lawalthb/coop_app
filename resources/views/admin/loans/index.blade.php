@@ -6,11 +6,15 @@
         <!-- Header Section -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Loan Management</h1>
-            <a href="{{ route('admin.loans.create') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-plus mr-2"></i>New Loan Application
-            </a>
+            <div class="flex space-x-4">
+                <a href="{{ route('admin.loans.create') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-plus mr-2"></i>New Loan Application
+                </a>
+                <a href="{{ route('admin.loans.import') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-file-import mr-2"></i>Import Loans
+                </a>
+            </div>
         </div>
-
         <!-- Table Section -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
