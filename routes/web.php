@@ -252,6 +252,21 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::get('/admin/roles', function () {
         return view('admin.roles.index');
     })->name('admin.roles.index');
+
+
+
+    Route::prefix('/reports')->name('reports.')->group(function () {
+
+        Route::get('/members', [ReportController::class, 'members'])->name('members');
+        Route::get('/admins', [ReportController::class, 'admins'])->name('admins');
+        Route::get('/entrance-fees', [ReportController::class, 'entranceFees'])->name('entrance-fees');
+        Route::get('/savings', [ReportController::class, 'savings'])->name('savings');
+        Route::get('/shares', [ReportController::class, 'shares'])->name('shares');
+        Route::get('/loans', [ReportController::class, 'loans'])->name('loans');
+        Route::get('/transactions', [ReportController::class, 'transactions'])->name('transactions');
+    });
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
 });
  //end of admin routes
 

@@ -137,7 +137,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(LoanGuarantor::class, 'user_id');
     }
+    public function shares()
+    {
+        return $this->hasMany(Share::class);
+    }
 
 }
+
 
 
