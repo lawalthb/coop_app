@@ -119,4 +119,42 @@ class MemberController extends Controller
         $member->update($validated);
         return redirect()->route('admin.members.show', $member)->with('success', 'Member updated successfully');
     }
-}
+    public function create()
+    {
+       
+        return view('admin.members.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'surname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:20',
+            'department' => 'required|string|max:255',
+            'password' => 'required|string|min:8|confirmed',
+            'member_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        // Handle image upload
+        if ($request->hasFile('member_image')) {
+            $imagePath = $request->file('member_image')->store('member-images', 'public');
+            $validated['member_image'] = $imagePath;
+        }
+
+        // Set additional fields
+        $validated['password'] = bcrypt($validated['password']);
+        $validated['is_admin'] = false;
+        $validated['admin_sign'] = 'Yes';
+        $validated['member_id'] = 'MEM-' . date('Y') . '-' . str_pad(User::count() + 1, 4, '0', STR_PAD_LEFT);
+
+        User::create($validated);
+
+        return redirect()->route('admin.members')
+            ->with('success', 'Member created successfully');
+    }
+    }
+
+
+

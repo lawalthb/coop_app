@@ -120,6 +120,11 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
 
 
     //member management
+
+    Route::get('/members/create', [MemberController::class, 'create'])->name('members.create');
+    Route::post('/members', [MemberController::class, 'store'])->name('members.store');
+
+    
     Route::get('/members', [MemberController::class, 'index'])->name('members');
     Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
     Route::patch('/members/{member}/approve', [MemberController::class, 'approve'])->name('members.approve');
@@ -281,7 +286,7 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
         Route::get('/shares/pdf', [ReportController::class, 'sharesPdf'])->name('shares.pdf');
         Route::get('/loans/pdf', [ReportController::class, 'loansPdf'])->name('loans.pdf');
         Route::get('/transactions/pdf', [ReportController::class, 'transactionsPdf'])->name('transactions.pdf');
-        
+
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 

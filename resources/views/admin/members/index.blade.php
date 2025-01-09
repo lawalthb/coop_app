@@ -6,6 +6,10 @@
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Member Management</h2>
             <div class="flex space-x-4">
+                <!-- Add New Member Button -->
+                <a href="{{ route('admin.members.create') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-plus mr-2"></i>Add New Member
+                </a>
                 <div class="relative">
                     <form action="{{ route('admin.members') }}" method="GET" class="relative">
                         <input type="text"

@@ -134,10 +134,10 @@
                             <span>Roles & Permissions</span>
                         </a>
                         @endif
-                        <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
+                        <!-- <a href="#" class="flex items-center px-4 py-3 hover:bg-purple-700 'bg-purple-700' : '' }}">
                             <i class="fas fa-cog w-5"></i>
                             <span class="ml-3">Settings</span>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </nav>
