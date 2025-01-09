@@ -6,9 +6,17 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Shares Report</h1>
-            <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-print mr-2"></i>Print Report
-            </button>
+            <div class="flex space-x-3">
+                <a href="{{ route('admin.reports.shares.excel') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                </a>
+                <a href="{{ route('admin.reports.shares.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                </a>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-print mr-2"></i>Print Report
+                </button>
+            </div>
         </div>
 
         <!-- Filters -->
@@ -19,9 +27,9 @@
                     <select name="share_type_id" class="w-full rounded-lg border-gray-300">
                         <option value="">All Types</option>
                         @foreach($shareTypes as $type)
-                            <option value="{{ $type->id }}" {{ request('share_type_id') == $type->id ? 'selected' : '' }}>
-                                {{ $type->name }}
-                            </option>
+                        <option value="{{ $type->id }}" {{ request('share_type_id') == $type->id ? 'selected' : '' }}>
+                            {{ $type->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>

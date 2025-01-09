@@ -3,14 +3,22 @@
 @section('content')
 <div class="min-h-screen bg-purple-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Administrators Report</h1>
-            <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-print mr-2"></i>Print Report
-            </button>
+            <div class="flex space-x-3">
+                <a href="{{ route('admin.reports.admins.excel') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                </a>
+                <a href="{{ route('admin.reports.admins.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                </a>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-print mr-2"></i>Print Report
+                </button>
+            </div>
         </div>
-
         <!-- Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-lg p-6">

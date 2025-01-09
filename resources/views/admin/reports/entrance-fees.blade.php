@@ -5,10 +5,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold text-gray-900">Entrance Fees Report</h1>
-            <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-print mr-2"></i>Print Report
-            </button>
+            <h1 class="text-2xl font-semibold text-gray-900">Entrance-fees Report</h1>
+            <div class="flex space-x-3">
+                <a href="{{ route('admin.reports.entrance-fees.excel') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                </a>
+                <a href="{{ route('admin.reports.entrance-fees.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                </a>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-print mr-2"></i>Print Report
+                </button>
+            </div>
         </div>
 
         <!-- Filters -->

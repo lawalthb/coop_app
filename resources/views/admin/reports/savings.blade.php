@@ -6,11 +6,18 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Savings Report</h1>
-            <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-print mr-2"></i>Print Report
-            </button>
+            <div class="flex space-x-3">
+                <a href="{{ route('admin.reports.savings.excel') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                </a>
+                <a href="{{ route('admin.reports.savings.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    <i class="fas fa-file-pdf mr-2"></i>Download PDF
+                </a>
+                <button onclick="window.print()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-print mr-2"></i>Print Report
+                </button>
+            </div>
         </div>
-
         <!-- Filters -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <form action="{{ route('admin.reports.savings') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -19,9 +26,9 @@
                     <select name="saving_type" class="w-full rounded-lg border-gray-300">
                         <option value="">All Types</option>
                         @foreach($savingTypes as $type)
-                            <option value="{{ $type->id }}" {{ request('saving_type') == $type->id ? 'selected' : '' }}>
-                                {{ $type->name }}
-                            </option>
+                        <option value="{{ $type->id }}" {{ request('saving_type') == $type->id ? 'selected' : '' }}>
+                            {{ $type->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
