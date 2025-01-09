@@ -76,7 +76,7 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $saving->created_at->format('M d, Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $saving->user->surname }} {{ $saving->user->firstname }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $saving->savingType->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"></td>
                         <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($saving->amount, 2) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

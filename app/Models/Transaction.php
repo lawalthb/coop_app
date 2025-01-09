@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+
 class Transaction extends Model
 {
     use SoftDeletes;
@@ -118,5 +119,8 @@ class Transaction extends Model
     {
         return $this->belongsTo(LoanType::class);
     }
-
+ 
 }
+
+
+

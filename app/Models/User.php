@@ -142,7 +142,19 @@ class User extends Authenticatable
         return $this->hasMany(Share::class);
     }
 
+
+    public function approvedShares()
+    {
+        return $this->hasMany(Share::class)->where('status', 'approved');
+    }
+    
+    public function approvedLoans()
+    {
+        return $this->hasMany(Loan::class)->where('status', 'approved');
+    }
+
 }
+
 
 
 

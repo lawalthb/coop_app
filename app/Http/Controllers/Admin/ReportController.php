@@ -17,6 +17,10 @@ use App\Exports\SavingsExport;
 use App\Exports\SharesExport;
 use App\Exports\LoansExport;
 use App\Exports\TransactionsExport;
+use App\Models\SavingType;
+use App\Models\ShareType;
+use App\Models\LoanType;
+
 
 
 class ReportController extends Controller
@@ -88,38 +92,35 @@ class ReportController extends Controller
         return view('admin.reports.entrance-fees', compact('entranceFees'));
     }
 
-    public function shares(Request $request)
+    public function shares()
     {
+        $shareTypes = ShareType::all();
         $shares = Share::with(['user', 'shareType'])
-            ->when($request->status, function($query, $status) {
-                return $query->where('status', $status);
-            })
-            ->when($request->date_from, function($query, $date) {
-                return $query->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function($query, $date) {
-                return $query->whereDate('created_at', '<=', $date);
-            })
-            ->paginate(15);
+            ->latest()
+            ->paginate(10);
 
-        return view('admin.reports.shares', compact('shares'));
+        return view('admin.reports.shares', compact('shares', 'shareTypes'));
     }
-
-    public function loans(Request $request)
+    public function loans()
     {
+        $loanTypes = LoanType::all();
         $loans = Loan::with(['user', 'loanType'])
-            ->when($request->status, function($query, $status) {
-                return $query->where('status', $status);
-            })
-            ->when($request->date_from, function($query, $date) {
-                return $query->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function($query, $date) {
-                return $query->whereDate('created_at', '<=', $date);
-            })
-            ->paginate(15);
+            ->latest()
+            ->paginate(10);
 
-        return view('admin.reports.loans', compact('loans'));
+        $totalLoans = Loan::where('status', 'approved')->sum('amount');
+        $activeLoans = Loan::where('status', 'approved')->where('balance', '>', 0)->sum('amount');
+        $totalRepayments = Loan::where('status', 'approved')->sum('amount_paid');
+        $outstandingBalance = Loan::where('status', 'approved')->sum('balance');
+
+        return view('admin.reports.loans', compact(
+            'loans',
+            'loanTypes',
+            'totalLoans',
+            'activeLoans',
+            'totalRepayments',
+            'outstandingBalance'
+        ));
     }
 
     public function transactions(Request $request)
@@ -201,7 +202,41 @@ class ReportController extends Controller
         $pdf = PDF::loadView('admin.reports.transactions-pdf', compact('transactions'));
         return $pdf->download('transactions-report.pdf');
     }
+
+
+    public function savings()
+    {
+        $savingTypes = SavingType::all();
+        $savings = Transaction::where('type', 'savings')
+            ->with(['user'])
+            ->latest()
+            ->paginate(10);
+
+        $totalSavings = Transaction::where('type', 'savings')
+            ->where('status', 'completed')
+            ->sum('credit_amount');
+
+        $activeSavers = Transaction::where('type', 'savings')
+            ->where('status', 'completed')
+            ->distinct('user_id')
+            ->count();
+
+        $monthlyAverage = Transaction::where('type', 'savings')
+            ->where('status', 'completed')
+            ->whereMonth('created_at', now()->month)
+            ->avg('credit_amount') ?? 0;
+
+        return view('admin.reports.savings', compact(
+            'savings',
+            'savingTypes',
+            'totalSavings',
+            'activeSavers',
+            'monthlyAverage'
+        ));
+    }
+
 }
+
 
 
 
