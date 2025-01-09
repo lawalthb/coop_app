@@ -64,6 +64,14 @@
                                         </button>
                                     </form>
                                     @endif
+
+                                    <form action="{{ route('admin.shares.destroy', $share) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this share purchase?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

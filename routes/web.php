@@ -73,7 +73,14 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
     Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
-    Route::get('/member/shares', [MemberShareController::class, 'index'])->name('member.shares');
+
+    //shares
+    Route::get('/member/shares', [MemberShareController::class, 'index'])->name('member.shares.index');
+
+    Route::get('/member/shares/create', [MemberShareController::class, 'create'])->name('member.shares.create');
+
+    Route::post('/member/shares', [MemberShareController::class, 'store'])->name('member.shares.store');
+
     Route::get('/member/loans', [MemberLoanController::class, 'index'])->name('member.loans.index');
     Route::get('/member/loans/create', [MemberLoanController::class, 'create'])->name('member.loans.create');
     Route::post('/member/loans', [MemberLoanController::class, 'store'])->name('member.loans.store');
@@ -82,6 +89,8 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
     Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
     Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
+
+
 
 
     //passbook routes
@@ -181,6 +190,10 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
     Route::post('/shares/{share}/approve', [ShareController::class, 'approve'])->name('shares.approve');
     Route::post('/shares/{share}/reject', [ShareController::class, 'reject'])->name('shares.reject');
+    Route::delete('/shares/{share}', [ShareController::class, 'destroy'])->name('shares.destroy');
+
+
+
 
 
 

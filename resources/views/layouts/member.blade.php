@@ -66,7 +66,7 @@
                         <span class="ml-3">Withdrawals</span>
                     </a>
 
-                    <a href="{{ route('member.shares') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.shares*') ? 'bg-purple-700' : '' }}">
+                    <a href="{{ route('member.shares.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.shares*') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-chart-pie w-5"></i>
                         <span class="ml-3">Shares</span>
                     </a>
@@ -89,8 +89,8 @@
                         <span class="ml-3">Notifications
                             @if(auth()->user()->notifications()->whereNull('read_at')->count() > 0)
                             <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full"> {{ auth()->user()->notifications()->whereNull('read_at')->count() }}</span>
-                                @endif
-                            </span>
+                            @endif
+                        </span>
                     </a>
                     <!-- Add this to your member sidebar navigation -->
                     <a href="{{ route('member.guarantor-requests') }}"

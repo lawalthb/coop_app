@@ -111,4 +111,25 @@ class ShareController extends Controller
 
         return back()->with('success', 'Share purchase rejected');
     }
+
+    public function destroy(Share $share)
+    {
+        if ($share->status === 'approved') {
+            return back()->with('error', 'Cannot delete an approved share purchase');
+        }
+
+        TransactionHelper::updateTransactionStatus(
+            $share->user_id,
+            'share_purchase',
+            $share->amount_paid,
+            'cancelled',
+            'Share Purchase Cancelled - ' . $share->certificate_number
+        );
+
+        $share->delete();
+
+        return redirect()
+            ->route('admin.shares.index')
+            ->with('success', 'Share purchase deleted successfully');
+    }
 }
