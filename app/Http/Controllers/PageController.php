@@ -39,4 +39,8 @@ class PageController extends Controller
     {
         return view('pages.contact');
     }
+    public function history()
+    {
+        return view('pages.history');
+    }
 }

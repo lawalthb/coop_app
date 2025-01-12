@@ -40,6 +40,8 @@ class User extends Authenticatable
         'member_no',
         'salary_deduction_agreement',
         'membership_declaration',
+        'religion',
+        'marital_status',
     ];
 
     protected $hidden = [
@@ -147,7 +149,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Share::class)->where('status', 'approved');
     }
-    
+
     public function approvedLoans()
     {
         return $this->hasMany(Loan::class)->where('status', 'approved');

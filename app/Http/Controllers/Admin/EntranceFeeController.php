@@ -61,7 +61,7 @@ class EntranceFeeController extends Controller
             // Update user with new member number
             User::where('id', $request->user_id)->update([
                 'admin_sign' => 'Yes',
-                'member_no' => 'OASCMS-' . '0081',
+                'member_no' => TransactionHelper::generateUniqueMemberNo() ,
                 'is_approved' => 1,
                 'approved_at' => now(),
                 'approved_by' => auth()->id(),

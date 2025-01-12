@@ -69,7 +69,12 @@
 
                     <p class="mb-4">The committee began by first considering the prevailing situation surrounding the existing cooperative societies in the Institute highlighting both good and unethical practices in their custom over the years with a view of establishing a Society with a difference and welfare of members at heart.</p>
 
-                    <p>5th April 2022 signifies the starting date of the society named OGITECH ACADEMIC STAFF COOPERATIVE MULTIPURPOSE SOCIETY.</p>
+                    <p>5th April 2022 signifies the starting date of the society named OGUN STATE INSTITUTE OF TECHNOLOGY ACADEMIC STAFF IGBESA (ADO-ODO/OTA) COOPERATIVE MULTIPURPOSE SOCIETY LIMITED.</p>
+                    <div class="text-center mt-6">
+                        <a href="{{ route('history') }}" class="inline-block bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                            Read Full History
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

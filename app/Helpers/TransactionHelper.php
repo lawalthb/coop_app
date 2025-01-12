@@ -64,4 +64,21 @@ class TransactionHelper
         return true;
     }
 
+
+    public static function generateUniqueMemberNo()
+    {
+        $base_number = \App\Models\User::count() + 1;
+        $new_member_no = 'OASCMS-' . str_pad($base_number, 4, '0', STR_PAD_LEFT);
+
+        while (\App\Models\User::where('member_no', $new_member_no)->exists()) {
+            $base_number++;
+            $new_member_no = 'OASCMS-' . str_pad($base_number, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $new_member_no;
+    }
+
+
 }
+
+

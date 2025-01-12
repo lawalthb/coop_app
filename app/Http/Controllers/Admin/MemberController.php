@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\AccountActivatedEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\TransactionHelper;
+
 
 
 class MemberController extends Controller
@@ -47,7 +49,14 @@ class MemberController extends Controller
 
     public function approve(User $member)
     {
-        $member->update(['admin_sign' => 'Yes']);
+        $new_member_no =TransactionHelper::generateUniqueMemberNo();
+        dd($new_member_no);
+        $member->update([
+            'admin_sign' => 'Yes',
+            'member_no' => $new_member_no,
+            'is_approved' => 1,
+            'approved_at' => now(),
+        ]);
 
         Mail::to($member->email)->send(new AccountActivatedEmail($member));
 
@@ -119,20 +128,32 @@ class MemberController extends Controller
         $member->update($validated);
         return redirect()->route('admin.members.show', $member)->with('success', 'Member updated successfully');
     }
+
+
     public function create()
     {
-       
-        return view('admin.members.create');
+        $faculties = Faculty::all();
+        $states = State::all();
+
+        return view('admin.members.create', compact('faculties', 'states'));
     }
+
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'surname' => 'required|string|max:255',
             'firstname' => 'required|string|max:255',
+            'staff_no' => 'required|string|max:50|unique:users',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|string|max:20',
-            'department' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:20',
+            'faculty_id' => 'required|exists:faculties,id',
+            'department_id' => 'required|exists:departments,id',
+            'state_id' => 'required|exists:states,id',
+            'lga_id' => 'required|exists:lgas,id',
+            'date_join' => 'required|date',
+            'monthly_savings' => 'required|numeric|min:0',
             'password' => 'required|string|min:8|confirmed',
             'member_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
@@ -147,14 +168,14 @@ class MemberController extends Controller
         $validated['password'] = bcrypt($validated['password']);
         $validated['is_admin'] = false;
         $validated['admin_sign'] = 'Yes';
-        $validated['member_id'] = 'MEM-' . date('Y') . '-' . str_pad(User::count() + 1, 4, '0', STR_PAD_LEFT);
-
+        $validated['is_approved'] = 1;
+        $validated['member_no'] = TransactionHelper::generateUniqueMemberNo() ;
+        $validated['approved_at'] = now();
         User::create($validated);
 
         return redirect()->route('admin.members')
             ->with('success', 'Member created successfully');
     }
-    }
 
-
-
+ 
+}

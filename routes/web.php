@@ -51,6 +51,8 @@ Route::get('/services', [PageController::class, 'services'])->name('services');
 Route::get('/resources', [PageController::class, 'resources'])->name('resources');
 Route::get('/events', [PageController::class, 'events'])->name('events');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::get('/history', [PageController::class, 'history'])->name('history');
+
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -124,7 +126,7 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::get('/members/create', [MemberController::class, 'create'])->name('members.create');
     Route::post('/members', [MemberController::class, 'store'])->name('members.store');
 
-    
+
     Route::get('/members', [MemberController::class, 'index'])->name('members');
     Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
     Route::patch('/members/{member}/approve', [MemberController::class, 'approve'])->name('members.approve');

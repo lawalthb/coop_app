@@ -302,5 +302,32 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const salaryCheckbox = document.getElementById('salary_deduction');
+        const membershipCheckbox = document.getElementById('membership_declaration');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        function checkBoxesStatus() {
+            if (salaryCheckbox.checked && membershipCheckbox.checked) {
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                submitButton.classList.add('hover:bg-purple-700');
+            } else {
+                submitButton.disabled = true;
+                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                submitButton.classList.remove('hover:bg-purple-700');
+            }
+        }
+
+        // Initially disable the button
+        submitButton.disabled = true;
+        submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+        // Add event listeners to both checkboxes
+        salaryCheckbox.addEventListener('change', checkBoxesStatus);
+        membershipCheckbox.addEventListener('change', checkBoxesStatus);
+    });
+</script>
 
 @endsection
