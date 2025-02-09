@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use App\Mail\AccountActivatedEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\TransactionHelper;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EntranceFeesImport;
 
 class EntranceFeeController extends Controller
 {
@@ -114,19 +117,31 @@ class EntranceFeeController extends Controller
         return back()->with('success', 'Entrance fee deleted successfully');
     }
 
-    // Additional helpful methods
-    public function export()
-    {
-        // Export entrance fees to Excel/CSV
-    }
+  public function export()
+{
+    return Excel::download(new EntranceFeesExport, 'entrance_fees.xlsx');
+}
 
     public function generateReceipt(EntranceFee $entranceFee)
     {
         // Generate PDF receipt
     }
 
-    public function bulkUpload(Request $request)
-    {
-        // Handle bulk upload of entrance fees
+ public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls'
+    ]);
+
+    DB::beginTransaction();
+    try {
+        Excel::import(new EntranceFeesImport, $request->file('file'));
+        DB::commit();
+        return back()->with('success', 'Entrance fees imported successfully');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Import failed: ' . $e->getMessage());
     }
+}
+
 }

@@ -150,6 +150,10 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::put('/member/entrance-fees/{entranceFee}', [EntranceFeeController::class, 'update'])->name('entrance-fees.update');
     Route::delete('/member/entrance-fees/{entranceFee}', [EntranceFeeController::class, 'destroy'])->name('entrance-fees.destroy');
 
+    Route::post('/entrance-fees/import', [EntranceFeeController::class, 'import'])->name('entrance-fees.import');
+Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->name('entrance-fees.export');
+
+
     // Admin Saving Types Routes
     Route::get('/saving-types', [SavingTypeController::class, 'index'])->name('saving-types.index');
     Route::get('/saving-types/create', [SavingTypeController::class, 'create'])->name('saving-types.create');
