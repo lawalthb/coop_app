@@ -30,10 +30,10 @@
         <tbody>
             @foreach($members as $member)
             <tr>
-                <td>{{ $member->member_id }}</td>
+                <td>{{ $member->id }}</td>
                 <td>{{ $member->surname }} {{ $member->firstname }}</td>
                 <td>{{ $member->email }}</td>
-                <td>{{ ucfirst($member->status) }}</td>
+                <td>{{ ucfirst($member->is_approved) }}</td>
                 <td>{{ $member->created_at->format('M d, Y') }}</td>
             </tr>
             @endforeach
