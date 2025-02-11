@@ -68,6 +68,11 @@
                             <option value="loan_interest" {{ request('type') === 'loan_interest' ? 'selected' : '' }}>Loan Interest</option>
                             <option value="expenses" {{ request('type') === 'expenses' ? 'selected' : '' }}>Expenses</option>
                             <option value="income" {{ request('type') === 'income' ? 'selected' : '' }}>Income</option>
+
+                              <option value="entrance_fee" {{ request('type') === 'entrance_fee' ? 'selected' : '' }}>Entrance Fee</option>
+
+
+
                         </select>
 
                     </div>

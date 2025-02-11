@@ -41,7 +41,7 @@ class EntranceFeesImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'exists:users,email'],
+            'email' => ['required','exists:users,email'],
             'amount' => ['required', 'numeric', 'min:0'],
             'month' => ['required', 'exists:months,id'],
             'year' => ['required', 'exists:years,id'],

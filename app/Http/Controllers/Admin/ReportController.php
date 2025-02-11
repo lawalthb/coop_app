@@ -74,23 +74,31 @@ class ReportController extends Controller
         return view('admin.reports.admins', compact('admins'));
     }
 
-    public function entranceFees(Request $request)
-    {
-        $entranceFees = Transaction::where('type', 'entrance_fee')
-            ->when($request->status, function($query, $status) {
-                return $query->where('status', $status);
-            })
-            ->when($request->date_from, function($query, $date) {
-                return $query->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function($query, $date) {
-                return $query->whereDate('created_at', '<=', $date);
-            })
-            ->with('user')
-            ->paginate(15);
+  public function entranceFees(Request $request)
+{
+    $query = Transaction::where('type', 'entrance_fee')
+        ->when($request->status, function($query, $status) {
+            return $query->where('status', $status);
+        })
+        ->when($request->date_from, function($query, $date) {
+            return $query->whereDate('created_at', '>=', $date);
+        })
+        ->when($request->date_to, function($query, $date) {
+            return $query->whereDate('created_at', '<=', $date);
+        });
 
-        return view('admin.reports.entrance-fees', compact('entranceFees'));
-    }
+    // Get totals before pagination
+    $totals = [
+        'total_amount' => $query->sum('credit_amount'),
+        'completed_count' => (clone $query)->where('status', 'completed')->count(),
+        'pending_count' => (clone $query)->where('status', 'pending')->count()
+    ];
+
+    $entranceFees = $query->with('user')->paginate(50);
+
+    return view('admin.reports.entrance-fees', compact('entranceFees', 'totals'));
+}
+
 
     public function shares()
     {

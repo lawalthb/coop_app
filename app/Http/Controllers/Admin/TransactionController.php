@@ -31,7 +31,7 @@ class TransactionController extends Controller
             $query->where('type', $request->type);
         }
 
-        $totalCredits = (clone $query)->where('type', 'savings')->sum('credit_amount');
+        $totalCredits = (clone $query)->whereIn('type', ['savings', 'entrance_fee'])->sum('credit_amount');
         $totalDebits = (clone $query)->where('type', 'withdraw')->sum('debit_amount');
 
         $transactions = $query->latest()->paginate(15);

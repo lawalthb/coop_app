@@ -52,15 +52,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Collections</h3>
-                <p class="text-3xl font-bold text-purple-600">₦{{ number_format($entranceFees->sum('credit_amount'), 2) }}</p>
+                <p class="text-3xl font-bold text-purple-600">₦{{ number_format($totals['total_amount'], 2) }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Completed Payments</h3>
-                <p class="text-3xl font-bold text-green-600">{{ $entranceFees->where('status', 'completed')->count() }}</p>
+                <p class="text-3xl font-bold text-green-600">{{  $totals['completed_count'] }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Pending Payments</h3>
-                <p class="text-3xl font-bold text-yellow-600">{{ $entranceFees->where('status', 'pending')->count() }}</p>
+                <p class="text-3xl font-bold text-yellow-600">{{  $totals['pending_count'] }}</p>
             </div>
         </div>
 
