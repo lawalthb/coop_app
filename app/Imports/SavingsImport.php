@@ -50,7 +50,7 @@ class SavingsImport implements ToModel, WithValidation, SkipsOnFailure, WithHead
     public function rules(): array
     {
         return [
-            'member_email' => ['required', 'email', 'exists:users,email'],
+            'member_email' => ['required',  'exists:users,email'],
             'saving_type_id' => ['required', 'exists:saving_types,id'],
             'amount' => ['required', 'numeric'],
             'month_id' => ['required', 'exists:months,id'],
@@ -58,8 +58,21 @@ class SavingsImport implements ToModel, WithValidation, SkipsOnFailure, WithHead
         ];
     }
 
-    public function onFailure(Failure ...$failures)
-    {
-       dd('error');
+   public function onFailure(Failure ...$failures)
+{
+    foreach ($failures as $failure) {
+        $error = [
+            'row' => $failure->row(),
+            'attribute' => $failure->attribute(),
+            'errors' => $failure->errors(),
+            'values' => $failure->values()
+        ];
+
+        // You can log these errors
+        \Log::error('Savings Import Failed:', $error);
     }
+
+    throw new \Exception('Savings import failed. Check logs for details.');
+}
+
 }
