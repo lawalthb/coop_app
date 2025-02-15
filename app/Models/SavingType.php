@@ -29,4 +29,8 @@ class SavingType extends Model
     {
         return $this->hasMany(Saving::class);
     }
+    public function scopeWithdrawable($query)
+    {
+        return $query->where('name', 'not like', '%withdraw%');
+    }
 }

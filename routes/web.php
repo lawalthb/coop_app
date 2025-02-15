@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SavingTypeController;
 use App\Http\Controllers\Admin\ShareController;
 use App\Http\Controllers\Admin\ShareTypeController;
+use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -173,6 +174,9 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
 
 
     //savings
+     Route::get('/savings/withdraw', [SavingController::class, 'showWithdrawForm'])->name('savings.withdraw-form');
+    Route::post('/savings/withdraw', [SavingController::class, 'withdraw'])->name('savings.withdraw');
+
     Route::get('/savings', [SavingController::class, 'index'])->name('savings');
     Route::get('/savings/create', [SavingController::class, 'create'])->name('savings.create');
     Route::post('/savings', [SavingController::class, 'store'])->name('savings.store');
@@ -182,6 +186,8 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::get('/savings/{saving}/edit', [SavingController::class, 'edit'])->name('savings.edit');
     Route::put('/savings/{saving}', [SavingController::class, 'update'])->name('savings.update');
     Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
+
+
 
 
 
@@ -281,6 +287,10 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
 
         // Excel exports
         Route::get('/admins/excel', [ReportController::class, 'adminsExcel'])->name('admins.excel');
+
+         Route::get('/saving/excel', [ReportController::class, 'savingsExcel'])->name('savings.excel');
+
+
         Route::get('/entrance-fees/excel', [ReportController::class, 'entranceFeesExcel'])->name('entrance-fees.excel');
         Route::get('/shares/excel', [ReportController::class, 'sharesExcel'])->name('shares.excel');
         Route::get('/loans/excel', [ReportController::class, 'loansExcel'])->name('loans.excel');
@@ -293,8 +303,12 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
         Route::get('/loans/pdf', [ReportController::class, 'loansPdf'])->name('loans.pdf');
         Route::get('/transactions/pdf', [ReportController::class, 'transactionsPdf'])->name('transactions.pdf');
 
+         Route::get('/savings/pdf', [ReportController::class, 'savingsPdf'])->name('savings.pdf');
+
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+
 
 });
  //end of admin routes

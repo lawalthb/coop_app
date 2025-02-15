@@ -11,7 +11,7 @@ class SavingTypeController extends Controller
 {
     public function index()
     {
-        $savingTypes = SavingType::latest()->paginate(10);
+        $savingTypes = SavingType::withdrawable()->where('status', 'active')->latest()->paginate(10);
         return view('admin.saving-types.index', compact('savingTypes'));
     }
 

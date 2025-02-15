@@ -22,6 +22,18 @@
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <form action="{{ route('admin.reports.savings') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Member</label>
+    <select name="member_id" class="w-full rounded-lg border-gray-300">
+        <option value="">All Members</option>
+        @foreach($members as $member)
+        <option value="{{ $member->id }}" {{ request('member_id') == $member->id ? 'selected' : '' }}>
+            {{ $member->title }}  {{ $member->surname }} {{ $member->firstname }} -  {{ $member->member_no }}
+        </option>
+        @endforeach
+    </select>
+</div>
+
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Saving Type</label>
                     <select name="saving_type" class="w-full rounded-lg border-gray-300">
                         <option value="">All Types</option>

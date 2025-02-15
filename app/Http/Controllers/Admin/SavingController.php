@@ -34,7 +34,7 @@ class SavingController extends Controller
             $query->where('saving_type_id', $request->type);
         }
 
-        $savings = $query->latest()->paginate(10);
+        $savings = $query->latest()->paginate(100);
 
         $months = Month::all();
         $years = Year::all();
@@ -49,7 +49,7 @@ class SavingController extends Controller
         $members = User::where('is_admin', false)
             ->where('admin_sign', 'Yes')
             ->get();
-        $savingTypes = SavingType::where('status', 'active')->get();
+        $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
         $months = Month::all();
         $years = Year::all();
 
@@ -160,7 +160,7 @@ class SavingController extends Controller
 
     public function edit(Saving $saving)
     {
-        $savingTypes = SavingType::where('status', 'active')->get();
+        $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
         $months = Month::all();
         $years = Year::all();
 
@@ -244,7 +244,59 @@ class SavingController extends Controller
 
         return Excel::download(new SavingsExport($headers), $filename);
     }
+
+   public function showWithdrawForm()
+{
+    $members = User::where('is_admin', false)
+        ->orderBy('surname')
+        ->get();
+    $savingTypes = SavingType::where('name', 'like', '%withdraw%')->where('status', 'active')->get();
+    $months = Month::all();
+    $years = Year::all();
+    return view('admin.savings.withdraw', compact('members', 'savingTypes', 'months', 'years'));
+}
+
+public function withdraw(Request $request)
+{
+    $validated = $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'saving_type_id' => 'required|exists:saving_types,id',
+        'amount' => 'required|numeric|min:0',
+        'month_id' => 'required|exists:months,id',
+        'year_id' => 'required|exists:years,id',
+        'remark' => 'nullable|string'
+    ]);
+
+    $withdrawal = Saving::create([
+        'user_id' => $validated['user_id'],
+        'saving_type_id' => $validated['saving_type_id'],
+        'amount' => -abs($validated['amount']),
+        'month_id' => $validated['month_id'],
+        'year_id' => $validated['year_id'],
+        'reference' => 'WTH-' . Str::random(10),
+        'status' => 'completed',
+        'remark' => 'Withdrawal: ' . $validated['remark'],
+        'posted_by' => auth()->id()
+    ]);
+
+    TransactionHelper::recordTransaction(
+        $validated['user_id'],
+        'withdrawal',
+        abs($validated['amount']),
+        0,
+
+        'completed',
+        'Savings Withdrawal - ' . $withdrawal->reference
+    );
+
+    return redirect()->route('admin.savings')
+        ->with('success', 'Withdrawal processed successfully');
+}
+
+
     }
+
+
 
 
 

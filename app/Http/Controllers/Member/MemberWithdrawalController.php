@@ -14,7 +14,7 @@ class MemberWithdrawalController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $savingTypes = SavingType::all();
+        $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
 
         $balances = [];
         foreach ($savingTypes as $type) {
@@ -68,7 +68,7 @@ class MemberWithdrawalController extends Controller
         $withdrawal = Withdrawal::create([
             'user_id' => $user->id,
             'saving_type_id' => $validated['saving_type_id'],
-          
+
             'amount' => $validated['amount'],
             'reference' => 'WTH-' . strtoupper(uniqid()),
             'status' => 'pending',

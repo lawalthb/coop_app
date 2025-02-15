@@ -45,7 +45,7 @@ class ReportController extends Controller
                 return $query->whereDate('created_at', '<=', $date);
             })
             ->withCount(['shares', 'loans', 'transactions'])
-            ->paginate(15);
+            ->paginate(50);
 
         return view('admin.reports.members', compact('members'));
     }
@@ -114,7 +114,7 @@ class ReportController extends Controller
         $loanTypes = LoanType::all();
         $loans = Loan::with(['user', 'loanType'])
             ->latest()
-            ->paginate(10);
+            ->paginate(50);
 
         $totalLoans = Loan::where('status', 'approved')->sum('amount');
         $activeLoans = Loan::where('status', 'approved')->where('balance', '>', 0)->sum('amount');
@@ -146,7 +146,7 @@ class ReportController extends Controller
             ->when($request->date_to, function($query, $date) {
                 return $query->whereDate('created_at', '<=', $date);
             })
-            ->paginate(15);
+            ->paginate(100);
 
         return view('admin.reports.transactions', compact('transactions'));
     }
@@ -212,36 +212,45 @@ class ReportController extends Controller
     }
 
 
-    public function savings()
-    {
-        $savingTypes = SavingType::all();
-        $savings = Transaction::where('type', 'savings')
-            ->with(['user'])
-            ->latest()
-            ->paginate(10);
+  public function savings(Request $request)
+{
+    $query = Transaction::where('type', 'savings')
+        ->when($request->member_id, function($query, $memberId) {
+            return $query->where('user_id', $memberId);
+        })
+        ->when($request->saving_type, function($query, $type) {
+            return $query->where('saving_type_id', $type);
+        })
+        ->when($request->date_from, function($query, $date) {
+            return $query->whereDate('created_at', '>=', $date);
+        })
+        ->when($request->date_to, function($query, $date) {
+            return $query->whereDate('created_at', '<=', $date);
+        });
 
-        $totalSavings = Transaction::where('type', 'savings')
-            ->where('status', 'completed')
-            ->sum('credit_amount');
+    // Get members for dropdown
+    $members = User::where('is_admin', false)->get();
 
-        $activeSavers = Transaction::where('type', 'savings')
-            ->where('status', 'completed')
-            ->distinct('user_id')
-            ->count();
+    // Get saving types
+    $savingTypes = SavingType::all();
 
-        $monthlyAverage = Transaction::where('type', 'savings')
-            ->where('status', 'completed')
-            ->whereMonth('created_at', now()->month)
-            ->avg('credit_amount') ?? 0;
+    $savings = $query->with(['user'])->latest()->paginate(10);
 
-        return view('admin.reports.savings', compact(
-            'savings',
-            'savingTypes',
-            'totalSavings',
-            'activeSavers',
-            'monthlyAverage'
-        ));
-    }
+    // Calculate totals
+    $totalSavings = $query->sum('credit_amount');
+    $activeSavers = $query->distinct('user_id')->count();
+    $monthlyAverage = $query->whereMonth('created_at', now()->month)->avg('credit_amount') ?? 0;
+
+    return view('admin.reports.savings', compact(
+        'savings',
+        'savingTypes',
+        'members',
+        'totalSavings',
+        'activeSavers',
+        'monthlyAverage'
+    ));
+}
+
 
 }
 
