@@ -12,4 +12,9 @@ class Month extends Model
     {
         return $this->hasMany(EntranceFee::class);
     }
+
+    public function shares()
+    {
+        return $this->hasMany(Share::class);
+    }
 }

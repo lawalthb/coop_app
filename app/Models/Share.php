@@ -10,9 +10,10 @@ class Share extends Model
         'user_id',
         'share_type_id',
         'certificate_number',
-        'number_of_units',
+
         'amount_paid',
-        'unit_price',
+        'month_id',
+        'year_id',
         'status',
         'approved_by',
         'approved_at',
@@ -43,4 +44,15 @@ class Share extends Model
     {
         return $this->belongsTo(User::class, 'posted_by');
     }
+
+     public function month()
+    {
+        return $this->belongsTo(Month::class);
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+
 }

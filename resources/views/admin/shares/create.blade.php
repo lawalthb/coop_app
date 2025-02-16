@@ -26,20 +26,45 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Share Type</label>
                             <select name="share_type_id" required class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                                 <option value="">Select Share Type</option>
+                                  <option selected value="1">normal</option>
                                 @foreach($shareTypes as $type)
                                 <option value="{{ $type->id }}" {{ old('share_type_id') == $type->id ? 'selected' : '' }}>
-                                    {{ $type->name }} (₦{{ number_format($type->price_per_unit, 2) }} per unit)
+                                    {{ $type->name }} (minimum ₦{{ number_format($type->minimum_amount, 2) }} ) (maxinum ₦{{ number_format($type->maximum_amount, 2) }} )
                                 </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Number of Units</label>
-                            <input type="number" name="number_of_units" value="{{ old('number_of_units') }}" required
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Amount Paid</label>
+                            <input type="number" name="amount_paid" value="{{ old('amount_paid') }}" required
                                 class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
+<div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                            <select name="month_id" required class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                                <option value="">Select Month</option>
+                                 <option selected value="4">April</option>
+                                @foreach($months as $month)
+                                <option value="{{ $month->id }}" {{ old('month_id') == $month->id ? 'selected' : '' }}>
+                                    {{ $month->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                            <select name="year_id" required class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                                <option value="">Select Year</option>
+                                 <option selected value="22">2022</option>
+                                @foreach($years as $year)
+                                <option value="{{ $year->id }}" {{ old('year_id') == $year->id ? 'selected' : '' }}>
+                                    {{ $year->year }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Remark</label>
                             <textarea name="remark" rows="3"

@@ -208,7 +208,7 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::post('/shares/{share}/approve', [ShareController::class, 'approve'])->name('shares.approve');
     Route::post('/shares/{share}/reject', [ShareController::class, 'reject'])->name('shares.reject');
     Route::delete('/shares/{share}', [ShareController::class, 'destroy'])->name('shares.destroy');
-
+  Route::post('/shares/import', [ShareController::class, 'import'])->name('shares.import');
 
 
 

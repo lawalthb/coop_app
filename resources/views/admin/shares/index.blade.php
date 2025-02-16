@@ -10,7 +10,21 @@
                 <i class="fas fa-plus mr-2"></i>New Share Purchase
             </a>
         </div>
-
+<div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Import Shares</h3>
+    <form action="{{ route('admin.shares.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center space-x-4">
+        @csrf
+        <div class="flex-1">
+            <input type="file" name="file" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+        </div>
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+            Import Shares
+        </button>
+    </form>
+    <div class="mt-2 text-sm text-gray-600">
+        File must contain: email, amount, month_id, year_id
+    </div>
+</div>
         <!-- Table Section -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
@@ -20,8 +34,9 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Certificate</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Member</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Share Type</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Units</th>
+
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Period</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Posted By</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
@@ -34,8 +49,9 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $share->certificate_number }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $share->user->surname }} {{ $share->user->firstname }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $share->shareType->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $share->number_of_units }}</td>
+
                             <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($share->amount_paid, 2) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $share->month->name }} {{ $share->year->year }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                     {{ $share->status === 'approved' ? 'bg-green-100 text-green-800' :

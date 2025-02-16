@@ -6,64 +6,72 @@ use App\Http\Controllers\Controller;
 use App\Models\Share;
 use App\Models\ShareType;
 use App\Models\User;
+use App\Models\Month;
+use App\Models\Year;
+
 use App\Helpers\TransactionHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Imports\SharesImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ShareController extends Controller
 {
     public function index()
     {
-        $shares = Share::with(['user', 'shareType', 'approvedBy', 'postedBy'])
+        $shares = Share::with(['user', 'shareType', 'approvedBy', 'postedBy', 'month', 'year'])
             ->latest()
-            ->paginate(10);
+            ->paginate(50);
 
         return view('admin.shares.index', compact('shares'));
     }
 
-    public function create()
-    {
-        $members = User::where('is_admin', false)
-            ->where('admin_sign', 'Yes')
-            ->get();
-        $shareTypes = ShareType::where('status', 'active')->get();
+public function create()
+{
+    $members = User::where('is_admin', false)
+        ->where('admin_sign', 'Yes')
+        ->get();
+    $shareTypes = ShareType::where('status', 'active')->get();
+    $months = Month::all();
+    $years = Year::all();
 
-        return view('admin.shares.create', compact('members', 'shareTypes'));
-    }
+    return view('admin.shares.create', compact('members', 'shareTypes', 'months', 'years'));
+}
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'share_type_id' => 'required|exists:share_types,id',
-            'number_of_units' => 'required|integer|min:1',
-            'remark' => 'nullable|string'
-        ]);
+    'user_id' => 'required|exists:users,id',
+    'share_type_id' => 'required|exists:share_types,id',
+    'amount_paid' => 'required|integer|min:1',
+    'month_id' => 'required|exists:months,id',
+    'year_id' => 'required|exists:years,id',
+    'remark' => 'nullable|string'
+]);
 
-        $shareType = ShareType::find($request->share_type_id);
-        $amountPaid = $shareType->price_per_unit * $validated['number_of_units'];
 
-        $share = Share::create([
-            'user_id' => $validated['user_id'],
-            'share_type_id' => $validated['share_type_id'],
-            'certificate_number' => 'SHR-' . date('Y') . '-' . Str::random(8),
-            'number_of_units' => $validated['number_of_units'],
-            'amount_paid' => $amountPaid,
-            'unit_price' => $shareType->price_per_unit,
-            'posted_by' => auth()->id(),
-            'remark' => $validated['remark']
-        ]);
-
+       $share = Share::create([
+    'user_id' => $validated['user_id'],
+    'share_type_id' => $validated['share_type_id'],
+    'certificate_number' => 'SHR-' . date('Y') . '-' . Str::random(8),
+    'amount_paid' => $validated['amount_paid'],
+    'month_id' => $validated['month_id'],
+    'year_id' => $validated['year_id'],
+    'posted_by' => auth()->id(),
+     'status' => 'approved',
+    'remark' => $validated['remark']
+]);
         TransactionHelper::recordTransaction(
             $validated['user_id'],
             'share_purchase',
-            $amountPaid,
+
             0,
-            'pending',
+            $validated['amount_paid'],
+            'completed',
             'Share Purchase - ' . $share->certificate_number
         );
 
-        return redirect()->route('admin.shares.index')
+        return redirect()->route('admin.shares.create')
             ->with('success', 'Share purchase recorded successfully');
     }
 
@@ -132,4 +140,16 @@ class ShareController extends Controller
             ->route('admin.shares.index')
             ->with('success', 'Share purchase deleted successfully');
     }
+
+    public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,csv'
+    ]);
+
+    Excel::import(new SharesImport, $request->file('file'));
+
+    return redirect()->route('admin.shares.index')
+        ->with('success', 'Shares imported successfully');
+}
 }

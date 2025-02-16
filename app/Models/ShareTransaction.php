@@ -9,7 +9,6 @@ class ShareTransaction extends Model
     protected $fillable = [
         'user_id',
         'transaction_type',
-        'number_of_shares',
         'amount',
         'reference',
         'status',
