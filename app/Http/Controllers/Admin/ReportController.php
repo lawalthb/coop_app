@@ -20,8 +20,8 @@ use App\Exports\TransactionsExport;
 use App\Models\SavingType;
 use App\Models\ShareType;
 use App\Models\LoanType;
-
-
+use App\Models\Month;
+use App\Models\Year;
 
 class ReportController extends Controller
 {
@@ -100,15 +100,39 @@ class ReportController extends Controller
 }
 
 
-    public function shares()
-    {
-        $shareTypes = ShareType::all();
-        $shares = Share::with(['user', 'shareType'])
-            ->latest()
-            ->paginate(10);
+ public function shares()
+{
+    $query = Share::with(['user', 'shareType']);
 
-        return view('admin.reports.shares', compact('shares', 'shareTypes'));
+    if (request('share_type_id')) {
+        $query->where('share_type_id', request('share_type_id'));
     }
+    if (request('month_id')) {
+        $query->where('month_id', request('month_id'));
+    }
+    if (request('year_id')) {
+        $query->where('year_id', request('year_id'));
+    }
+    if (request('date_from')) {
+        $query->whereDate('created_at', '>=', request('date_from'));
+    }
+    if (request('date_to')) {
+        $query->whereDate('created_at', '<=', request('date_to'));
+    }
+
+    $totalAmount = $query->sum('amount_paid');
+    $totalApproved = $query->whereNotNull('approved_by')->count();
+    $totalNotyet =Share::with(['user', 'shareType'])->whereNull('approved_by')->count();
+    $totalShareholders = $query->distinct('user_id')->count('user_id');
+
+    $shares = $query->latest()->paginate(50);
+    $shareTypes = ShareType::all();
+    $months = Month::all();
+    $years = Year::all();
+
+    return view('admin.reports.shares', compact('shares', 'shareTypes', 'months', 'years', 'totalAmount', 'totalApproved', 'totalNotyet', 'totalShareholders'));
+}
+
     public function loans()
     {
         $loanTypes = LoanType::all();

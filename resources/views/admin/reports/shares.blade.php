@@ -21,49 +21,71 @@
 
         <!-- Filters -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-            <form action="{{ route('admin.reports.shares') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Share Type</label>
-                    <select name="share_type_id" class="w-full rounded-lg border-gray-300">
-                        <option value="">All Types</option>
-                        @foreach($shareTypes as $type)
-                        <option value="{{ $type->id }}" {{ request('share_type_id') == $type->id ? 'selected' : '' }}>
-                            {{ $type->name }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
-                    <input type="date" name="date_from" value="{{ request('date_from') }}"
-                        class="w-full rounded-lg border-gray-300">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
-                    <input type="date" name="date_to" value="{{ request('date_to') }}"
-                        class="w-full rounded-lg border-gray-300">
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full">
-                        Apply Filters
-                    </button>
-                </div>
-            </form>
+            <form action="{{ route('admin.reports.shares') }}" method="GET" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Share Type</label>
+        <select name="share_type_id" class="w-full rounded-lg border-gray-300">
+            <option value="">All Types</option>
+            @foreach($shareTypes as $type)
+            <option value="{{ $type->id }}" {{ request('share_type_id') == $type->id ? 'selected' : '' }}>
+                {{ $type->name }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+        <select name="month_id" class="w-full rounded-lg border-gray-300">
+            <option value="">All Months</option>
+            @foreach($months as $month)
+            <option value="{{ $month->id }}" {{ request('month_id') == $month->id ? 'selected' : '' }}>
+                {{ $month->name }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+        <select name="year_id" class="w-full rounded-lg border-gray-300">
+            <option value="">All Years</option>
+            @foreach($years as $year)
+            <option value="{{ $year->id }}" {{ request('year_id') == $year->id ? 'selected' : '' }}>
+                {{ $year->year }}
+            </option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+        <input type="date" name="date_from" value="{{ request('date_from') }}"
+            class="w-full rounded-lg border-gray-300">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+        <input type="date" name="date_to" value="{{ request('date_to') }}"
+            class="w-full rounded-lg border-gray-300">
+    </div>
+    <div class="flex items-end">
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 w-full">
+            Apply Filters
+        </button>
+    </div>
+</form>
         </div>
 
         <!-- Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Share Capital</h3>
-                <p class="text-3xl font-bold text-purple-600">₦{{ number_format($shares->sum('amount_paid'), 2) }}</p>
+                <p class="text-3xl font-bold text-purple-600">₦{{ number_format($totalAmount, 2) }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Share Units</h3>
-                <p class="text-3xl font-bold text-blue-600">{{ number_format($shares->sum('number_of_units')) }}</p>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Approved & Not Yet</h3>
+                <p class="text-3xl font-bold text-blue-600">{{$totalApproved }} & {{$totalNotyet }}</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-2">Shareholders</h3>
-                <p class="text-3xl font-bold text-green-600">{{ $shares->unique('user_id')->count() }}</p>
+                <p class="text-3xl font-bold text-green-600">{{$totalShareholders  }}</p>
             </div>
         </div>
 
