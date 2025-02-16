@@ -18,9 +18,9 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price Per Unit</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Min Units</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Max Units</th>
+
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Min Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Max Amount</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dividend Rate</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
@@ -30,9 +30,9 @@
                         @forelse($shareTypes as $type)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $type->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($type->price_per_unit, 2) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $type->minimum_units }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $type->maximum_units ?? 'Unlimited' }}</td>
+                          
+                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($type->minimum_amount, 2) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($type->maximum_amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $type->dividend_rate }}%</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

@@ -36,21 +36,17 @@
                             class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Price Per Unit</label>
-                        <input type="number" step="0.01" name="price_per_unit" value="{{ old('price_per_unit', $shareType->price_per_unit) }}" required
-                            class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
-                    </div>
+
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Units</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Amount</label>
                             <input type="number" name="minimum_units" value="{{ old('minimum_units', $shareType->minimum_units) }}" required
                                 class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Units</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Amount</label>
                             <input type="number" name="maximum_units" value="{{ old('maximum_units', $shareType->maximum_units) }}"
                                 class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>

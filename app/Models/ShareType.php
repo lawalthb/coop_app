@@ -8,9 +8,8 @@ class ShareType extends Model
 {
     protected $fillable = [
         'name',
-        'price_per_unit',
-        'minimum_units',
-        'maximum_units',
+        'minimum_amount',
+        'maximum_amount',
         'dividend_rate',
         'is_transferable',
         'has_voting_rights',
