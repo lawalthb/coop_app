@@ -40,16 +40,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Number of Units</h3>
-                        <p class="mt-1">{{ $share->number_of_units }}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Unit Price</h3>
-                        <p class="mt-1">₦{{ number_format($share->unit_price, 2) }}</p>
-                    </div>
-                </div>
+                
 
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Total Amount Paid</h3>
