@@ -26,7 +26,7 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-gray-500 text-sm">Total Savings</h3>
-                    <p class="text-2xl font-bold">₦{{ number_format($totalSavings, 2) }}</p>
+                    <p class="text-1xl font-bold ">₦{{ number_format($totalSavings, 2) }}</p>
                     <span class="text-sm text-gray-400">₦{{ number_format($monthlySavings, 2) }} this month</span>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-gray-500 text-sm">Share Capital</h3>
-                    <p class="text-2xl font-bold">₦{{ number_format($totalShares, 2) }}</p>
+                    <p class="text-1xl font-bold">₦{{ number_format($totalShares, 2) }}</p>
                     <span class="text-sm text-gray-400">{{ number_format($totalShareUnits) }} units</span>
                 </div>
             </div>

@@ -7,7 +7,27 @@
             <div class="px-6 py-4 bg-purple-600">
                 <h2 class="text-xl font-semibold text-white">Edit Loan Type</h2>
             </div>
-
+@if ($errors->any())
+<div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+            <div class="mt-2 text-sm text-red-700">
+                <ul class="list-disc pl-5 space-y-1">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
             <form action="{{ route('admin.loan-types.update', $loanType) }}" method="POST" class="p-6">
                 @csrf
                 @method('PUT')
@@ -26,7 +46,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Maximum Duration (Months)</label>
-                            <input type="number" name="max_duration" value="{{ $loanType->max_duration }}" min="1" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
+                            <input type="number" name="duration_months" value="{{ $loanType->duration_months }}" min="1" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px;">
                         </div>
 
                         <div>
@@ -46,6 +66,16 @@
                                 <option value="inactive" {{ $loanType->status === 'inactive' ? 'selected' : '' }}>Inactive</option>
                             </select>
                         </div>
+
+                        <div>
+        <label class="block text-sm font-medium text-gray-700">Number of Guarantors</label>
+        <input type="number" name="no_guarantors" value="{{ $loanType->no_guarantors }}" min="0" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px;">
+        @error('no_guarantors')
+            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+
                     </div>
                 </div>
 

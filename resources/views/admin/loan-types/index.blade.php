@@ -21,8 +21,8 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Required Savings (Months)</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Interest Rate (12m)</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Interest Rate (18m)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Interest Rate</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Duration (Months)</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Maximum Amount</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Actions</th>
@@ -33,8 +33,8 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->required_active_savings_months }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->interest_rate_12_months }}%</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->interest_rate_18_months }}%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->interest_rate }}%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->duration_months }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($loanType->maximum_amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">

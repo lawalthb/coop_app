@@ -29,7 +29,9 @@ class AdminDashboardController extends Controller
             ->sum('credit_amount');
 
         $totalShares = Share::where('status', 'approved')->sum('amount_paid');
-        $totalShareUnits = Share::where('status', 'approved')->sum('number_of_units');
+        $totalShareUnits = Share::where('status', 'approved')
+            ->whereMonth('created_at', now()->month)
+            ->count();
 
         // Loan Statistics
         $activeLoans = Loan::where('status', 'approved')

@@ -20,7 +20,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="required_active_savings_months" class="block text-sm font-medium text-gray-700">Required Savings Months</label>
-                            <input type="number" name="required_active_savings_months" id="required_active_savings_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('required_active_savings_months', $loanType->required_active_savings_months ?? 6) }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;" value="10">
+                            <input type="number" name="required_active_savings_months" id="required_active_savings_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('required_active_savings_months', $loanType->required_active_savings_months ?? 6) }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
@@ -31,13 +31,13 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="interest_rate_12_months" class="block text-sm font-medium text-gray-700">Interest Rate (12 months)</label>
-                            <input type="number" step="0.01" name="interest_rate_12_months" id="interest_rate_12_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('interest_rate_12_months', $loanType->interest_rate_12_months ?? '10') }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                            <label for="interest_rate" class="block text-sm font-medium text-gray-700">Interest Rate (%)</label>
+                            <input type="number" step="0.01" name="interest_rate" id="interest_rate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('interest_rate', $loanType->interest_rate ?? '') }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 
                         <div>
-                            <label for="interest_rate_18_months" class="block text-sm font-medium text-gray-700">Interest Rate (18 months)</label>
-                            <input type="number" step="0.01" name="interest_rate_18_months" id="interest_rate_18_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('interest_rate_18_months', $loanType->interest_rate_18_months ?? '15') }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+                            <label for="duration_months" class="block text-sm font-medium text-gray-700">Duration (Months)</label>
+                            <input type="number" name="duration_months" id="duration_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('duration_months', $loanType->duration_months ?? 12) }}" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
 
@@ -53,27 +53,10 @@
                         </div>
                     </div>
 
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="max_duration_months" class="block text-sm font-medium text-gray-700">Maximum Duration (Months)</label>
-                            <input type="number" name="max_duration_months" id="max_duration_months" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('max_duration_months', $loanType->max_duration_months ?? 18) }}" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
-                            @error('max_duration_months')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="no_guarantors" class="block text-sm font-medium text-gray-700">Number of Guarantors Required</label>
-                            <input type="number" name="no_guarantors" id="no_guarantors" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('no_guarantors', $loanType->no_guarantors ?? 2) }}" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
-                            @error('no_guarantors')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+                    <div>
+                        <label for="no_guarantors" class="block text-sm font-medium text-gray-700">Number of Guarantors Required</label>
+                        <input type="number" name="no_guarantors" id="no_guarantors" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('no_guarantors', $loanType->no_guarantors ?? 2) }}" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
                     </div>
-
-
-
 
                     <div>
                         <label class="inline-flex items-center">
@@ -82,14 +65,13 @@
                         </label>
                     </div>
 
-
-
                     <div class="flex justify-end gap-4">
                         <button type="button" onclick="window.history.back()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Cancel</button>
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Save Loan Type</button>
                     </div>
                 </div>
             </form>
+
             @if ($errors->any())
             <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
                 <div class="flex">
