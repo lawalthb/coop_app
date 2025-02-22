@@ -54,8 +54,8 @@ $loan_interest = $loanType->interest_rate;
 }else{
 $loan_interest = 10;
 }
-        // Calculate loan details
-        $interestAmount = ($validated['amount'] * $loan_interest * $validated['duration']) / 100;
+        // Calculate loan details for annual base
+        $interestAmount = ($validated['amount'] * ($loan_interest/100) * ($validated['duration']/12));
         $totalAmount = $validated['amount'] + $interestAmount;
         $monthlyPayment = $totalAmount / $validated['duration'];
 
