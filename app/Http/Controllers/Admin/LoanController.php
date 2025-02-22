@@ -49,10 +49,10 @@ class LoanController extends Controller
         ]);
 
         $loanType = LoanType::find($request->loan_type_id);
-if($validated['duration'] > 12 ){
-$loan_interest = $loanType->interest_rate_18_months;
+if($loanType ){
+$loan_interest = $loanType->interest_rate;
 }else{
-$loan_interest = $loanType->interest_rate_12_months;
+$loan_interest = 10;
 }
         // Calculate loan details
         $interestAmount = ($validated['amount'] * $loan_interest * $validated['duration']) / 100;
@@ -74,13 +74,10 @@ $loan_interest = $loanType->interest_rate_12_months;
             'posted_by' => auth()->id()
         ]);
 
-        NotificationService::notify(
-            $loan->user_id,
-            'Loan Application Submitted',
-            'Your loan application has been submitted successfully.',
-            'loan_application',
-            ['loan_id' => $loan->id]
-        );
+      $user = User::find($validated['user_id']);
+$user->notify(new LoanStatusNotification($loan));
+
+
 
         return redirect()->route('admin.loans.index')
             ->with('success', 'Loan application submitted successfully');
@@ -127,7 +124,7 @@ $loan_interest = $loanType->interest_rate_12_months;
 
     public function import()
     {
-      
+
         return view('admin.loans.import');
     }
 

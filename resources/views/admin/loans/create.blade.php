@@ -19,7 +19,7 @@
                             <option value="">Select a member</option>
                             @foreach($members as $member)
                             <option value="{{ $member->id }}">
-                                {{ $member->surname }} {{ $member->firstname }} - {{ $member->staff_no }}
+                                {{ $member->surname }} {{ $member->firstname }} - {{ $member->member_no }}
                             </option>
                             @endforeach
                         </select>
@@ -72,7 +72,8 @@
                 <!-- Form Actions -->
                 <div class="mt-6 flex justify-end space-x-4">
                     <a href="{{ route('admin.loans.index') }}" class="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200">Cancel</a>
-                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Submit Application</button>
+                   <button type="submit" onclick="this.disabled=true;this.form.submit();" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Submit Application</button>
+
                 </div>
             </form>
         </div>
