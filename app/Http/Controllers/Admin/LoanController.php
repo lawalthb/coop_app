@@ -18,14 +18,37 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LoanController extends Controller
 {
-    public function index()
-    {
-        $loans = Loan::with(['user', 'loanType', 'approvedBy', 'postedBy'])
-            ->latest()
-            ->paginate(10);
+public function index(Request $request)
+{
+    $query = Loan::with(['user', 'loanType', 'approvedBy', 'postedBy']);
 
-        return view('admin.loans.index', compact('loans'));
+    // Apply reference filter if provided
+    if ($request->has('reference') && !empty($request->reference)) {
+        $query->where('reference', $request->reference);
     }
+
+    $loans = $query->latest()->paginate(50);
+
+    // Get unique loan references with associated user information and loan type
+    $loanReferences = Loan::select('loans.reference', 'users.firstname', 'users.surname', 'loan_types.name as loan_type_name')
+        ->join('users', 'loans.user_id', '=', 'users.id')
+        ->join('loan_types', 'loans.loan_type_id', '=', 'loan_types.id')
+        ->groupBy('loans.reference', 'users.firstname', 'users.surname', 'loan_types.name')
+        ->orderBy('users.surname')
+        ->orderBy('users.firstname')
+        ->get();
+
+    // Append query parameters to pagination links
+    if ($request->has('reference')) {
+        $loans->appends(['reference' => $request->reference]);
+    }
+
+    return view('admin.loans.index', compact('loans', 'loanReferences'));
+}
+
+
+
+
 
     public function create()
     {
@@ -128,33 +151,53 @@ $user->notify(new LoanStatusNotification($loan));
         return view('admin.loans.import');
     }
 
-    public function processImport(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:csv,xlsx,xls'
-        ]);
+public function processImport(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,xls,csv'
+    ]);
 
-        $file = $request->file('file');
+    $file = $request->file('file');
 
+    try {
         Excel::import(new LoansImport, $file);
-
         return redirect()->route('admin.loans.index')
-        ->with('success', 'Loans data imported successfully');
-    }
+            ->with('success', 'Loans data imported successfully');
+    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        // Handle validation errors
+        $failures = $e->failures();
+        $errors = [];
 
-    public function downloadFormat()
-    {
-        $headers = [
-            'Member Email',
-            'Loan Type ID',
-            'Amount',
-            'Duration',
-            'Start Date',
-            'Purpose'
-        ];
+        foreach ($failures as $failure) {
+            $errors[] = "Row {$failure->row()}: {$failure->errors()[0]}";
+        }
 
-        return Excel::download(new LoansExport($headers), 'loans_import_format.xlsx');
+        return redirect()->route('admin.loans.import')
+            ->with('error', implode('<br>', $errors))
+            ->withInput();
+    } catch (\Exception $e) {
+        // Handle other errors
+        return redirect()->route('admin.loans.import')
+            ->with('error', 'Import failed: ' . $e->getMessage())
+            ->withInput();
     }
+}
+
+public function downloadFormat()
+{
+    $headers = [
+        'Member Email',
+        'Loan Type ID',
+        'Amount',
+        'Duration',
+        'Start Date (DD/MM/YY)',
+        'Purpose',
+        'Status'
+    ];
+
+    return Excel::download(new LoansExport($headers), 'loans_import_format.xlsx');
+}
+
 
 
 }

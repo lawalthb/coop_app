@@ -5,7 +5,11 @@
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-xl shadow-lg p-6">
             <h2 class="text-2xl font-semibold mb-6">Import Loans Data</h2>
-
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline">{!! session('error') !!}</span>
+    </div>
+@endif
             <form action="{{ route('admin.loans.process-import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-6">
