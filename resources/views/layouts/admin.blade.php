@@ -96,7 +96,14 @@
                     <i class="fas fa-file-alt w-5"></i>
                     <span class="ml-3">Resources</span>
                 </a>
-
+                <a href="{{ route('admin.commodities.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.commodities*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-shopping-basket w-5"></i>
+                    <span class="ml-3">Commodities</span>
+                </a>
+                <a href="{{ route('admin.commodity-subscriptions.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.commodity-subscriptions*') ? 'bg-purple-700' : '' }}">
+                    <i class="fas fa-clipboard-list w-5"></i>
+                    <span class="ml-3">Commodity Subscriptions</span>
+                </a>
                 <a href="{{ route('admin.faqs.index') }}"
                     class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('admin.faqs.*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-question-circle w-5 h-5 mr-3"></i>

@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminProfileUpdateController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\CommodityController;
+use App\Http\Controllers\Admin\CommoditySubscriptionController;
 use App\Http\Controllers\Admin\EntranceFeeController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\LoanRepaymentController;
@@ -308,6 +310,14 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
+
+      Route::resource('commodities', CommodityController::class);
+
+    // Admin Commodity Subscriptions Management
+    Route::get('commodity-subscriptions', [CommoditySubscriptionController::class, 'index'])->name('commodity-subscriptions.index');
+    Route::get('commodity-subscriptions/{subscription}', [CommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
+    Route::post('commodity-subscriptions/{subscription}/approve', [CommoditySubscriptionController::class, 'approve'])->name('commodity-subscriptions.approve');
+    Route::post('commodity-subscriptions/{subscription}/reject', [CommoditySubscriptionController::class, 'reject'])->name('commodity-subscriptions.reject');
 
 
 });
