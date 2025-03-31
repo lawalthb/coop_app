@@ -65,7 +65,7 @@
                             <span class="text-gray-600">Interest Rate:</span>
                             <span class="font-medium">
                                 @if($loan->amount > 0)
-                                    {{ number_format(($loan->interest_amount / $loan->amount) * 100, 2) }}%
+                                    {{ number_format($loan->amount/$loan->interest_amount )}}%
                                 @else
                                     0%
                                 @endif

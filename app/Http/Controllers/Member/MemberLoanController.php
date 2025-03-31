@@ -90,9 +90,8 @@ class MemberLoanController extends Controller
         }
     }
 
-  
+    $interestAmount = ($loanType->interest_rate / 100) *$validated['amount'] *  $validated['duration'] ;
 
-    $interestAmount = ($validated['amount'] * $loan_interest) / 100;
     $totalAmount = $validated['amount'] + $interestAmount;
     $monthlyPayment = $totalAmount / $validated['duration'];
     $startDate = now();
