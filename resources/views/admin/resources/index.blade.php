@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-purple-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold text-gray-900">Resources Management</h1>
+            <h1 class="text-2xl font-semibold text-gray-900">Information Management</h1>
             <a href="{{ route('admin.resources.create') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                 <i class="fas fa-plus mr-2"></i>Upload Resource
             </a>

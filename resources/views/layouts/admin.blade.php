@@ -94,7 +94,7 @@
                 </a>
                 <a href="{{ route('admin.resources.index')}}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.resources*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-file-alt w-5"></i>
-                    <span class="ml-3">Resources</span>
+                    <span class="ml-3">Information</span>
                 </a>
                 <a href="{{ route('admin.commodities.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.commodities*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-shopping-basket w-5"></i>
