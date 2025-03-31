@@ -70,14 +70,14 @@
                             </select>
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Year</label>
-                            <select name="year_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;" required>
-                                @foreach($years as $year)
-                                <option value="{{ $year->id }}">{{ $year->year }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                     <div>
+    <label class="block text-sm font-medium text-gray-700">Year</label>
+    <select name="year_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;" required>
+        @foreach($years as $year)
+        <option value="{{ $year->id }}" {{ date('Y') == $year->year ? 'selected' : '' }}>{{ $year->year }}</option>
+        @endforeach
+    </select>
+</div>
                     </div>
 
                     <div>

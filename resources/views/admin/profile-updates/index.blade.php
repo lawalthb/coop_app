@@ -14,7 +14,12 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-900">
-                                {{ $request->user->title }} {{ $request->user->firstname }} {{ $request->user->surname }}
+                               @if($request->user)
+    {{ $request->user->title }} {{ $request->user->firstname }} {{ $request->user->surname }}
+@else
+    <span class="text-red-500">User not found</span>
+@endif
+
                             </h3>
                             <p class="text-sm text-gray-500">Submitted: {{ $request->created_at->diffForHumans() }}</p>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium

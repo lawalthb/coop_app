@@ -8,7 +8,7 @@ use App\Models\Commodity;
 use App\Models\CommoditySubscription;
 use Illuminate\Support\Facades\Auth;
 
-class CommodityController extends Controller
+class MemberCommodityController extends Controller
 {
     public function index()
     {

@@ -43,55 +43,80 @@ class MemberLoanController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'loan_type_id' => 'required|exists:loan_types,id',
-            'amount' => 'required|numeric|min:1000',
-            'duration' => 'required|integer|min:1',
-            'purpose' => 'required|string|max:500',
-            'guarantor_ids' => 'required|array',
-            'guarantor_ids.*' => 'required|exists:users,id'
+{
+
+    $loanType = LoanType::find($request->loan_type_id);
+
+    if (!$loanType) {
+        return back()->withInput()->withErrors([
+            'loan_type_id' => "Invalid loan type selected"
         ]);
+    }
 
-        $loanType = LoanType::find($validated['loan_type_id']);
+    // Prepare validation rules based on guarantor requirements
+    $validationRules = [
+        'loan_type_id' => 'required|exists:loan_types,id',
+        'amount' => 'required|numeric|min:1000',
+        'purpose' => 'required|string|max:500',
+    ];
+// Validate duration against loan type's maximum duration
+    $request->validate([
+        'duration' => [
+            'required',
+            'integer',
+            'min:1',
+            'max:' . $loanType->duration_months
+        ]
+    ], [
+        'duration.max' => 'The loan duration cannot exceed ' . $loanType->duration_months . ' months for this loan type.'
+    ]);
 
-        // Validate number of guarantors matches loan type requirement
-        if (count($validated['guarantor_ids']) !== $loanType->no_guarantors) {
+
+    // Only add guarantor validation if this loan type requires guarantors
+    if ($loanType->no_guarantors > 0) {
+        $validationRules['guarantor_ids'] = 'required|array';
+        $validationRules['guarantor_ids.*'] = 'required|exists:users,id';
+    }
+
+    $validated = $request->validate($validationRules);
+    $validated['duration'] = $request->duration;
+
+    // Validate number of guarantors only if required
+    if ($loanType->no_guarantors > 0) {
+        if (count($request->guarantor_ids ?? []) !== $loanType->no_guarantors) {
             return back()->withInput()->withErrors([
                 'guarantor_ids' => "This loan type requires exactly {$loanType->no_guarantors} guarantor(s)"
             ]);
         }
-        $loanType = LoanType::find($request->loan_type_id);
-        if ($validated['duration'] > 12) {
-            $loan_interest = $loanType->interest_rate_18_months;
-        } else {
-            $loan_interest = $loanType->interest_rate_12_months;
-        }
-        // Calculate loan details
-        $interestAmount = ($validated['amount'] * $loan_interest ) / 100;
-        $totalAmount = $validated['amount'] + $interestAmount;
-        $monthlyPayment = $totalAmount / $validated['duration'];
-        $startDate = now();
-        $endDate = Carbon::parse($startDate)->addMonths((int)$validated['duration']);
+    }
 
-        $loan = Loan::create([
-            'user_id' => auth()->id(),
-            'reference' => 'LOAN-' . strtoupper(uniqid()),
-            'loan_type_id' => $validated['loan_type_id'],
-            'amount' => $validated['amount'],
-            'interest_amount' => $interestAmount,
-            'total_amount' => $totalAmount,
-            'monthly_payment' => $monthlyPayment,
-            'duration' => $validated['duration'],
-            'purpose' => $validated['purpose'],
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'status' => 'pending',
-            'posted_by' => auth()->id(),
-        ]);
+  
 
-        // Create guarantor records and send notifications
-        foreach ($validated['guarantor_ids'] as $guarantorId) {
+    $interestAmount = ($validated['amount'] * $loan_interest) / 100;
+    $totalAmount = $validated['amount'] + $interestAmount;
+    $monthlyPayment = $totalAmount / $validated['duration'];
+    $startDate = now();
+    $endDate = Carbon::parse($startDate)->addMonths((int)$validated['duration']);
+
+    $loan = Loan::create([
+        'user_id' => auth()->id(),
+        'reference' => 'LOAN-' . strtoupper(uniqid()),
+        'loan_type_id' => $validated['loan_type_id'],
+        'amount' => $validated['amount'],
+        'interest_amount' => $interestAmount,
+        'total_amount' => $totalAmount,
+        'monthly_payment' => $monthlyPayment,
+        'duration' => $validated['duration'],
+        'purpose' => $validated['purpose'],
+        'start_date' => $startDate,
+        'end_date' => $endDate,
+        'status' => 'pending',
+        'posted_by' => auth()->id(),
+    ]);
+
+    // Create guarantor records and send notifications only if guarantors are required
+    if ($loanType->no_guarantors > 0 && isset($request->guarantor_ids)) {
+        foreach ($request->guarantor_ids as $guarantorId) {
             LoanGuarantor::create([
                 'loan_id' => $loan->id,
                 'user_id' => $guarantorId,
@@ -105,6 +130,12 @@ class MemberLoanController extends Controller
         return redirect()->route('member.loans.index')
             ->with('success', 'Loan application submitted successfully. Waiting for guarantor approval.');
     }
+
+    // If no guarantors required, return a different success message
+    return redirect()->route('member.loans.index')
+        ->with('success', 'Loan application submitted successfully. Waiting for admin approval.');
+}
+
 
     public function show(Loan $loan)
     {

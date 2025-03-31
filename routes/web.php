@@ -117,6 +117,14 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
         ->name('member.guarantor-requests');
     Route::get('/member/guarantor/{loan}/show', [MemberLoanController::class, 'showGuarantorRequest'])
         ->name('member.guarantor.show');
+
+Route::get('commodities', [MemberCommodityController::class, 'index'])->name('commodities.index');
+    Route::get('commodities/{commodity}', [MemberCommodityController::class, 'show'])->name('commodities.show');
+    Route::post('commodities/{commodity}/subscribe', [MemberCommodityController::class, 'subscribe'])->name('commodities.subscribe');
+
+    Route::get('commodity-subscriptions', [Member\CommoditySubscriptionController::class, 'index'])->name('commodity-subscriptions.index');
+    Route::get('commodity-subscriptions/{subscription}', [Member\CommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
+
 }); //end of member routes
 
 // Admin Routes

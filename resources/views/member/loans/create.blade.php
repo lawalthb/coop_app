@@ -8,6 +8,25 @@
                 <h2 class="text-xl font-semibold text-white">Loan Application</h2>
             </div>
 
+            <!-- Error Messages Section -->
+            @if($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-6 mt-4" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <ul class="list-disc list-inside">
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <!-- Success Message -->
+            @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-6 mt-4" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+            @endif
+
             <form action="{{ route('member.loans.store') }}" method="POST" class="p-6 space-y-6">
                 @csrf
 

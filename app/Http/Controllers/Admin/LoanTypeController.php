@@ -58,7 +58,7 @@ class LoanTypeController extends Controller
             'duration_months' => 'required|integer|min:1',
             'minimum_amount' => 'required|numeric|min:0',
             'maximum_amount' => 'required|numeric|gt:minimum_amount',
-
+            'status' => 'required|in:active,inactive',
             'saved_percentage' => 'nullable|in:50,100,150,200,250,300,None',
             'no_guarantors' => 'required|integer|min:0',
         ]);

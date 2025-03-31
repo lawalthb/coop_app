@@ -307,26 +307,30 @@
         const salaryCheckbox = document.getElementById('salary_deduction');
         const membershipCheckbox = document.getElementById('membership_declaration');
         const submitButton = document.querySelector('button[type="submit"]');
+        const currentStage = "{{ $stage }}"; // Get the current stage from PHP
 
-        function checkBoxesStatus() {
-            if (salaryCheckbox.checked && membershipCheckbox.checked) {
-                submitButton.disabled = false;
-                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                submitButton.classList.add('hover:bg-purple-700');
-            } else {
-                submitButton.disabled = true;
-                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-                submitButton.classList.remove('hover:bg-purple-700');
+        // Only apply checkbox validation on the documents stage
+        if (currentStage === 'documents') {
+            function checkBoxesStatus() {
+                if (salaryCheckbox.checked && membershipCheckbox.checked) {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    submitButton.classList.add('hover:bg-purple-700');
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    submitButton.classList.remove('hover:bg-purple-700');
+                }
             }
+
+            // Initially disable the button
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Add event listeners to both checkboxes
+            salaryCheckbox.addEventListener('change', checkBoxesStatus);
+            membershipCheckbox.addEventListener('change', checkBoxesStatus);
         }
-
-        // Initially disable the button
-        submitButton.disabled = true;
-        submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-
-        // Add event listeners to both checkboxes
-        salaryCheckbox.addEventListener('change', checkBoxesStatus);
-        membershipCheckbox.addEventListener('change', checkBoxesStatus);
     });
 </script>
 

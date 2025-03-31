@@ -35,12 +35,18 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->required_active_savings_months }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->interest_rate }}%</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->duration_months }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($loanType->maximum_amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{ ucfirst($loanType->status) }}
-                                </span>
-                            </td>
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+        @if($loanType->status === 'active')
+            bg-green-100 text-green-800
+        @elseif($loanType->status === 'pending')
+            bg-yellow-100 text-yellow-800
+        @else
+            bg-red-100 text-red-800
+        @endif">
+        {{ ucfirst($loanType->status) }}
+    </span>
+</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-3">
                                     <a href="{{ route('admin.loan-types.show', $loanType) }}" class="text-blue-600 hover:text-blue-900" title="View">
