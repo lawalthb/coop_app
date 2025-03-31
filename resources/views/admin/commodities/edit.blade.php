@@ -34,7 +34,7 @@
                     </div>
 
                     <div>
-                        <label for="quantity_available" class="block text-sm font-medium text-gray-700">Quantity Available*</label>
+                        <label for="quantity_available" class="block text-sm font-medium text-gray-700">Slot Available*</label>
                         <input type="number" name="quantity_available" id="quantity_available" value="{{ old('quantity_available', $commodity->quantity_available) }}" required min="0"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
                                style="border: 1px solid #ccc; font-size: 16px; border-radius: 10px;">
