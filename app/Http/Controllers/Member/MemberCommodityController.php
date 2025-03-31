@@ -35,21 +35,25 @@ class MemberCommodityController extends Controller
 
     public function subscribe(Request $request, Commodity $commodity)
     {
+
         $validated = $request->validate([
             'quantity' => 'required|integer|min:1|max:' . $commodity->quantity_available,
-            'reason' => 'nullable|string',
-        ]);
 
+        ]);
+   $reference = 'COM-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8)) . '-' . date('Ymd');
         $subscription = CommoditySubscription::create([
             'user_id' => Auth::id(),
             'commodity_id' => $commodity->id,
             'quantity' => $validated['quantity'],
             'status' => 'pending',
-            'reason' => $validated['reason'] ?? null,
+            'unit_price' => $commodity->price,
+            'notes' => $validated ['reason'] ?? " ",
+            'reference' => $reference,
             'total_amount' => $commodity->price * $validated['quantity'],
         ]);
-
-        return redirect()->route('member.commodity-subscriptions.index')
+ $commodity->quantity_available -= $validated['quantity'];
+    $commodity->save();
+        return redirect()->route('commodity-subscriptions.index')
             ->with('success', 'Subscription submitted successfully.');
     }
 }

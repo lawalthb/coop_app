@@ -19,6 +19,7 @@ class CommoditySubscriptionController extends Controller
 
     public function show(CommoditySubscription $subscription)
     {
+
         return view('admin.commodity-subscriptions.show', compact('subscription'));
     }
 

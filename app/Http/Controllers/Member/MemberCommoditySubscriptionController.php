@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CommoditySubscription;
 use Illuminate\Support\Facades\Auth;
 
-class CommoditySubscriptionController extends Controller
+class MemberCommoditySubscriptionController extends Controller
 {
     public function index()
     {
@@ -15,7 +15,7 @@ class CommoditySubscriptionController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('member.commodity-subscriptions.index', compact('subscriptions'));
+        return view('commodity-subscriptions.index', compact('subscriptions'));
     }
 
     public function show(CommoditySubscription $subscription)
@@ -25,6 +25,6 @@ class CommoditySubscriptionController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('member.commodity-subscriptions.show', compact('subscription'));
+        return view('commodity-subscriptions.show', compact('subscription'));
     }
 }

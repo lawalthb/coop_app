@@ -35,6 +35,8 @@ use App\Http\Controllers\Member\MemberTransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Member\LoanCalculatorController;
+use App\Http\Controllers\Member\MemberCommodityController;
+use App\Http\Controllers\Member\MemberCommoditySubscriptionController;
 use App\Http\Controllers\Member\MemberLoanController;
 use App\Http\Controllers\Member\MemberSavingsController;
 use App\Http\Controllers\Member\MemberShareController;
@@ -122,8 +124,8 @@ Route::get('commodities', [MemberCommodityController::class, 'index'])->name('co
     Route::get('commodities/{commodity}', [MemberCommodityController::class, 'show'])->name('commodities.show');
     Route::post('commodities/{commodity}/subscribe', [MemberCommodityController::class, 'subscribe'])->name('commodities.subscribe');
 
-    Route::get('commodity-subscriptions', [Member\CommoditySubscriptionController::class, 'index'])->name('commodity-subscriptions.index');
-    Route::get('commodity-subscriptions/{subscription}', [Member\CommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
+    Route::get('commodity-subscriptions', [MemberCommoditySubscriptionController::class, 'index'])->name('commodity-subscriptions.index');
+    Route::get('commodity-subscriptions/{subscription}', [MemberCommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
 
 }); //end of member routes
 
@@ -149,8 +151,6 @@ Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin'
     Route::get('/members/{member}/edit', [MemberController::class, 'edit'])->name('members.edit');
     Route::put('/members/{member}', [MemberController::class, 'update'])->name('members.update');
     Route::get('/members/{member}/authority-deduct', [MemberController::class, 'authorityDeduct'])->name('members.authority-deduct');
-
-
 
 
     //entrance fee management

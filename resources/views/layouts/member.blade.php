@@ -17,7 +17,53 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
+    <!-- Custom Scrollbar Styling -->
+    <style>
+        /* Webkit browsers (Chrome, Safari, newer versions of Opera) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
 
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* Light purple/gray background */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #7e22ce; /* Purple color matching the theme */
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b21a8; /* Darker purple on hover */
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #7e22ce #f1f5f9;
+        }
+
+        /* For the sidebar specifically */
+        #sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #6b21a8 #4c1d95;
+        }
+
+        #sidebar::-webkit-scrollbar-track {
+            background: #4c1d95; /* Darker purple for sidebar track */
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background: #6b21a8; /* Slightly lighter purple for thumb */
+        }
+
+        #sidebar::-webkit-scrollbar-thumb:hover {
+            background: #7e22ce; /* Even lighter on hover */
+        }
+    </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -92,6 +138,16 @@
                             @endif
                         </span>
                     </a>
+                    <a href="{{ route('commodities.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('commodities*') ? 'bg-purple-700' : '' }}">
+    <i class="fas fa-shopping-basket w-5"></i>
+    <span class="ml-3">Commodities</span>
+</a>
+
+<a href="{{ route('commodity-subscriptions.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('commodity-subscriptions*') ? 'bg-purple-700' : '' }}">
+    <i class="fas fa-clipboard-list w-5"></i>
+    <span class="ml-3">My Subscriptions</span>
+</a>
+
                     <!-- Add this to your member sidebar navigation -->
                     <a href="{{ route('member.guarantor-requests') }}"
                         class="flex items-center px-4 py-2 text-white-700 hover:bg-purple-700 {{ request()->routeIs('member.guarantor-requests*') ? 'bg-purple-700' : '' }}">

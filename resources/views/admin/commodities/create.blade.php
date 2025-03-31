@@ -94,6 +94,69 @@
                         </label>
                     </div>
 
+<div class="mt-6 p-4 bg-gray-50 rounded-lg">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Options</h3>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <input type="checkbox" name="allow_installment" id="allow_installment" value="1" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+            <label for="allow_installment" class="ml-2 block text-sm text-gray-900">
+                Allow Installment Payments
+            </label>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">
+            Enable this option to allow members to pay for this commodity in installments.
+        </p>
+    </div>
+
+    <div id="installment_options" class="pl-6 space-y-4 hidden">
+        <div>
+            <label for="max_installment_months" class="block text-sm font-medium text-gray-700">
+                Maximum Installment Period (Months)
+            </label>
+            <input type="number" name="max_installment_months" id="max_installment_months" min="1" max="36" value="3"
+                   class="mt-1 focus:ring-purple-500 focus:border-purple-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+            <p class="mt-1 text-xs text-gray-500">
+                The maximum number of months members can spread their payments over.
+            </p>
+        </div>
+
+        <div>
+            <label for="initial_deposit_percentage" class="block text-sm font-medium text-gray-700">
+                Initial Deposit Percentage (%)
+            </label>
+            <input type="number" name="initial_deposit_percentage" id="initial_deposit_percentage" min="0" max="100" value="20" step="5"
+                   class="mt-1 focus:ring-purple-500 focus:border-purple-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+            <p class="mt-1 text-xs text-gray-500">
+                The percentage of the total price that members must pay as initial deposit.
+            </p>
+        </div>
+
+        <div id="payment_preview" class="mt-4 p-4 bg-white border border-gray-200 rounded-md hidden">
+            <h4 class="text-sm font-medium text-gray-700 mb-2">Payment Preview</h4>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span>Total Price:</span>
+                    <span id="preview_total_price">₦0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Initial Deposit:</span>
+                    <span id="preview_initial_deposit">₦0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Remaining Amount:</span>
+                    <span id="preview_remaining">₦0.00</span>
+                </div>
+                <div class="flex justify-between font-medium">
+                    <span>Monthly Payment:</span>
+                    <span id="preview_monthly">₦0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                     <div class="flex justify-end space-x-3">
                         <a href="{{ route('admin.commodities.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Cancel
@@ -107,4 +170,59 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const allowInstallmentCheckbox = document.getElementById('allow_installment');
+        const installmentOptions = document.getElementById('installment_options');
+        const priceInput = document.getElementById('price');
+        const maxMonthsInput = document.getElementById('max_installment_months');
+        const initialDepositInput = document.getElementById('initial_deposit_percentage');
+
+         const paymentPreview = document.getElementById('payment_preview');
+
+        // Function to update payment preview
+        function updatePaymentPreview() {
+            if (!allowInstallmentCheckbox.checked) {
+                paymentPreview.classList.add('hidden');
+                return;
+            }
+
+            const price = parseFloat(priceInput.value) || 0;
+            const months = parseInt(maxMonthsInput.value) || 1;
+            const depositPercentage = parseFloat(initialDepositInput.value) || 0;
+
+            if (price > 0) {
+                const initialDeposit = (price * depositPercentage) / 100;
+                const remainingAmount = price - initialDeposit;
+                const monthlyPayment = remainingAmount / months;
+
+                document.getElementById('preview_total_price').textContent = '₦' + price.toFixed(2);
+                document.getElementById('preview_initial_deposit').textContent = '₦' + initialDeposit.toFixed(2);
+                document.getElementById('preview_remaining').textContent = '₦' + remainingAmount.toFixed(2);
+                document.getElementById('preview_monthly').textContent = '₦' + monthlyPayment.toFixed(2);
+
+                paymentPreview.classList.remove('hidden');
+            } else {
+                paymentPreview.classList.add('hidden');
+            }
+        }
+
+        // Toggle installment options visibility
+        allowInstallmentCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                installmentOptions.classList.remove('hidden');
+                updatePaymentPreview();
+            } else {
+                installmentOptions.classList.add('hidden');
+            }
+        });
+
+        // Update preview when inputs change
+        priceInput.addEventListener('input', updatePaymentPreview);
+        maxMonthsInput.addEventListener('input', updatePaymentPreview);
+        initialDepositInput.addEventListener('input', updatePaymentPreview);
+    });
+</script>
+
 @endsection

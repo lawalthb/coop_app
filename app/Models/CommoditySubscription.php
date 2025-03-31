@@ -15,10 +15,13 @@ class CommoditySubscription extends Model
         'quantity',
         'total_amount',
         'status',
-        'reason',
+        'note',
+         'reference',
         'admin_notes',
+        'unit_price',
         'approved_at',
         'rejected_at',
+        'admin_notes'
     ];
 
     protected $casts = [

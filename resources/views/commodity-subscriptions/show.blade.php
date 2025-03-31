@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-green-700">
-                                        This subscription has been approved. You can collect your commodity from the cooperative office.
+                                        Your subscription has been approved. You can collect your commodity from the cooperative office.
                                     </p>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-red-700">
-                                        This subscription has been rejected. Please see the admin notes below for more information.
+                                        Your subscription has been rejected. Please see the admin notes below for more information.
                                     </p>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                                     {{ $subscription->created_at->format('M d, Y h:i A') }}
                                 </time>
                                 <p class="mt-1 text-sm text-gray-600">
-                                    Member subscribed for {{ $subscription->quantity }} unit(s) of {{ $subscription->commodity->name }}.
+                                    You subscribed for {{ $subscription->quantity }} unit(s) of {{ $subscription->commodity->name }}.
                                 </p>
                             </div>
                         </div>
@@ -206,9 +206,9 @@
                                 </time>
                                 <p class="mt-1 text-sm text-gray-600">
                                     @if($subscription->status === 'approved')
-                                    This subscription was approved by the administrator.
+                                    Your subscription was approved by the administrator.
                                     @else
-                                    This subscription was rejected by the administrator.
+                                    Your subscription was rejected by the administrator.
                                     @endif
                                 </p>
                             </div>
