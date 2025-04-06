@@ -32,7 +32,7 @@
 
                 @if($commodity->end_date && $commodity->end_date->diffInDays(now()) < 7)
                 <div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    Ends in {{ $commodity->end_date->diffInDays(now()) }} days
+                    Ends in {{ number_format( $commodity->end_date->diffInDays(now()),0) }} days
                 </div>
                 @endif
             </div>

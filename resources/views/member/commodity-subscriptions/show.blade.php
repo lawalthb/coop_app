@@ -25,7 +25,8 @@
                     <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Commodity Information</h3>
                     <div class="flex items-start mb-4">
                         @if($subscription->commodity->image)
-                        <img src="{{ asset('storage/' . $subscription->commodity->image) }}" alt="{{ $subscription->commodity->name }}" class="w-20 h-20 object-cover rounded mr-4">
+                      <img src="{{ asset('storage/' . $subscription->commodity->image) }}" alt="{{ $subscription->commodity->name }}" class="w-15 h-15 object-cover rounded mr-4">
+
                         @else
                         <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center mr-4">
                             <i class="fas fa-shopping-basket text-gray-400 text-2xl"></i>

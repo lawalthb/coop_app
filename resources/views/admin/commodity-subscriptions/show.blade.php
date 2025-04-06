@@ -1,11 +1,11 @@
-@extends('layouts.member')
+@extends('layouts.admin')
 
 @section('content')
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="max-w-4xl mx-auto">
         <!-- Back Navigation -->
         <div class="mb-6">
-            <a href="{{ route('commodity-subscriptions.index') }}" class="text-purple-600 hover:text-purple-800 flex items-center">
+            <a href="{{ route('admin.commodity-subscriptions.index') }}" class="text-purple-600 hover:text-purple-800 flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i> Back to My Subscriptions
             </a>
         </div>

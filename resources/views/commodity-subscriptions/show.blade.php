@@ -216,6 +216,88 @@
                         @endif
                     </div>
                 </div>
+
+                <!-- Add this section to display payment information -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 mb-4">Payment Information</h3>
+
+                    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h4 class="text-sm font-medium text-gray-700">Payment Method</h4>
+                                <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">
+                                    {{ $subscription->payment_type === 'installment' ? 'Installment Plan' : 'Full Payment' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-4">
+                            @if($subscription->payment_type === 'installment')
+                                <div class="space-y-4">
+                                    <!-- Payment Progress -->
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span>Payment Progress</span>
+                                            <span>{{ $subscription->payment_progress_percentage }}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-purple-600 h-2.5 rounded-full" style="width: {{ $subscription->payment_progress_percentage }}%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Details -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="text-xs font-medium text-gray-500 uppercase mb-2">Payment Summary</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Total Amount:</span>
+                                                    <span class="text-sm font-medium">₦{{ number_format($subscription->total_amount, 2) }}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Initial Deposit:</span>
+                                                    <span class="text-sm font-medium">₦{{ number_format($subscription->initial_deposit, 2) }}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Monthly Payment:</span>
+                                                    <span class="text-sm font-medium">₦{{ number_format($subscription->monthly_amount, 2) }}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Installment Period:</span>
+                                                    <span class="text-sm font-medium">{{ $subscription->installment_months }} months</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="text-xs font-medium text-gray-500 uppercase mb-2">Current Status</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Months Paid:</span>
+                                                    <span class="text-sm font-medium">{{ $subscription->months_paid }} of {{ $subscription->installment_months }}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Amount Paid:</span>
+                                                    <span class="text-sm font-medium">₦{{ number_format($subscription->initial_deposit + ($subscription->monthly_amount * $subscription->months_paid), 2) }}</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Remaining Amount:</span>
+                                                    <span class="text-sm font-medium">₦{{ number_format($subscription->remaining_amount, 2) }}</span>
+                                                </div>
+                                                @if(!$subscription->is_completed && $subscription->status === 'approved')
+                                                <div class="flex justify-between">
+                                                    <span class="text-sm text-gray-600">Next Payment Due:</span>
+                                                    <span class="text-sm font-medium">{{ $subscription->next_payment_date->format('M d, Y') }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
