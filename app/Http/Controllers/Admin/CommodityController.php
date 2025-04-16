@@ -10,11 +10,26 @@ use Illuminate\Support\Facades\Log;
 
 class CommodityController extends Controller
 {
-    public function index()
-    {
-        $commodities = Commodity::latest()->paginate(10);
-        return view('admin.commodities.index', compact('commodities'));
+   public function index(Request $request)
+{
+    // Start with a base query
+    $query = Commodity::query();
+
+    // Apply status filter if provided
+    if ($request->has('status') && $request->status !== '') {
+        $query->where('is_active', $request->status);
     }
+
+    // Get paginated results with latest first
+    $commodities = $query->latest()->paginate(10);
+
+    // If there's a filter applied, append it to pagination links
+    if ($request->has('status')) {
+        $commodities->appends(['status' => $request->status]);
+    }
+
+    return view('admin.commodities.index', compact('commodities'));
+}
 
     public function create()
     {
@@ -23,6 +38,7 @@ class CommodityController extends Controller
 
     public function store(Request $request)
     {
+     //   dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',

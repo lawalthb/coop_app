@@ -12,19 +12,31 @@ class CommodityPayment extends Model
     protected $fillable = [
         'commodity_subscription_id',
         'amount',
-        'payment_date',
-        'payment_type', // 'full_payment', 'initial_deposit', 'installment'
-        'status', // 'pending', 'approved', 'rejected'
+        'payment_method',
+        'payment_reference',
+        'status',
+        'approved_by',
+        'approved_at',
         'notes'
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'payment_date' => 'datetime',
+        'approved_at' => 'datetime',
     ];
 
+    /**
+     * Get the subscription that this payment belongs to.
+     */
     public function subscription()
     {
         return $this->belongsTo(CommoditySubscription::class, 'commodity_subscription_id');
+    }
+
+    /**
+     * Get the admin who approved this payment.
+     */
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

@@ -23,6 +23,7 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commodity</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Type</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -50,6 +51,28 @@
                             ₦{{ number_format($subscription->total_amount, 2) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
+                            @if(isset($subscription->payment_type))
+                                @if($subscription->payment_type == 'installment')
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Installment
+                                    </span>
+                                    @if($subscription->status === 'approved')
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            {{ $subscription->installment_months }} months
+                                        </div>
+                                    @endif
+                                @else
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Full Payment
+                                    </span>
+                                @endif
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    Full Payment
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                             @if($subscription->status === 'approved') bg-green-100 text-green-800
                             @elseif($subscription->status === 'rejected') bg-red-100 text-red-800
@@ -64,11 +87,17 @@
                             <a href="{{ route('member.commodity-subscriptions.show', $subscription) }}" class="text-indigo-600 hover:text-indigo-900">
                                 View Details
                             </a>
+
+                            @if($subscription->status === 'approved' && isset($subscription->payment_type) && $subscription->payment_type == 'installment')
+                                <a href="{{ route('member.commodity-payments.index', ['subscription' => $subscription->id]) }}" class="text-green-600 hover:text-green-900 ml-3">
+                                    Payments
+                                </a>
+                            @endif
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                             You haven't subscribed to any commodities yet. <a href="{{ route('member.commodities.index') }}" class="text-purple-600 hover:text-purple-900">Browse available commodities</a>.
                         </td>
                     </tr>

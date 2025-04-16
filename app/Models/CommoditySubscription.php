@@ -52,10 +52,7 @@ class CommoditySubscription extends Model
         return $this->belongsTo(Commodity::class);
     }
 
-     public function payments()
-    {
-        return $this->hasMany(CommodityPayment::class);
-    }
+
 
     // Helper methods
     public function getRemainingAmountAttribute()
@@ -78,5 +75,14 @@ class CommoditySubscription extends Model
         return min(100, round(($totalPaid / $this->total_amount) * 100));
     }
 
-    
+//     public function payments()
+// {
+//     return $this->hasMany(CommodityPayment::class, 'subscription_id');
+// }
+
+
+public function payments()
+{
+    return $this->hasMany(CommodityPayment::class, 'commodity_subscription_id');
+}
 }

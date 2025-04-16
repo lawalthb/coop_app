@@ -25,6 +25,6 @@ class MemberCommoditySubscriptionController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return view('commodity-subscriptions.show', compact('subscription'));
+        return view('member.commodity-subscriptions.show', compact('subscription'));
     }
 }

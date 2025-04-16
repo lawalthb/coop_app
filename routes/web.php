@@ -124,8 +124,16 @@ Route::get('commodities', [MemberCommodityController::class, 'index'])->name('co
     Route::get('commodities/{commodity}', [MemberCommodityController::class, 'show'])->name('commodities.show');
     Route::post('commodities/{commodity}/subscribe', [MemberCommodityController::class, 'subscribe'])->name('commodities.subscribe');
 
-    Route::get('commodity-subscriptions', [MemberCommoditySubscriptionController::class, 'index'])->name('commodity-subscriptions.index');
-    Route::get('commodity-subscriptions/{subscription}', [MemberCommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
+    Route::get('member/commodity-subscriptions', [MemberCommoditySubscriptionController::class, 'index'])->name('member.commodity-subscriptions.index');
+    Route::get('member/commodity-subscriptions/{subscription}', [MemberCommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
+
+
+     Route::get('/member/commodity-subscriptions/{subscription}/payments', [CommodityPaymentController::class, 'index'])
+        ->name('member.commodity-payments.index');
+    Route::get('/member/commodity-subscriptions/{subscription}/payments/create', [CommodityPaymentController::class, 'create'])
+        ->name('member.commodity-payments.create');
+    Route::post('/member/commodity-subscriptions/{subscription}/payments', [CommodityPaymentController::class, 'store'])
+        ->name('member.commodity-payments.store');
 
 }); //end of member routes
 
@@ -326,6 +334,11 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::get('commodity-subscriptions/{subscription}', [CommoditySubscriptionController::class, 'show'])->name('commodity-subscriptions.show');
     Route::post('commodity-subscriptions/{subscription}/approve', [CommoditySubscriptionController::class, 'approve'])->name('commodity-subscriptions.approve');
     Route::post('commodity-subscriptions/{subscription}/reject', [CommoditySubscriptionController::class, 'reject'])->name('commodity-subscriptions.reject');
+
+
+    Route::post('/commodity-subscriptions/{subscription}/record-payment', [CommoditySubscriptionController::class, 'recordPayment'])->name('commodity-subscriptions.record-payment');
+    Route::post('/commodity-payments/{payment}/approve', [CommoditySubscriptionController::class, 'approvePayment'])->name('commodity-payments.approve');
+    Route::post('/commodity-payments/{payment}/reject', [CommoditySubscriptionController::class, 'rejectPayment'])->name('commodity-payments.reject');
 
 
 });

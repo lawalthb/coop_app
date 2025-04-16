@@ -143,7 +143,7 @@
     <span class="ml-3">Commodities</span>
 </a>
 
-<a href="{{ route('commodity-subscriptions.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('commodity-subscriptions*') ? 'bg-purple-700' : '' }}">
+<a href="{{ route('member.commodity-subscriptions.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('commodity-subscriptions*') ? 'bg-purple-700' : '' }}">
     <i class="fas fa-clipboard-list w-5"></i>
     <span class="ml-3">My Subscriptions</span>
 </a>
