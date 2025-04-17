@@ -10,7 +10,7 @@ use App\Notifications\CommoditySubscriptionStatusUpdated;
 use App\Notifications\CommodityPaymentStatusUpdated;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-
+use App\Models\Transaction;
 class CommoditySubscriptionController extends Controller
 {
     public function index()
@@ -106,14 +106,28 @@ class CommoditySubscriptionController extends Controller
         return back()->with('success', 'Payment recorded successfully.');
     }
 
-    public function approvePayment(CommodityPayment $payment)
+     public function approvePayment(CommodityPayment $payment)
     {
         $payment->update([
             'status' => 'approved',
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
         ]);
 
         // Process the payment
         $this->processApprovedPayment($payment);
+
+        // Get the subscription details
+        $subscription = $payment->subscription;
+
+        // Record the transaction
+   Transaction::recordCommodityPayment(
+    $subscription->user_id,
+    $payment->amount,
+    $subscription->commodity->name,
+    $subscription->commodity_id,
+    $payment->payment_reference ?? ('COM-PAY-' . $payment->id)
+);
 
         // Notify the user
         $payment->subscription->user->notify(new CommodityPaymentStatusUpdated($payment));

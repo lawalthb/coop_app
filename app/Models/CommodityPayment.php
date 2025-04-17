@@ -39,4 +39,9 @@ class CommodityPayment extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+      public function commoditySubscription()
+    {
+        return $this->belongsTo(CommoditySubscription::class, 'commodity_subscription_id');
+    }
 }

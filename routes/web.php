@@ -48,6 +48,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileUpdateController;
 use App\Http\Controllers\Member\MemberCommodityPaymentController;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Admin\AdminCommodityPaymentController;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -343,6 +344,19 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::get('/commodity-subscriptions/{subscription}', [CommoditySubscriptionController::class, 'show'])
         ->name('commodity-subscriptions.show');
 
+
+        Route::get('/commodity-payments', [AdminCommodityPaymentController::class, 'index'])
+    ->name('commodity-payments.index');
+Route::get('/commodity-payments/create/{subscription}', [AdminCommodityPaymentController::class, 'create'])
+    ->name('commodity-payments.create');
+Route::post('/commodity-payments/{subscription}', [AdminCommodityPaymentController::class, 'store'])
+    ->name('commodity-payments.store');
+Route::get('/commodity-payments/{payment}', [AdminCommodityPaymentController::class, 'show'])
+    ->name('commodity-payments.show');
+Route::post('/commodity-payments/{payment}/approve', [AdminCommodityPaymentController::class, 'approve'])
+    ->name('commodity-payments.approve');
+Route::post('/commodity-payments/{payment}/reject', [AdminCommodityPaymentController::class, 'reject'])
+    ->name('commodity-payments.reject');
 
 });
  //end of admin routes

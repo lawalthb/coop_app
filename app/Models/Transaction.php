@@ -119,7 +119,23 @@ class Transaction extends Model
     {
         return $this->belongsTo(LoanType::class);
     }
- 
+
+ public static function recordCommodityPayment($userId, $amount, $commodityName, $commodityId, $reference = null)
+    {
+        return self::create([
+            'user_id' => $userId,
+            'type' => 'commodity_payment',
+            'credit_amount' => $amount,
+            'debit_amount' => 0,
+            'description' => 'Payment for ' . $commodityName . ' (Commodity ID: ' . $commodityId . ')',
+            'reference' => $reference ?? 'COM-PAY-' . Str::random(8),
+            'posted_by' => auth()->id(),
+            'transaction_date' => now(),
+            'status' => 'completed'
+        ]);
+    }
+
+
 }
 
 
