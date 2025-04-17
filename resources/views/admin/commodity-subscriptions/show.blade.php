@@ -280,7 +280,7 @@
                                 @foreach($subscription->payments as $payment)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $payment->payment_date->format('M d, Y') }}
+                                        {{ $payment->created_at->format('M d, Y') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         @if($payment->payment_type === 'full')

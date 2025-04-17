@@ -20,60 +20,47 @@
         </div>
 
         <div class="p-6">
-            <!-- Reference Number -->
-            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
-                <div class="flex items-center">
-                    <i class="fas fa-hashtag text-gray-400 mr-3"></i>
-                    <div>
-                        <span class="text-sm text-gray-500">Reference Number:</span>
-                        <p class="font-medium text-gray-900">{{ $subscription->reference }}</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Commodity Information</h3>
                     <div class="flex items-start mb-4">
                         @if($subscription->commodity->image)
-                        <div class="flex-shrink-0 h-20 w-20">
-                            <img src="{{ asset('storage/' . $subscription->commodity->image) }}" alt="{{ $subscription->commodity->name }}" class="w-20 h-20 object-cover rounded mr-4">
-                        </div>
+                        <img src="{{ asset('storage/' . $subscription->commodity->image) }}" alt="{{ $subscription->commodity->name }}" class="w-15 h-15 object-cover rounded mr-4">
                         @else
-                        <div class="flex-shrink-0 w-20 h-20 bg-gray-200 rounded flex items-center justify-center mr-4">
+                        <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center mr-4">
                             <i class="fas fa-shopping-basket text-gray-400 text-2xl"></i>
                         </div>
                         @endif
-                        <div class="ml-4 flex-1">
-                            <h4 class="text-md font-semibold text-gray-900">{{ $subscription->commodity->name }}</h4>
+                        <div>
+                            <h4 class="text-md font-semibold">{{ $subscription->commodity->name }}</h4>
                             <p class="text-sm text-gray-600 mt-1">Unit Price: ₦{{ number_format($subscription->unit_price, 2) }}</p>
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                        <div class="flex justify-between">
+                    <div class="space-y-3">
+                        <div>
                             <span class="text-sm text-gray-500">Quantity:</span>
-                            <span class="font-medium">{{ $subscription->quantity }}</span>
+                            <p class="font-medium">{{ $subscription->quantity }}</p>
                         </div>
-                        <div class="flex justify-between">
+                        <div>
                             <span class="text-sm text-gray-500">Total Amount:</span>
-                            <span class="font-medium">₦{{ number_format($subscription->total_amount, 2) }}</span>
+                            <p class="font-medium">₦{{ number_format($subscription->total_amount, 2) }}</p>
                         </div>
-                        <div class="flex justify-between">
+                        <div>
                             <span class="text-sm text-gray-500">Subscription Date:</span>
-                            <span class="font-medium">{{ $subscription->created_at ? $subscription->created_at->format('M d, Y h:i A') : 'N/A' }}</span>
+                            <p class="font-medium">{{ $subscription->created_at->format('M d, Y h:i A') }}</p>
                         </div>
 
                         <!-- Payment Type Information -->
-                        <div class="flex justify-between">
+                        <div>
                             <span class="text-sm text-gray-500">Payment Type:</span>
-                            <span class="font-medium">
+                            <p class="font-medium">
                                 @if(isset($subscription->payment_type) && $subscription->payment_type == 'installment')
                                     <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Installment</span>
                                 @else
                                     <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Full Payment</span>
                                 @endif
-                            </span>
+                            </p>
                         </div>
                     </div>
 
@@ -101,7 +88,7 @@
 
                             @if($subscription->status === 'approved')
                             <div class="mt-4 pt-3 border-t border-blue-200">
-                                <a href="{{ route('member.commodity-payments.index', $subscription) }}"
+                                <a href="{{ route('member.commodity-payments.index', ['subscription' => $subscription->id]) }}"
                                    class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
                                     View Payment History
                                 </a>
@@ -212,7 +199,7 @@
 
                         @if($subscription->status === 'approved' && isset($subscription->payment_type) && $subscription->payment_type == 'installment')
                         <div class="mt-4">
-                            <a href="{{ route('member.commodity-payments.create', $subscription) }}"
+                            <a href="{{ route('member.commodity-payments.create', ['subscription' => $subscription->id]) }}"
                                class="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded">
                                 Make a Payment
                             </a>
@@ -234,7 +221,7 @@
                         </div>
                         <div class="ml-4">
                             <h4 class="text-sm font-medium text-gray-900">Subscription Created</h4>
-                            <p class="text-sm text-gray-500">{{ $subscription->created_at ? $subscription->created_at->format('M d, Y h:i A') : 'N/A' }}</p>
+                            <p class="text-sm text-gray-500">{{ $subscription->created_at->format('M d, Y h:i A') }}</p>
                         </div>
                     </div>
 
@@ -249,12 +236,12 @@
                             <h4 class="text-sm font-medium text-gray-900">
                                 Subscription {{ ucfirst($subscription->status) }}
                             </h4>
-                            <p class="text-sm text-gray-500">{{ $subscription->updated_at ? $subscription->updated_at->format('M d, Y h:i A') : 'N/A' }}</p>
+                            <p class="text-sm text-gray-500">{{ $subscription->updated_at->format('M d, Y h:i A') }}</p>
                         </div>
                     </div>
                     @endif
 
-                                      <!-- Payment Timeline Events -->
+                    <!-- Payment Timeline Events -->
                     @if(isset($subscription->payments) && $subscription->payments->count() > 0)
                         @foreach($subscription->payments as $payment)
                         <div class="flex">
@@ -267,17 +254,8 @@
                                 <h4 class="text-sm font-medium text-gray-900">
                                     Payment Received
                                 </h4>
-                                <p class="text-sm text-gray-500">{{ $payment->created_at ? $payment->created_at->format('M d, Y h:i A') : 'N/A' }}</p>
+                                <p class="text-sm text-gray-500">{{ $payment->created_at->format('M d, Y h:i A') }}</p>
                                 <p class="text-sm text-gray-700">Amount: ₦{{ number_format($payment->amount, 2) }}</p>
-                                <p class="text-sm text-gray-500">
-                                    Status:
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        @if($payment->status === 'approved') bg-green-100 text-green-800
-                                        @elseif($payment->status === 'rejected') bg-red-100 text-red-800
-                                        @else bg-yellow-100 text-yellow-800 @endif">
-                                        {{ ucfirst($payment->status) }}
-                                    </span>
-                                </p>
                             </div>
                         </div>
                         @endforeach
@@ -288,4 +266,3 @@
     </div>
 </div>
 @endsection
-
