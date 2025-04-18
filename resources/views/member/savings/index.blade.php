@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
+    <!-- Monthly Summary Button -->
+    <div class="flex justify-end mb-4">
+        <a href="{{ route('member.savings.monthly-summary') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <i class="fas fa-table mr-2"></i>Monthly Summary
+        </a>
+    </div>
+
     <!-- Savings Overview -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         @foreach($savingTypes as $type)

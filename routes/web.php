@@ -136,6 +136,11 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::post('/member/commodity-subscriptions/{subscription}/payments', [MemberCommodityPaymentController::class, 'store'])
         ->name('member.commodity-payments.store');
 
+
+
+Route::get('/member/savings/monthly-summary', [MemberSavingsController::class, 'monthlySummary'])->name('member.savings.monthly-summary');
+Route::get('/member/savings/history', [MemberSavingsController::class, 'savingsHistory'])->name('member.savings.history');
+
 }); //end of member routes
 
 // Admin Routes
