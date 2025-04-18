@@ -17,4 +17,8 @@ class Month extends Model
     {
         return $this->hasMany(Share::class);
     }
+    public function commodityPayments()
+{
+    return $this->hasMany(CommodityPayment::class);
+}
 }

@@ -17,7 +17,9 @@ class CommodityPayment extends Model
         'status',
         'approved_by',
         'approved_at',
-        'notes'
+        'notes',
+         'month_id',
+        'year_id',
     ];
 
     protected $casts = [
@@ -44,4 +46,15 @@ class CommodityPayment extends Model
     {
         return $this->belongsTo(CommoditySubscription::class, 'commodity_subscription_id');
     }
+
+       public function month()
+    {
+        return $this->belongsTo(Month::class);
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+    
 }

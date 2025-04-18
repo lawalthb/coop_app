@@ -112,7 +112,8 @@
                 @else
                 <div>
                     <label for="subscription_id" class="block text-sm font-medium text-gray-700">Subscription</label>
-                    <select name="subscription_id" id="subscription_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    <select name="subscription_id" id="subscription_id"  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                         <option value="">All Subscriptions</option>
                         @foreach(\App\Models\CommoditySubscription::with(['user', 'commodity'])->get() as $sub)
                         <option value="{{ $sub->id }}" {{ request('subscription_id') == $sub->id ? 'selected' : '' }}>
@@ -125,7 +126,8 @@
 
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                    <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    <select name="status" id="status"  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                         <option value="">All Statuses</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
@@ -133,9 +135,32 @@
                     </select>
                 </div>
 
+    <div>
+        <label for="month_id" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
+        <select name="month_id" id="month_id" required
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+            @foreach($months as $month)
+                <option value="{{ $month->id }}">{{ $month->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label for="year_id" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+        <select name="year_id" id="year_id" required
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+            @foreach($years as $year)
+                <option value="{{ $year->id }}">{{ $year->year }}</option>
+            @endforeach
+        </select>
+    </div>
+
                 <div>
                     <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
-                    <select name="payment_method" id="payment_method" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                    <select name="payment_method" id="payment_method"  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
                         <option value="">All Methods</option>
                         <option value="cash" {{ request('payment_method') === 'cash' ? 'selected' : '' }}>Cash</option>
                                             <option value="bank_transfer" {{ request('payment_method') === 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
@@ -147,9 +172,18 @@
                     <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Filter
                     </button>
-                    <a href="{{ route('admin.commodity-payments.index', isset($subscription) ? ['subscription_id' => $subscription->id] : []) }}" class="ml-2 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+
+                
+
+                </div>
+
+                <div>
+
+
+                    <a href="{{ route('admin.commodity-payments.index', isset($subscription) ? ['subscription_id' => $subscription->id] : []) }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Reset
                     </a>
+
                 </div>
             </form>
         </div>

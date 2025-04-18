@@ -10,12 +10,13 @@ class MemberCommoditySubscriptionController extends Controller
 {
     public function index()
     {
+       // return 5;
         $subscriptions = CommoditySubscription::where('user_id', Auth::id())
             ->with('commodity')
             ->latest()
             ->paginate(10);
 
-        return view('commodity-subscriptions.index', compact('subscriptions'));
+        return view('member.commodity-subscriptions.index', compact('subscriptions'));
     }
 
     public function show(CommoditySubscription $subscription)

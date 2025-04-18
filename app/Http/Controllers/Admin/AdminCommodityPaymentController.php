@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CommodityPayment;
 use App\Models\CommoditySubscription;
+use App\Models\Month;
 use App\Models\Transaction;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +32,16 @@ class AdminCommodityPaymentController extends Controller
             $query->where('payment_method', $request->payment_method);
         }
 
+         // Filter by month if provided
+        if ($request->has('month_id') && $request->month_id != '') {
+            $query->where('month_id', $request->month_id);
+        }
+
+        // Filter by year if provided
+        if ($request->has('year_id') && $request->year_id != '') {
+            $query->where('year_id', $request->year_id);
+        }
+
         $payments = $query->latest()->paginate(15);
 
         // Get subscription if filtering by subscription
@@ -37,9 +49,14 @@ class AdminCommodityPaymentController extends Controller
         if ($request->has('subscription_id')) {
             $subscription = CommoditySubscription::with(['user', 'commodity'])->findOrFail($request->subscription_id);
         }
+  // Get months and years for filtering
+        $months = Month::all();
+        $years = Year::all();
 
-        return view('admin.commodity-payments.index', compact('payments', 'subscription'));
+
+       return view('admin.commodity-payments.index', compact('payments', 'subscription', 'months', 'years'));
     }
+
 
     public function show(CommodityPayment $payment)
     {
@@ -47,7 +64,7 @@ class AdminCommodityPaymentController extends Controller
         return view('admin.commodity-payments.show', compact('payment'));
     }
 
-    public function create(CommoditySubscription $subscription)
+   public function create(CommoditySubscription $subscription)
     {
         $subscription->load(['user', 'commodity', 'payments']);
 
@@ -55,7 +72,11 @@ class AdminCommodityPaymentController extends Controller
         $paidAmount = $subscription->initial_deposit + ($subscription->payments->sum('amount') ?? 0);
         $remainingAmount = $subscription->total_amount - $paidAmount;
 
-        return view('admin.commodity-payments.create', compact('subscription', 'remainingAmount'));
+        // Get months and years for the form
+        $months = Month::all();
+        $years = Year::all();
+
+        return view('admin.commodity-payments.create', compact('subscription', 'remainingAmount', 'months', 'years'));
     }
 
      public function store(Request $request, CommoditySubscription $subscription)
@@ -65,6 +86,8 @@ class AdminCommodityPaymentController extends Controller
             'payment_method' => 'required|in:cash,bank_transfer,deduction',
             'payment_reference' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:500',
+            'month_id' => 'required|exists:months,id',
+            'year_id' => 'required|exists:years,id',
         ]);
 
         // Calculate remaining amount
@@ -86,16 +109,18 @@ class AdminCommodityPaymentController extends Controller
             'approved_by' => Auth::id(),
             'approved_at' => now(),
             'notes' => $validated['notes'],
+            'month_id' => $validated['month_id'],
+            'year_id' => $validated['year_id'],
         ]);
 
         // Record the transaction
-   Transaction::recordCommodityPayment(
-    $subscription->user_id,
-    $validated['amount'],
-    $subscription->commodity->name,
-    $subscription->commodity_id,
-    $payment->payment_reference ?? ('COM-PAY-' . $payment->id)
-);
+        Transaction::recordCommodityPayment(
+            $subscription->user_id,
+            $validated['amount'],
+            $subscription->commodity->name,
+            $subscription->commodity_id,
+            $payment->payment_reference ?? ('COM-PAY-' . $payment->id)
+        );
 
         return redirect()->route('admin.commodity-payments.index', ['subscription_id' => $subscription->id])
             ->with('success', 'Payment recorded successfully.');
@@ -113,33 +138,29 @@ class AdminCommodityPaymentController extends Controller
         $subscription = $payment->commoditySubscription;
 
         // Record the transaction
-        Transaction::create([
-            'user_id' => $subscription->user_id,
-            'type' => 'commodity_payment',
-            'credit_amount' => $payment->amount,
-            'debit_amount' => 0,
-            'description' => 'Payment for ' . $subscription->commodity->name . ' (Commodity ID: ' . $subscription->commodity_id . ')',
-            'reference' => $payment->payment_reference ?? ('COM-PAY-' . $payment->id),
-            'posted_by' => Auth::id(),
-            'transaction_date' => now(),
-            'status' => 'completed'
-        ]);
+        Transaction::recordCommodityPayment(
+            $subscription->user_id,
+            $payment->amount,
+            $subscription->commodity->name,
+            $subscription->commodity_id,
+            $payment->payment_reference ?? ('COM-PAY-' . $payment->id)
+        );
 
         return redirect()->route('admin.commodity-payments.show', $payment)
             ->with('success', 'Payment approved successfully.');
     }
 
-    public function approve(CommodityPayment $payment)
-    {
-        $payment->update([
-            'status' => 'approved',
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
-        ]);
+    // public function approve(CommodityPayment $payment)
+    // {
+    //     $payment->update([
+    //         'status' => 'approved',
+    //         'approved_by' => Auth::id(),
+    //         'approved_at' => now(),
+    //     ]);
 
-        return redirect()->route('admin.commodity-payments.show', $payment)
-            ->with('success', 'Payment approved successfully.');
-    }
+    //     return redirect()->route('admin.commodity-payments.show', $payment)
+    //         ->with('success', 'Payment approved successfully.');
+    // }
 
     public function reject(Request $request, CommodityPayment $payment)
     {

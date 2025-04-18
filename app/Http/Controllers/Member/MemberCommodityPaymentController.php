@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\CommodityPayment;
 use App\Models\CommoditySubscription;
+use App\Models\Month;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,8 +66,11 @@ class MemberCommodityPaymentController extends Controller
             return redirect()->route('member.commodity-subscriptions.show', $subscription)
                 ->with('info', 'This subscription is already fully paid.');
         }
+  // Get months and years for the form
+        $months = Month::all();
+        $years = Year::all();
 
-        return view('member.commodity-payments.create', compact('subscription', 'remainingAmount'));
+        return view('member.commodity-payments.create', compact('subscription', 'remainingAmount', 'months', 'years'));
     }
 
     /**
@@ -88,6 +93,8 @@ class MemberCommodityPaymentController extends Controller
             'amount' => 'required|numeric|min:1|max:' . $remainingAmount,
             'payment_method' => 'required|in:cash,bank_transfer,deduction',
             'payment_reference' => 'nullable|string|max:255',
+               'month_id' => 'required|exists:months,id',
+            'year_id' => 'required|exists:years,id',
         ]);
 
         // Create the payment record
@@ -97,6 +104,8 @@ class MemberCommodityPaymentController extends Controller
         $payment->payment_method = $request->payment_method;
         $payment->payment_reference = $request->payment_reference;
         $payment->status = 'pending'; // Payments need admin approval
+        $payment->month_id = $request->month_id;
+        $payment->year_id = $request->year_id;
         $payment->save();
 
         return redirect()->route('member.commodity-subscriptions.show', $subscription)

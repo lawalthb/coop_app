@@ -78,6 +78,29 @@
                                 <option value="deduction">Salary Deduction</option>
                             </select>
                         </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div>
+        <label for="month_id" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
+        <select name="month_id" id="month_id" required
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+            @foreach($months as $month)
+                <option value="{{ $month->id }}">{{ $month->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label for="year_id" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+        <select name="year_id" id="year_id" required
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200"
+                style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+            @foreach($years as $year)
+                <option value="{{ $year->id }}">{{ $year->year }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
                         <div>
                             <label for="payment_reference" class="block text-sm font-medium text-gray-700 mb-1">Payment Reference (Optional)</label>

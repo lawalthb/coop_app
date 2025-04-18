@@ -121,9 +121,9 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/guarantor/{loan}/show', [MemberLoanController::class, 'showGuarantorRequest'])
         ->name('member.guarantor.show');
 
-Route::get('commodities', [MemberCommodityController::class, 'index'])->name('commodities.index');
-    Route::get('commodities/{commodity}', [MemberCommodityController::class, 'show'])->name('commodities.show');
-    Route::post('commodities/{commodity}/subscribe', [MemberCommodityController::class, 'subscribe'])->name('commodities.subscribe');
+    Route::get('member/commodities', [MemberCommodityController::class, 'index'])->name('member.commodities.index');
+    Route::get('member/commodities/{commodity}', [MemberCommodityController::class, 'show'])->name('member.commodities.show');
+    Route::post('member/commodities/{commodity}/subscribe', [MemberCommodityController::class, 'subscribe'])->name('member.commodities.subscribe');
 
     Route::get('member/commodity-subscriptions', [MemberCommoditySubscriptionController::class, 'index'])->name('member.commodity-subscriptions.index');
     Route::get('member/commodity-subscriptions/{subscription}', [MemberCommoditySubscriptionController::class, 'show'])->name('member.commodity-subscriptions.show');

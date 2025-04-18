@@ -46,7 +46,7 @@
                     <span class="text-sm text-gray-500">{{ $commodity->quantity_available }} available</span>
                 </div>
 
-                <a href="{{ route('commodities.show', $commodity) }}" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-2 rounded-md transition duration-300">
+                <a href="{{ route('member.commodities.show', $commodity) }}" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-2 rounded-md transition duration-300">
                     View Details
                 </a>
             </div>
