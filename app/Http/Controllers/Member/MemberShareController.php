@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\Month;
 use App\Models\Share;
 use App\Models\ShareType;
+use App\Models\Year;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class MemberShareController extends Controller
@@ -52,5 +55,53 @@ class MemberShareController extends Controller
 
         return redirect()->route('member.shares.index')
             ->with('success', 'Share purchase request submitted successfully');
+    }
+
+    public function monthlyShareSummary(Request $request)
+    {
+        $user = Auth::user();
+        $selectedYear = $request->input('year', date('Y'));
+
+        // Get all years for the dropdown
+        $years = Year::orderBy('year', 'desc')->get();
+
+        // Get the year_id for the selected year
+        $yearRecord = Year::where('year', $selectedYear)->first();
+
+        if (!$yearRecord) {
+            return redirect()->route('member.shares.index')
+                ->with('error', 'Selected year not found in the system.');
+        }
+
+        // Get all months
+        $months = Month::orderBy('id')->get();
+
+        // Initialize the data structure for the summary
+        $summary = [
+            'shares' => [
+                'name' => 'Share Subscriptions',
+                'months' => [],
+                'total' => 0
+            ]
+        ];
+
+        // Initialize each month with 0
+        foreach ($months as $month) {
+            $summary['shares']['months'][$month->id] = 0;
+        }
+
+        // Get all share purchases for the user in the selected year
+        $shares = Share::where('user_id', $user->id)
+            ->where('year_id', $yearRecord->id)
+            ->where('status', 'approved')
+            ->get();
+
+        // Fill in the actual share amounts
+        foreach ($shares as $share) {
+            $summary['shares']['months'][$share->month_id] += $share->amount;
+            $summary['shares']['total'] += $share->amount;
+        }
+
+        return view('member.shares.monthly-summary', compact('summary', 'months', 'years', 'selectedYear'));
     }
 }

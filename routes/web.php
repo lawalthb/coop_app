@@ -49,6 +49,7 @@ use App\Http\Controllers\ProfileUpdateController;
 use App\Http\Controllers\Member\MemberCommodityPaymentController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Admin\AdminCommodityPaymentController;
+use App\Http\Controllers\Member\MemberFinancialSummaryController;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -140,6 +141,9 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
 
 Route::get('/member/savings/monthly-summary', [MemberSavingsController::class, 'monthlySummary'])->name('member.savings.monthly-summary');
 Route::get('/member/savings/history', [MemberSavingsController::class, 'savingsHistory'])->name('member.savings.history');
+
+Route::get('/member/financial-summary', [MemberFinancialSummaryController::class, 'index'])->name('member.financial-summary');
+
 
 }); //end of member routes
 

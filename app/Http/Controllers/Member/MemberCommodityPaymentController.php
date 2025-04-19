@@ -111,4 +111,64 @@ class MemberCommodityPaymentController extends Controller
         return redirect()->route('member.commodity-subscriptions.show', $subscription)
             ->with('success', 'Payment submitted successfully and is pending approval.');
     }
+
+    public function monthlyCommodityPaymentSummary(Request $request)
+{
+    $user = Auth::user();
+    $selectedYear = $request->input('year', date('Y'));
+
+    // Get all years for the dropdown
+    $years = Year::orderBy('year', 'desc')->get();
+
+    // Get the year_id for the selected year
+    $yearRecord = Year::where('year', $selectedYear)->first();
+
+    if (!$yearRecord) {
+        return redirect()->route('member.commodity-subscriptions.index')
+            ->with('error', 'Selected year not found in the system.');
+    }
+
+    // Get all months
+    $months = Month::orderBy('id')->get();
+
+    // Get all approved subscriptions
+    $subscriptions = CommoditySubscription::where('user_id', $user->id)
+        ->where('status', 'approved')
+        ->with('commodity')
+        ->get();
+
+    // Initialize the data structure for the summary
+    $summary = [];
+
+    foreach ($subscriptions as $subscription) {
+        $summary[$subscription->id] = [
+            'name' => $subscription->commodity->name . ' (' . $subscription->reference . ')',
+            'months' => [],
+            'total' => 0
+        ];
+
+        // Initialize each month with 0
+        foreach ($months as $month) {
+            $summary[$subscription->id]['months'][$month->id] = 0;
+        }
+    }
+
+    // Get all payments for the user's subscriptions in the selected year
+    $payments = CommodityPayment::whereIn('commodity_subscription_id', $subscriptions->pluck('id'))
+        ->where('year_id', $yearRecord->id)
+        ->where('status', 'approved')
+        ->get();
+
+    // Fill in the actual payment amounts
+    foreach ($payments as $payment) {
+        if (isset($summary[$payment->commodity_subscription_id])) {
+            $summary[$payment->commodity_subscription_id]['months'][$payment->month_id] += $payment->amount;
+            $summary[$payment->commodity_subscription_id]['total'] += $payment->amount;
+        }
+    }
+
+    return view('member.commodity-payments.monthly-summary', compact('summary', 'months', 'years', 'selectedYear'));
+}
+
+    
 }

@@ -193,4 +193,60 @@ class MemberLoanController extends Controller
 
         return view('member.loans.guarantor-response', compact('loan', 'guarantorRequest'));
     }
+
+    public function monthlyRepaymentSummary(Request $request)
+    {
+        $user = Auth::user();
+        $selectedYear = $request->input('year', date('Y'));
+
+        // Get all years for the dropdown
+        $years = Year::orderBy('year', 'desc')->get();
+
+        // Get the year_id for the selected year
+        $yearRecord = Year::where('year', $selectedYear)->first();
+
+        if (!$yearRecord) {
+            return redirect()->route('member.loans.index')
+                ->with('error', 'Selected year not found in the system.');
+        }
+
+        // Get all months
+        $months = Month::orderBy('id')->get();
+
+        // Get all active loans
+        $loans = Loan::where('user_id', $user->id)
+            ->where('status', 'approved')
+            ->get();
+
+        // Initialize the data structure for the summary
+        $summary = [];
+
+        foreach ($loans as $loan) {
+            $summary[$loan->id] = [
+                'name' => $loan->loanType->name . ' (' . $loan->reference . ')',
+                'months' => [],
+                'total' => 0
+            ];
+
+            // Initialize each month with 0
+            foreach ($months as $month) {
+                $summary[$loan->id]['months'][$month->id] = 0;
+            }
+        }
+
+        // Get all repayments for the user in the selected year
+        $repayments = LoanRepayment::whereIn('loan_id', $loans->pluck('id'))
+            ->where('year_id', $yearRecord->id)
+            ->get();
+
+        // Fill in the actual repayment amounts
+        foreach ($repayments as $repayment) {
+            if (isset($summary[$repayment->loan_id])) {
+                $summary[$repayment->loan_id]['months'][$repayment->month_id] += $repayment->amount;
+                $summary[$repayment->loan_id]['total'] += $repayment->amount;
+            }
+        }
+
+        return view('member.loans.monthly-repayment-summary', compact('summary', 'months', 'years', 'selectedYear'));
+    }
 }
