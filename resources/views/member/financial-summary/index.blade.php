@@ -1,6 +1,7 @@
 @extends('layouts.member')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-semibold text-gray-900">Financial Summary for {{ $selectedYear }}</h1>
@@ -96,7 +97,7 @@
                                 ₦{{ number_format($savingsTotal, 2) }}
                             </td>
                         </tr>
-                                            </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -300,7 +301,7 @@
                                     @endphp
 
                                     @if($monthTotal > 0)
-                                        ₦{{ number_format($monthTotal, 2) }}
+                                                                           ₦{{ number_format($monthTotal, 2) }}
                                     @else
                                         -
                                     @endif
@@ -416,7 +417,7 @@
 
                             @foreach($months as $month)
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                                                   @if($summary['shares']['months'][$month->id] > 0)
+                                    @if($summary['shares']['months'][$month->id] > 0)
                                         ₦{{ number_format($summary['shares']['months'][$month->id], 2) }}
                                     @else
                                         -
@@ -514,191 +515,474 @@
         </div>
     </div>
 
-    <!-- Visualization Section -->
-    <div class="mt-8">
+    <!-- Financial Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <!-- Savings Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-blue-500">
+                <h3 class="text-lg font-semibold text-white">Total Savings</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900 mb-2">₦{{ number_format($savingsTotal, 2) }}</div>
+                <div class="text-sm text-gray-500">Your total savings for {{ $selectedYear }}</div>
+            </div>
+        </div>
+
+        <!-- Loan Repayments Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-purple-500">
+                <h3 class="text-lg font-semibold text-white">Loan Repayments</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900 mb-2">₦{{ number_format($loansTotal, 2) }}</div>
+                <div class="text-sm text-gray-500">Your total loan repayments for {{ $selectedYear }}</div>
+            </div>
+        </div>
+
+        <!-- Shares Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-orange-500">
+                <h3 class="text-lg font-semibold text-white">Share Subscriptions</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900 mb-2">₦{{ number_format($summary['shares']['total'], 2) }}</div>
+                <div class="text-sm text-gray-500">Your total share subscriptions for {{ $selectedYear }}</div>
+            </div>
+        </div>
+
+        <!-- Commodity Payments Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-red-500">
+                <h3 class="text-lg font-semibold text-white">Commodity Payments</h3>
+            </div>
+            <div class="p-6">
+                <div class="text-3xl font-bold text-gray-900 mb-2">₦{{ number_format($commoditiesTotal, 2) }}</div>
+                <div class="text-sm text-gray-500">Your total commodity payments for {{ $selectedYear }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualization Section - Improved -->
+    <div class="mb-10">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <div class="px-6 py-4 bg-purple-600">
                 <h2 class="text-xl font-semibold text-white">Payment Visualization</h2>
             </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Monthly Breakdown Chart -->
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Monthly Breakdown</h3>
-                        <canvas id="monthlyChart" width="400" height="300"></canvas>
+
+            @if($hasData)
+                <div class="p-6">
+                    <div id="chartLoading" class="text-center py-4">
+                        <p class="text-gray-600">Loading charts...</p>
                     </div>
 
-                    <!-- Payment Category Pie Chart -->
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Distribution</h3>
-                        <canvas id="categoryChart" width="400" height="300"></canvas>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="w-full" style="height: 400px; position: relative;">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Monthly Breakdown</h3>
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+
+                        <div class="w-full" style="height: 400px; position: relative;">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Payment Distribution</h3>
+                            <canvas id="categoryChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const chartLoading = document.getElementById('chartLoading');
+
+                        try {
+                            // Debug data
+                            console.log('Initializing charts...');
+
+                            // Chart configurations
+                            const monthlyChart = new Chart(document.getElementById('monthlyChart'), {
+                                type: 'bar',
+                                data: {
+                                    labels: @json($months->pluck('name')),
+                                    datasets: [{
+                                        label: 'Savings',
+                                        data: @json(collect($summary['savings'])->sum('total')),
+                                        backgroundColor: 'rgba(59, 130, 246, 0.7)'
+                                    }, {
+                                        label: 'Loan Repayments',
+                                        data: @json(collect($summary['loans'])->sum('total')),
+                                        backgroundColor: 'rgba(139, 92, 246, 0.7)'
+                                    }, {
+                                        label: 'Share Subscriptions',
+                                        data: @json($summary['shares']['total']),
+                                        backgroundColor: 'rgba(249, 115, 22, 0.7)'
+                                    }, {
+                                        label: 'Commodity Payments',
+                                        data: @json(collect($summary['commodities'])->sum('total')),
+                                        backgroundColor: 'rgba(239, 68, 68, 0.7)'
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                callback: function(value) {
+                                                    return '₦' + value.toLocaleString();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            const categoryChart = new Chart(document.getElementById('categoryChart'), {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Savings', 'Loan Repayments', 'Share Subscriptions', 'Commodity Payments'],
+                                    datasets: [{
+                                        data: [
+                                            @json(collect($summary['savings'])->sum('total')),
+                                            @json(collect($summary['loans'])->sum('total')),
+                                            @json($summary['shares']['total']),
+                                            @json(collect($summary['commodities'])->sum('total'))
+                                        ],
+                                        backgroundColor: [
+                                            'rgba(59, 130, 246, 0.7)',
+                                            'rgba(139, 92, 246, 0.7)',
+                                            'rgba(249, 115, 22, 0.7)',
+                                            'rgba(239, 68, 68, 0.7)'
+                                        ]
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            position: 'right'
+                                        }
+                                    }
+                                }
+                            });
+
+                            // Hide loading message
+                            chartLoading.style.display = 'none';
+
+                            console.log('Charts initialized successfully');
+                        } catch (error) {
+                            console.error('Chart initialization error:', error);
+                            chartLoading.innerHTML = `
+                                <div class="text-red-500">
+                                    <p>Error loading charts. Please refresh the page.</p>
+                                    <p class="text-sm mt-2">${error.message}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                </script>
+            @else
+                <div class="p-6 text-center">
+                    <div class="py-8 text-gray-500">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p class="text-lg">No financial data available for {{ $selectedYear }}</p>
+                        <p class="mt-2">Try selecting a different year or check back later when you have transactions.</p>
+                    </div>
+                </div>
+            @endif
         </div>
+    </div>
+
+    <!-- Print and Export Options -->
+    <div class="flex justify-end space-x-4 mb-10">
+        <button onclick="window.print()" class="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+            <i class="fas fa-print mr-2"></i> Print Summary
+        </button>
+
+        <a href="{{ route('member.financial-summary.export', ['year' => $selectedYear]) }}" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            <i class="fas fa-file-excel mr-2"></i> Export to Excel
+        </a>
+
+        <a href="{{ route('member.financial-summary.pdf', ['year' => $selectedYear]) }}" class="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+            <i class="fas fa-file-pdf mr-2"></i> Download PDF
+        </a>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@if($hasData)
+<!-- Load Chart.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Monthly Breakdown Chart
-    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-    const months = @json($months->pluck('name'));
+    try {
+        // Get the months for chart labels
+        const months = @json($months->pluck('name'));
 
-    // Prepare data for monthly chart
-    const monthlySavings = [];
-    const monthlyLoans = [];
-    const monthlyShares = [];
-    const monthlyCommodities = [];
+        // Prepare data arrays for monthly chart
+        const monthlySavings = [];
+        const monthlyLoans = [];
+        const monthlyShares = [];
+        const monthlyCommodities = [];
 
-    @foreach($months as $month)
-        // Calculate totals for each category by month
-        let savingsMonthTotal = 0;
+        // Calculate monthly totals for each category
+        @foreach($months as $month)
+            // Savings
+            let savingsMonthTotal = 0;
+            @foreach($summary['savings'] as $typeData)
+                savingsMonthTotal += {{ $typeData['months'][$month->id] ?? 0 }};
+            @endforeach
+            monthlySavings.push(savingsMonthTotal);
+
+            // Loans
+            let loansMonthTotal = 0;
+            @foreach($summary['loans'] as $loanData)
+                loansMonthTotal += {{ $loanData['months'][$month->id] ?? 0 }};
+            @endforeach
+            monthlyLoans.push(loansMonthTotal);
+
+            // Shares
+            monthlyShares.push({{ $summary['shares']['months'][$month->id] ?? 0 }});
+
+            // Commodities
+            let commoditiesMonthTotal = 0;
+            @foreach($summary['commodities'] as $commodityData)
+                commoditiesMonthTotal += {{ $commodityData['months'][$month->id] ?? 0 }};
+            @endforeach
+            monthlyCommodities.push(commoditiesMonthTotal);
+        @endforeach
+
+        // Calculate category totals for pie chart
+        let savingsTotal = 0;
         @foreach($summary['savings'] as $typeData)
-            savingsMonthTotal += {{ $typeData['months'][$month->id] ?? 0 }};
+            savingsTotal += {{ $typeData['total'] ?? 0 }};
         @endforeach
-        monthlySavings.push(savingsMonthTotal);
 
-        let loansMonthTotal = 0;
+        let loansTotal = 0;
         @foreach($summary['loans'] as $loanData)
-            loansMonthTotal += {{ $loanData['months'][$month->id] ?? 0 }};
+            loansTotal += {{ $loanData['total'] ?? 0 }};
         @endforeach
-        monthlyLoans.push(loansMonthTotal);
 
-        monthlyShares.push({{ $summary['shares']['months'][$month->id] ?? 0 }});
+        let sharesTotal = {{ $summary['shares']['total'] ?? 0 }};
 
-        let commoditiesMonthTotal = 0;
+        let commoditiesTotal = 0;
         @foreach($summary['commodities'] as $commodityData)
-            commoditiesMonthTotal += {{ $commodityData['months'][$month->id] ?? 0 }};
+            commoditiesTotal += {{ $commodityData['total'] ?? 0 }};
         @endforeach
-        monthlyCommodities.push(commoditiesMonthTotal);
-    @endforeach
 
-    const monthlyChart = new Chart(monthlyCtx, {
-        type: 'bar',
-        data: {
-            labels: months,
-            datasets: [
-                {
-                    label: 'Savings',
-                    data: monthlySavings,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Loan Repayments',
-                    data: monthlyLoans,
-                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Share Subscriptions',
-                    data: monthlyShares,
-                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Commodity Payments',
-                    data: monthlyCommodities,
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: {
-                    stacked: false
-                },
-                y: {
-                    stacked: false,
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '₦' + value.toLocaleString();
-                        }
+        // Format currency for tooltips
+        const formatCurrency = (value) => {
+            return '₦' + new Intl.NumberFormat('en-NG').format(value);
+        };
+
+        // Monthly Breakdown Chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Savings',
+                        data: monthlySavings,
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Loan Repayments',
+                        data: monthlyLoans,
+                        backgroundColor: 'rgba(139, 92, 246, 0.7)',
+                        borderColor: 'rgba(139, 92, 246, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Share Subscriptions',
+                        data: monthlyShares,
+                        backgroundColor: 'rgba(249, 115, 22, 0.7)',
+                        borderColor: 'rgba(249, 115, 22, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Commodity Payments',
+                        data: monthlyCommodities,
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1
                     }
-                }
+                ]
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ₦' + context.raw.toLocaleString();
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + formatCurrency(context.raw);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
 
-    // Category Distribution Pie Chart
-    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-
-    // Calculate totals for each category
-    let savingsTotal = 0;
-    @foreach($summary['savings'] as $typeData)
-        savingsTotal += {{ $typeData['total'] ?? 0 }};
-    @endforeach
-
-    let loansTotal = 0;
-    @foreach($summary['loans'] as $loanData)
-        loansTotal += {{ $loanData['total'] ?? 0 }};
-    @endforeach
-
-    let sharesTotal = {{ $summary['shares']['total'] ?? 0 }};
-
-    let commoditiesTotal = 0;
-    @foreach($summary['commodities'] as $commodityData)
-        commoditiesTotal += {{ $commodityData['total'] ?? 0 }};
-    @endforeach
-
-    const categoryChart = new Chart(categoryCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Savings', 'Loan Repayments', 'Share Subscriptions', 'Commodity Payments'],
-            datasets: [{
-                data: [savingsTotal, loansTotal, sharesTotal, commoditiesTotal],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(153, 102, 255, 0.6)',
-                    'rgba(255, 159, 64, 0.6)',
-                    'rgba(255, 99, 132, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = Math.round((value / total) * 100);
-                            return label + ': ₦' + value.toLocaleString() + ' (' + percentage + '%)';
+        // Payment Category Pie Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Savings', 'Loan Repayments', 'Share Subscriptions', 'Commodity Payments'],
+                datasets: [{
+                    data: [savingsTotal, loansTotal, sharesTotal, commoditiesTotal],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(139, 92, 246, 0.7)',
+                        'rgba(249, 115, 22, 0.7)',
+                        'rgba(239, 68, 68, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return label + ': ' + formatCurrency(value) + ' (' + percentage + '%)';
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+
+        // Show error message if charts fail to load
+        const chartContainers = document.querySelectorAll('canvas');
+        chartContainers.forEach(container => {
+            container.style.display = 'none';
+            container.parentNode.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full">
+                    <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-gray-500">Unable to load chart visualization</p>
+                    <button class="mt-3 px-4 py-2 bg-purple-600 text-white text-sm rounded hover:bg-purple-700" onclick="window.location.reload()">
+                        Refresh Page
+                    </button>
+                </div>
+            `;
+        });
+    }
 });
 </script>
+@endif
+
+<style>
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    button, a {
+        display: none !important;
+    }
+
+    .shadow-md, .shadow-lg {
+        box-shadow: none !important;
+    }
+
+    .bg-white, .bg-gray-50, .bg-gray-100 {
+        background-color: white !important;
+    }
+
+    .bg-purple-600, .bg-blue-500, .bg-purple-500, .bg-orange-500, .bg-red-500 {
+        background-color: white !important;
+        color: black !important;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .text-white {
+        color: black !important;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto !important;
+    }
+
+    h1 {
+        font-size: 24px !important;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 20px !important;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+}
+</style>
 @endsection
 
 

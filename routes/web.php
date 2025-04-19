@@ -143,7 +143,9 @@ Route::get('/member/savings/monthly-summary', [MemberSavingsController::class, '
 Route::get('/member/savings/history', [MemberSavingsController::class, 'savingsHistory'])->name('member.savings.history');
 
 Route::get('/member/financial-summary', [MemberFinancialSummaryController::class, 'index'])->name('member.financial-summary');
-
+   Route::get('/member/financial-summary', [MemberFinancialSummaryController::class, 'index'])->name('member.financial-summary');
+    Route::get('/member/financial-summary/export', [MemberFinancialSummaryController::class, 'export'])->name('member.financial-summary.export');
+    Route::get('/member/financial-summary/pdf', [MemberFinancialSummaryController::class, 'downloadPdf'])->name('member.financial-summary.pdf');
 
 }); //end of member routes
 
