@@ -122,6 +122,10 @@
                         <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
                         <span>Reports</span>
                     </a>
+                      <a href="{{ route('admin.financial-summary.index') }}" class="flex items-center py-2 px-4 text-gray-700 hover:bg-purple-100 hover:text-purple-700 rounded-md {{ request()->routeIs('admin.financial-summary.*') ? 'bg-purple-100 text-purple-700' : '' }}">
+        <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
+        <span>Financial Summary</span>
+    </a>
                 </div>
 
 
