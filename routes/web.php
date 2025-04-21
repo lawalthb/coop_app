@@ -163,6 +163,12 @@ Route::get('/member/financial-summary', [MemberFinancialSummaryController::class
     Route::delete('/member/savings/settings/{setting}', [MemberSavingsController::class, 'destroySavingsSetting'])
         ->name('member.savings.settings.destroy');
 
+
+        Route::get('/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
+    Route::get('/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
+    Route::post('/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
+    Route::get('/withdrawals/{withdrawal}', [MemberWithdrawalController::class, 'show'])->name('member.withdrawals.show');
+
 }); //end of member routes
 
 // Admin Routes
@@ -239,7 +245,13 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::put('/savings/{saving}', [SavingController::class, 'update'])->name('savings.update');
     Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
 
-    //saving settings
+ //withdrawals
+ Route::get('/withdrawals', [WithdrawalController::class, 'index'])->name('withdrawals.index');
+    Route::get('/withdrawals/create', [WithdrawalController::class, 'create'])->name('withdrawals.create');
+    Route::post('/withdrawals', [WithdrawalController::class, 'store'])->name('withdrawals.store');
+    Route::get('/withdrawals/{withdrawal}', [WithdrawalController::class, 'show'])->name('withdrawals.show');
+    Route::post('/withdrawals/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->name('withdrawals.approve');
+    Route::post('/withdrawals/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->name('withdrawals.reject');
 
 
 

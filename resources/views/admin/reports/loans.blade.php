@@ -101,15 +101,15 @@
         </div>
 
         <!-- Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-lg p-6 transition-transform hover:scale-105 duration-300">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
                         <i class="fas fa-money-bill-wave text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-1">Total Loans</h3>
-                        <p class="text-3xl font-bold text-purple-600">₦{{ number_format($totalLoans, 2) }}</p>
+                    <div class="w-full">
+                        <h3 class="text-lg font-normal text-gray-700 mb-1">Total Loans</h3>
+                        <p class="text-xl font-normal text-purple-600 truncate">₦{{ number_format($totalLoans, 2) }}</p>
                     </div>
                 </div>
             </div>
@@ -118,9 +118,9 @@
                     <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
                         <i class="fas fa-hand-holding-usd text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-1">Active Loans</h3>
-                        <p class="text-3xl font-bold text-blue-600">₦{{ number_format($activeLoans, 2) }}</p>
+                    <div class="w-full">
+                        <h3 class="text-lg font-normal text-gray-700 mb-1">Active Loans</h3>
+                        <p class="text-xl font-normal text-blue-600 truncate">₦{{ number_format($activeLoans, 2) }}</p>
                     </div>
                 </div>
             </div>
@@ -129,9 +129,9 @@
                     <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
                         <i class="fas fa-check-circle text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-1">Total Repayments</h3>
-                        <p class="text-3xl font-bold text-green-600">₦{{ number_format($totalRepayments, 2) }}</p>
+                    <div class="w-full">
+                        <h3 class="text-lg font-normal text-gray-700 mb-1">Total Repayments</h3>
+                        <p class="text-xl font-normal text-green-600 truncate">₦{{ number_format($totalRepayments, 2) }}</p>
                     </div>
                 </div>
             </div>
@@ -140,13 +140,15 @@
                     <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
                         <i class="fas fa-exclamation-circle text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-1">Outstanding Balance</h3>
-                        <p class="text-3xl font-bold text-red-600">₦{{ number_format($outstandingBalance, 2) }}</p>
+                    <div class="w-full">
+                        <h3 class="text-lg font-normal text-gray-700 mb-1">Outstanding Balance</h3>
+                        <p class="text-xl font-normal text-red-600 truncate">₦{{ number_format($outstandingBalance, 2) }}</p>
                     </div>
                 </div>
             </div>
         </div>
+
+
 
         <!-- Loans Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">

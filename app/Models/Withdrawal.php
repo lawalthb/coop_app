@@ -38,8 +38,10 @@ class Withdrawal extends Model
         return $this->belongsTo(SavingType::class);
     }
 
-    public function approver()
+    public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+     
 }

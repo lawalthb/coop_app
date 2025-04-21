@@ -73,7 +73,7 @@
     </a>
 
 
-                <a href="{{ route('admin.savings.withdraw-form') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.savings.withdraw-form') ? 'bg-purple-700' : '' }}">
+                <a href="{{ route('admin.withdrawals.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.withdrawals.index') ? 'bg-purple-700' : '' }}">
     <i class="fas fa-money-bill-wave w-5"></i>
     <span class="ml-3">Process Withdrawal</span>
 </a>

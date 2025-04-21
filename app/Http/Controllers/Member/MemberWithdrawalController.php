@@ -8,28 +8,28 @@ use App\Models\Transaction;
 use App\Models\SavingType;
 use App\Models\Withdrawal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class MemberWithdrawalController extends Controller
 {
     public function create()
     {
-        $user = auth()->user();
-        $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
+        $savingTypes = SavingType::all();
 
+        // Calculate available balance for each saving type
         $balances = [];
         foreach ($savingTypes as $type) {
-            $deposits = Saving::where('user_id', $user->id)
+                       $credits = Saving::where('user_id', auth()->id())
                 ->where('saving_type_id', $type->id)
-
+                ->where('status', 'completed')
                 ->sum('amount');
 
-            $withdrawals = Withdrawal::where('user_id', $user->id)
+            $withdrawals = Withdrawal::where('user_id', auth()->id())
                 ->where('saving_type_id', $type->id)
-
-
+                ->where('status', 'approved')
                 ->sum('amount');
 
-            $balances[$type->id] = $deposits - $withdrawals;
+            $balances[$type->id] = $credits - $withdrawals;
         }
 
         return view('member.withdrawals.create', compact('savingTypes', 'balances'));
@@ -39,47 +39,65 @@ class MemberWithdrawalController extends Controller
     {
         $validated = $request->validate([
             'saving_type_id' => 'required|exists:saving_types,id',
-            'amount' => 'required|numeric|min:1000',
-            'bank_name' => 'required|string',
-            'account_number' => 'required|string',
-            'account_name' => 'required|string',
-            'reason' => 'required|string|max:500',
+            'amount' => 'required|numeric|min:1',
+            'reason' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|string|max:20',
+            'account_name' => 'required|string|max:255',
         ]);
 
-        $user = auth()->user();
+        // Check if member has sufficient balance
+        $savingType = SavingType::find($validated['saving_type_id']);
 
-        // Check available balance
-        $deposits = Saving::where('user_id', $user->id)
-             ->where('saving_type_id', $validated['saving_type_id'])
-
+        $credits = Saving::where('user_id', auth()->id())
+            ->where('saving_type_id', $validated['saving_type_id'])
+            ->where('status', 'completed')
             ->sum('amount');
 
-        $withdrawals = Withdrawal::where('user_id', $user->id)
-             ->where('saving_type_id', $validated['saving_type_id'])
-
+        $withdrawals = Withdrawal::where('user_id', auth()->id())
+            ->where('saving_type_id', $validated['saving_type_id'])
+            ->where('status', 'approved')
             ->sum('amount');
 
-        $availableBalance = $deposits - $withdrawals;
+        $availableBalance = $credits - $withdrawals;
 
         if ($validated['amount'] > $availableBalance) {
-            return back()->withErrors(['amount' => 'Insufficient balance']);
+            return back()->withInput()->with('error', 'Insufficient balance. Your available balance is ₦' . number_format($availableBalance, 2));
         }
 
-        $withdrawal = Withdrawal::create([
-            'user_id' => $user->id,
-            'saving_type_id' => $validated['saving_type_id'],
+        // Generate a unique reference
+        $reference = 'WDR-' . strtoupper(Str::random(8));
 
+        // Create the withdrawal request
+        $withdrawal = Withdrawal::create([
+            'user_id' => auth()->id(),
+            'saving_type_id' => $validated['saving_type_id'],
             'amount' => $validated['amount'],
-            'reference' => 'WTH-' . strtoupper(uniqid()),
-            'status' => 'pending',
+            'reason' => $validated['reason'],
             'bank_name' => $validated['bank_name'],
             'account_number' => $validated['account_number'],
             'account_name' => $validated['account_name'],
-            'reason' => $validated['reason'],
+            'reference' => $reference,
+            'status' => 'pending',
         ]);
 
-        return redirect()->route('member.withdrawals.index')->with('success', 'Withdrawal request submitted successfully');
+        // Notify admins about the new withdrawal request (you can implement this)
+
+        return redirect()->route('member.withdrawals.index')
+            ->with('success', 'Withdrawal request submitted successfully. It will be processed by the admin.');
     }
+
+    public function show(Withdrawal $withdrawal)
+    {
+        // Ensure the withdrawal belongs to the authenticated user
+        if ($withdrawal->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('member.withdrawals.show', compact('withdrawal'));
+    }
+
+
 
     public function index()
     {
@@ -90,4 +108,8 @@ class MemberWithdrawalController extends Controller
 
         return view('member.withdrawals.index', compact('withdrawals'));
     }
+
+
+
+
 }
