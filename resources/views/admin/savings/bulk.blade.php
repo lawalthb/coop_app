@@ -129,7 +129,8 @@
                 console.log(`Fetching amount for member ${memberId}...`);
 
                 try {
-                    const url = `/admin/get-member-savings-amount/${memberId}/${yearId}/${monthId}`;
+                    // Include saving type ID of 1 in the URL
+                    const url = `/admin/get-member-savings-amount/${memberId}/${yearId}/${monthId}/1`;
                     console.log(`Making request to: ${url}`);
 
                     const response = await fetch(url);
@@ -194,4 +195,5 @@
         }
     });
 </script>
+
 @endsection

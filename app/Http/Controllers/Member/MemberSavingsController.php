@@ -166,8 +166,9 @@ public function showSavingsSettings()
 
     $settings = MonthlySavingsSetting::where('user_id', $user->id)
         ->with(['savingType', 'month', 'year'])
-        ->latest()
-        ->paginate(10);
+        ->orderBy('year_id', 'desc')
+    ->orderBy('month_id', 'desc')
+        ->paginate(20);
 
     return view('member.savings.settings.index', compact('settings', 'savingTypes', 'months', 'years'));
 }
@@ -209,7 +210,10 @@ public function storeSavingsSetting(Request $request)
         'month_id' => $validated['month_id'],
         'year_id' => $validated['year_id'],
         'amount' => $validated['amount'],
-        'status' => 'pending',
+       // 'status' => 'pending',
+          'status' => 'approved', // Set to approved for immediate application
+        'approved_by' => auth()->id(),
+        'approved_at' => now(),
     ]);
 
     return redirect()->route('member.savings.settings.index')

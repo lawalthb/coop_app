@@ -319,8 +319,10 @@ public function withdraw(Request $request)
 public function monthlySavingsSettings()
 {
     $settings = MonthlySavingsSetting::with(['user', 'savingType', 'month', 'year'])
-        ->latest()
-        ->paginate(10);
+       ->orderBy('year_id', 'desc')
+    ->orderBy('month_id', 'desc')
+        ->paginate(100);
+      
 
     return view('admin.savings.settings.index', compact('settings'));
 }
@@ -369,12 +371,16 @@ public function rejectSavingsSetting(Request $request, MonthlySavingsSetting $se
 }
 
 
-public function getMemberSavingsAmount(User $member, $yearId, $monthId)
+/**
+ * Get the member's monthly savings amount for the specified month/year and saving type
+ */
+public function getMemberSavingsAmount(User $member, $yearId, $monthId, $savingTypeId)
 {
-    // Try to find an approved setting for the specified month and year
+    // Try to find an approved setting for the specified month, year, and saving type
     $setting = MonthlySavingsSetting::where('user_id', $member->id)
         ->where('month_id', $monthId)
         ->where('year_id', $yearId)
+        ->where('saving_type_id', $savingTypeId)
         ->where('status', 'approved')
         ->first();
 
@@ -394,6 +400,7 @@ public function getMemberSavingsAmount(User $member, $yearId, $monthId)
         ]);
     }
 }
+
     }
 
 

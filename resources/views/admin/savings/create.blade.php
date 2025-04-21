@@ -25,6 +25,24 @@
                         </select>
                     </div>
 
+                    <!-- Saving Type -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Saving Type</label>
+                            <select name="saving_type_id" id="saving-type" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
+                                @foreach($savingTypes as $type)
+                                    <option value="{{ $type->id }}" data-interest="{{ $type->interest_rate }}">
+                                        {{ $type->name }} ({{ $type->interest_rate }}% Interest)
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Interest Rate</label>
+                            <input type="text" id="interest-rate" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
+                        </div>
+                    </div>
+
                     <!-- Period Selection -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -32,7 +50,7 @@
                             <select name="year_id" id="year-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
                                 <option value="">Select Year</option>
                                 @foreach($years as $year)
-                                <option value="{{ $year->id }}">{{ $year->year }}</option>
+                                <option value="{{ $year->id }}" {{ date('Y') == $year->year ? 'selected' : '' }}>{{ $year->year }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -42,7 +60,7 @@
                             <select name="month_id" id="month-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
                                 <option value="">Select Month</option>
                                 @foreach($months as $month)
-                                <option value="{{ $month->id }}">{{ $month->name }}</option>
+                                <option value="{{ $month->id }}" {{ date('n') == $month->id ? 'selected' : '' }}>{{ $month->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,24 +77,6 @@
                             <label class="block text-sm font-medium text-gray-700">Custom Amount</label>
                             <input type="number" name="amount" id="custom-amount" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
                             <p class="mt-1 text-sm text-gray-500">Leave blank to use default monthly amount</p>
-                        </div>
-                    </div>
-
-                    <!-- Saving Type -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Saving Type</label>
-                            <select name="saving_type_id" id="saving-type" class="mt-1 block w-full rounded-md border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" required style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
-                                @foreach($savingTypes as $type)
-                                    <option value="{{ $type->id }}" data-interest="{{ $type->interest_rate }}">
-                                        {{ $type->name }} ({{ $type->interest_rate }}% Interest)
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Interest Rate</label>
-                            <input type="text" id="interest-rate" class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100" readonly style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
                     </div>
 
@@ -127,6 +127,7 @@
         const memberSelect = document.getElementById('member-select');
         const yearSelect = document.getElementById('year-select');
         const monthSelect = document.getElementById('month-select');
+        const savingTypeInput = document.getElementById('saving-type');
         const defaultAmountInput = document.getElementById('default-amount');
         const amountSourceText = document.getElementById('amount-source');
 
@@ -135,16 +136,17 @@
             const memberId = memberSelect.value;
             const yearId = yearSelect.value;
             const monthId = monthSelect.value;
+            const savingTypeId = savingTypeInput.value;
 
-            // Only proceed if all three values are selected
-            if (!memberId || !yearId || !monthId) {
+            // Only proceed if all four values are selected
+            if (!memberId || !yearId || !monthId || !savingTypeId) {
                 defaultAmountInput.value = '';
                 amountSourceText.textContent = '';
                 return;
             }
 
             try {
-                const response = await fetch(`/admin/get-member-savings-amount/${memberId}/${yearId}/${monthId}`);
+                const response = await fetch(`/admin/get-member-savings-amount/${memberId}/${yearId}/${monthId}/${savingTypeId}`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -174,6 +176,7 @@
         memberSelect.addEventListener('change', fetchSavingsAmount);
         yearSelect.addEventListener('change', fetchSavingsAmount);
         monthSelect.addEventListener('change', fetchSavingsAmount);
+        savingTypeInput.addEventListener('change', fetchSavingsAmount);
     });
 </script>
 @endsection

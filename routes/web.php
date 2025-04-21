@@ -222,7 +222,7 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
         ->name('savings.settings.approve');
     Route::post('/savings/settings/{setting}/reject', [SavingController::class, 'rejectSavingsSetting'])
         ->name('savings.settings.reject');
-         Route::get('/get-member-savings-amount/{member}/{yearId}/{monthId}', [SavingController::class, 'getMemberSavingsAmount']);
+        Route::get('/get-member-savings-amount/{member}/{yearId}/{monthId}/{savingTypeId}', [SavingController::class, 'getMemberSavingsAmount']);
 
     //savings
      Route::get('/savings/withdraw', [SavingController::class, 'showWithdrawForm'])->name('savings.withdraw-form');
