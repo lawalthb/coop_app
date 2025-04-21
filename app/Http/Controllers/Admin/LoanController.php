@@ -112,26 +112,40 @@ $user->notify(new LoanStatusNotification($loan));
     }
 
     public function approve(Loan $loan)
-    {
-        $loan->update([
-            'status' => 'approved',
-            'approved_by' => auth()->id(),
-            'approved_at' => now()
-        ]);
-        // Record transaction
+{
+    $loan->update([
+        'status' => 'approved',
+        'approved_by' => auth()->id(),
+        'approved_at' => now()
+    ]);
+
+    // Record loan disbursement transaction
+    TransactionHelper::recordTransaction(
+        $loan->user_id,
+        'loan_disbursement',
+        0,  // debitAmount (0 because it's not a debit for the cooperative)
+        $loan->amount,  // creditAmount (the amount being credited to the member)
+        'completed',
+        'Loan Disbursement - ' . $loan->reference
+    );
+
+    // Record application fee as income if it exists
+    if ($loan->application_fee > 0) {
         TransactionHelper::recordTransaction(
             $loan->user_id,
-            'loan_disbursement',
-            $loan->amount,
-            0,
+            'application_fee',
+            $loan->application_fee,  // debitAmount (amount being debited from the member)
+            0,  // creditAmount (0 because it's not a credit for the member)
             'completed',
-            'Loan Disbursement - ' . $loan->reference
+            'Loan Application Fee - ' . $loan->reference
         );
-
-        $user = $loan->user;
-        $user->notify(new LoanStatusNotification($loan));
-        return back()->with('success', 'Loan approved successfully');
     }
+
+    $user = $loan->user;
+    $user->notify(new LoanStatusNotification($loan));
+    return back()->with('success', 'Loan approved successfully');
+}
+
 
     public function reject(Loan $loan)
     {

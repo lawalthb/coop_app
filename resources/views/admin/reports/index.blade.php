@@ -70,5 +70,19 @@
             </a>
         </div>
     </div>
+
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="p-5 bg-purple-600">
+        <h3 class="text-lg font-semibold text-white">Transaction Summary Report</h3>
+    </div>
+    <div class="p-5">
+        <p class="text-gray-600 mb-4">View and analyze transactions by type, member, and period.</p>
+        <a href="{{ route('admin.reports.transaction-summary') }}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+            <i class="fas fa-chart-bar mr-2"></i>View Report
+        </a>
+    </div>
+</div>
+
 </div>
 @endsection
+

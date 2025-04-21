@@ -135,6 +135,22 @@ class Transaction extends Model
         ]);
     }
 
+     // Helper method to get formatted amount based on transaction type
+    public function getFormattedAmountAttribute()
+    {
+        if ($this->debit_amount > 0) {
+            return '₦' . number_format($this->debit_amount, 2);
+        } else {
+            return '₦' . number_format($this->credit_amount, 2);
+        }
+    }
+
+    // Helper method to determine if this is a debit or credit transaction
+    public function getTransactionTypeAttribute()
+    {
+        return $this->debit_amount > 0 ? 'debit' : 'credit';
+    }
+
 
 }
 

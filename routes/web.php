@@ -50,6 +50,7 @@ use App\Http\Controllers\Member\MemberCommodityPaymentController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Admin\AdminCommodityPaymentController;
 use App\Http\Controllers\Admin\AdminFinancialSummaryController;
+use App\Http\Controllers\Admin\TransactionSummaryController;
 use App\Http\Controllers\Member\MemberFinancialSummaryController;
 
 // Public Pages
@@ -412,6 +413,12 @@ Route::get('/financial-summary/overall/pdf', [AdminFinancialSummaryController::c
     Route::get('/financial-summary/member/{member}/export', [AdminFinancialSummaryController::class, 'exportMember'])->name('financial-summary.member.export');
     Route::get('/financial-summary/member/{member}/pdf', [AdminFinancialSummaryController::class, 'downloadMemberPdf'])->name('financial-summary.member.pdf');
 
+
+
+    // Transaction Summary Report
+Route::get('/reports/transaction-summary', [TransactionSummaryController::class, 'index'])->name('reports.transaction-summary');
+Route::get('/reports/transaction-summary/csv', [TransactionSummaryController::class, 'exportCsv'])->name('reports.transaction-summary.csv');
+Route::get('/reports/transaction-summary/pdf', [TransactionSummaryController::class, 'exportPdf'])->name('reports.transaction-summary.pdf');
 
 
 

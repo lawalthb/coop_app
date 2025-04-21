@@ -99,6 +99,12 @@
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
                 </a>
+                <a href="{{ route('admin.reports.transaction-summary') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-purple-100 hover:text-purple-800 rounded-lg {{ request()->routeIs('admin.reports.transaction-summary*') ? 'bg-purple-100 text-purple-800' : '' }}">
+    <i class="fas fa-chart-bar mr-3"></i>
+    <span>Transaction Summary</span>
+</a>
+
+
                 <a href="{{ route('admin.resources.index')}}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.resources*') ? 'bg-purple-700' : '' }}">
                     <i class="fas fa-file-alt w-5"></i>
                     <span class="ml-3">Information</span>
