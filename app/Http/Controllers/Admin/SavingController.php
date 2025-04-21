@@ -46,17 +46,37 @@ class SavingController extends Controller
     }
 
 
-    public function create()
-    {
-        $members = User::where('is_admin', false)
-            ->where('admin_sign', 'Yes')
-            ->get();
-        $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
-        $months = Month::all();
-        $years = Year::all();
+   public function create()
+{
+    $members = User::where('is_admin', false)
+        ->where('admin_sign', 'Yes')
+        ->get();
+    $savingTypes = SavingType::withdrawable()->where('status', 'active')->get();
+    $months = Month::all();
+    $years = Year::all();
 
-        return view('admin.savings.create', compact('members', 'savingTypes', 'months', 'years'));
-    }
+    // Get current month and year for default settings
+    $currentMonth = Carbon::now()->month;
+    $currentYear = Carbon::now()->year;
+
+    // Get the Month and Year models for the current month/year
+    $currentMonthModel = Month::where('id', $currentMonth)->first();
+    $currentYearModel = Year::where('year', $currentYear)->first();
+
+    // Pass current month and year IDs to the view
+    $currentMonthId = $currentMonthModel ? $currentMonthModel->id : null;
+    $currentYearId = $currentYearModel ? $currentYearModel->id : null;
+
+    return view('admin.savings.create', compact(
+        'members',
+        'savingTypes',
+        'months',
+        'years',
+        'currentMonthId',
+        'currentYearId'
+    ));
+}
+
 
     public function store(Request $request)
     {
@@ -348,6 +368,32 @@ public function rejectSavingsSetting(Request $request, MonthlySavingsSetting $se
         ->with('success', 'Monthly savings setting rejected successfully.');
 }
 
+
+public function getMemberSavingsAmount(User $member, $yearId, $monthId)
+{
+    // Try to find an approved setting for the specified month and year
+    $setting = MonthlySavingsSetting::where('user_id', $member->id)
+        ->where('month_id', $monthId)
+        ->where('year_id', $yearId)
+        ->where('status', 'approved')
+        ->first();
+
+    if ($setting) {
+        // Use the amount from monthly_savings_settings
+        return response()->json([
+            'success' => true,
+            'amount' => $setting->amount,
+            'source' => 'settings'
+        ]);
+    } else {
+        // Fallback to the user's default monthly_savings
+        return response()->json([
+            'success' => true,
+            'amount' => $member->monthly_savings,
+            'source' => 'user_profile'
+        ]);
+    }
+}
     }
 
 
