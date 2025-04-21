@@ -24,6 +24,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Interest Rate</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Duration (Months)</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Maximum Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Application Fee</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Actions</th>
                         </tr>
@@ -35,18 +36,20 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->required_active_savings_months }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->interest_rate }}%</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $loanType->duration_months }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($loanType->maximum_amount, 2) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₦{{ number_format($loanType->application_fee, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-        @if($loanType->status === 'active')
-            bg-green-100 text-green-800
-        @elseif($loanType->status === 'pending')
-            bg-yellow-100 text-yellow-800
-        @else
-            bg-red-100 text-red-800
-        @endif">
-        {{ ucfirst($loanType->status) }}
-    </span>
-</td>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    @if($loanType->status === 'active')
+                                        bg-green-100 text-green-800
+                                    @elseif($loanType->status === 'pending')
+                                        bg-yellow-100 text-yellow-800
+                                    @else
+                                        bg-red-100 text-red-800
+                                    @endif">
+                                    {{ ucfirst($loanType->status) }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-3">
                                     <a href="{{ route('admin.loan-types.show', $loanType) }}" class="text-blue-600 hover:text-blue-900" title="View">
@@ -67,7 +70,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">No loan types found</td>
+                            <td colspan="8" class="px-6 py-4 text-center text-gray-500">No loan types found</td>
                         </tr>
                         @endforelse
                     </tbody>

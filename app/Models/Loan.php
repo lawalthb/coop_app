@@ -26,13 +26,16 @@ class Loan extends Model
         'guarantor_phone',
         'guarantor_address',
         'guarantor_relationship',
-        'guarantor_member_no'
+        'guarantor_member_no',
+         'application_fee'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'approved_at' => 'datetime'
+        'approved_at' => 'datetime',
+         'application_fee' => 'decimal:2'
+
     ];
 
     public function user()

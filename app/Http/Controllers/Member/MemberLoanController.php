@@ -78,6 +78,13 @@ class MemberLoanController extends Controller
         $validationRules['guarantor_ids.*'] = 'required|exists:users,id';
     }
 
+        // Add application fee agreement validation if there's an application fee
+    if ($loanType->application_fee > 0) {
+        $validationRules['application_fee_agreement'] = 'required|accepted';
+    }
+
+
+
     $validated = $request->validate($validationRules);
     $validated['duration'] = $request->duration;
 
@@ -111,6 +118,7 @@ class MemberLoanController extends Controller
         'end_date' => $endDate,
         'status' => 'pending',
         'posted_by' => auth()->id(),
+            'application_fee' => $loanType->application_fee
     ]);
 
     // Create guarantor records and send notifications only if guarantors are required

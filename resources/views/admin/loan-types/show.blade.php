@@ -41,6 +41,11 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-medium text-gray-700">Application Fee</label>
+                        <p class="mt-1 text-lg">₦{{ number_format($loanType->application_fee, 2) }}</p>
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-medium text-gray-700">Number of Guarantors</label>
                         <p class="mt-1 text-lg">{{ $loanType->no_guarantors }}</p>
                     </div>

@@ -65,9 +65,9 @@
     <input
         type="number"
         name="application_fee"
-        step="1000"
+        step="500"
         min="0"
-        value="{{ old('application_fee', $loanType->application_fee ?? 0) }}"
+        value="{{ old('application_fee', $loanType->application_fee ?? 500) }}"
         class="w-full pl-10 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200"
         required
         style="border: 1px solid #ccc; padding: 10px 10px 10px 30px; font-size: 16px; border-radius: 5px;"

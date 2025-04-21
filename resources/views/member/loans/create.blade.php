@@ -36,7 +36,12 @@
                         <select name="loan_type_id" id="loan_type_id" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px; outline: none; transition: border-color 0.3s ease;">
                             <option value="">Select Loan Type</option>
                             @foreach($loanTypes as $type)
-                            <option value="{{ $type->id }}" data-guarantors="{{ $type->no_guarantors }}">{{ $type->name }}</option>
+                            <option value="{{ $type->id }}"
+                                data-guarantors="{{ $type->no_guarantors }}"
+                                data-application-fee="{{ $type->application_fee }}"
+                                data-min-amount="{{ $type->minimum_amount }}"
+                                data-max-amount="{{ $type->maximum_amount }}"
+                                data-max-duration="{{ $type->duration_months }}">{{ $type->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -48,11 +53,13 @@
                             style="border: 1px solid #ccc; font-size: 16px; border-radius: 5px; padding: 10px; outline: none; transition: border-color 0.3s ease;">
                         <div class="mt-1 text-sm text-purple-600" id="amountInWords"></div>
                         <div class="mt-1 text-sm text-purple-600" id="formattedAmount" style="display: none;"></div>
+                        <div class="mt-1 text-sm text-gray-500" id="amountRange"></div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Duration (months)</label>
-                        <input type="number" name="duration" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px; outline: none; transition: border-color 0.3s ease;">
+                        <input type="number" name="duration" id="loanDuration" class="w-full rounded-lg border-gray-300" required style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px; outline: none; transition: border-color 0.3s ease;">
+                        <div class="mt-1 text-sm text-gray-500" id="durationLimit"></div>
                     </div>
                 </div>
 
@@ -64,6 +71,19 @@
                 <!-- Add this container for dynamic guarantor fields -->
                 <div id="guarantorsContainer"></div>
 
+                <!-- Application Fee Agreement -->
+                <div id="applicationFeeContainer" class="hidden mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5 mt-1">
+                            <input type="checkbox" name="application_fee_agreement" id="application_fee_agreement" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" required>
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="application_fee_agreement" class="font-medium text-gray-700">Application Fee Agreement</label>
+                            <p class="text-gray-500" id="application_fee_text">I agree to pay the application fee of ₦0.00 if my loan is approved, before the loan amount is disbursed.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end space-x-4">
 
                     <!-- Add this JavaScript at the top of the form -->
@@ -71,11 +91,23 @@
                         document.addEventListener('DOMContentLoaded', function() {
                             const loanTypeSelect = document.getElementById('loan_type_id');
                             const guarantorsContainer = document.getElementById('guarantorsContainer');
+                            const applicationFeeContainer = document.getElementById('applicationFeeContainer');
+                            const applicationFeeText = document.getElementById('application_fee_text');
+                            const applicationFeeCheckbox = document.getElementById('application_fee_agreement');
+                            const loanAmountInput = document.getElementById('loanAmount');
+                            const amountRangeText = document.getElementById('amountRange');
+                            const loanDurationInput = document.getElementById('loanDuration');
+                            const durationLimitText = document.getElementById('durationLimit');
 
                             loanTypeSelect.addEventListener('change', function() {
                                 const selectedOption = this.options[this.selectedIndex];
                                 const noOfGuarantors = selectedOption.dataset.guarantors;
+                                const applicationFee = selectedOption.dataset.applicationFee;
+                                const minAmount = parseFloat(selectedOption.dataset.minAmount);
+                                const maxAmount = parseFloat(selectedOption.dataset.maxAmount);
+                                const maxDuration = parseInt(selectedOption.dataset.maxDuration);
 
+                                // Update guarantors section
                                 guarantorsContainer.innerHTML = '';
 
                                 for (let i = 1; i <= noOfGuarantors; i++) {
@@ -95,6 +127,88 @@
                                     </div>
                                 </div>
                             `;
+                                }
+
+                                // Update application fee section
+                                if (applicationFee && applicationFee > 0) {
+                                    const formattedFee = new Intl.NumberFormat('en-NG', {
+                                        style: 'currency',
+                                        currency: 'NGN',
+                                        minimumFractionDigits: 2
+                                    }).format(applicationFee).replace('NGN', '₦');
+
+                                    applicationFeeText.textContent = `I agree to pay the application fee of ${formattedFee} if my loan is approved, before the loan amount is disbursed.`;
+                                    applicationFeeContainer.classList.remove('hidden');
+                                    applicationFeeCheckbox.required = true;
+                                } else {
+                                    applicationFeeContainer.classList.add('hidden');
+                                    applicationFeeCheckbox.required = false;
+                                }
+
+                                // Update amount constraints
+                                if (minAmount && maxAmount) {
+                                    loanAmountInput.min = minAmount;
+                                    loanAmountInput.max = maxAmount;
+
+                                    const formattedMin = new Intl.NumberFormat('en-NG', {
+                                        style: 'currency',
+                                        currency: 'NGN',
+                                        minimumFractionDigits: 2
+                                    }).format(minAmount).replace('NGN', '₦');
+
+                                    const formattedMax = new Intl.NumberFormat('en-NG', {
+                                        style: 'currency',
+                                        currency: 'NGN',
+                                        minimumFractionDigits: 2
+                                    }).format(maxAmount).replace('NGN', '₦');
+
+                                    amountRangeText.textContent = `Amount must be between ${formattedMin} and ${formattedMax}`;
+                                    amountRangeText.classList.remove('text-red-500');
+                                    amountRangeText.classList.add('text-gray-500');
+                                }
+
+                                // Update duration constraints
+                                if (maxDuration) {
+                                    loanDurationInput.min = 1;
+                                    loanDurationInput.max = maxDuration;
+                                    durationLimitText.textContent = `Maximum duration: ${maxDuration} months`;
+                                    durationLimitText.classList.remove('text-red-500');
+                                    durationLimitText.classList.add('text-gray-500');
+                                }
+                            });
+
+                            // Validate amount on input
+                            loanAmountInput.addEventListener('input', function() {
+                                const selectedOption = loanTypeSelect.options[loanTypeSelect.selectedIndex];
+                                if (!selectedOption.value) return;
+
+                                const minAmount = parseFloat(selectedOption.dataset.minAmount);
+                                const maxAmount = parseFloat(selectedOption.dataset.maxAmount);
+                                const currentAmount = parseFloat(this.value);
+
+                                if (currentAmount < minAmount || currentAmount > maxAmount) {
+                                    amountRangeText.classList.remove('text-gray-500');
+                                    amountRangeText.classList.add('text-red-500');
+                                } else {
+                                    amountRangeText.classList.remove('text-red-500');
+                                    amountRangeText.classList.add('text-gray-500');
+                                }
+                            });
+
+                            // Validate duration on input
+                            loanDurationInput.addEventListener('input', function() {
+                                const selectedOption = loanTypeSelect.options[loanTypeSelect.selectedIndex];
+                                if (!selectedOption.value) return;
+
+                                const maxDuration = parseInt(selectedOption.dataset.maxDuration);
+                                const currentDuration = parseInt(this.value);
+
+                                if (currentDuration < 1 || currentDuration > maxDuration) {
+                                    durationLimitText.classList.remove('text-gray-500');
+                                    durationLimitText.classList.add('text-red-500');
+                                } else {
+                                    durationLimitText.classList.remove('text-red-500');
+                                    durationLimitText.classList.add('text-gray-500');
                                 }
                             });
                         });
@@ -164,7 +278,7 @@
         let thousand = Math.floor((number % 1000000) / 1000);
         let remainder = number % 1000;
 
-        if (billion) result += convertGroup(billion) + 'Billion ';
+             if (billion) result += convertGroup(billion) + 'Billion ';
         if (million) result += convertGroup(million) + 'Million ';
         if (thousand) result += convertGroup(thousand) + 'Thousand ';
         if (remainder) result += convertGroup(remainder);
