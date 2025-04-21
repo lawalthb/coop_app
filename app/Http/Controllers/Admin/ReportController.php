@@ -258,7 +258,7 @@ class ReportController extends Controller
     // Get saving types
     $savingTypes = SavingType::all();
 
-    $savings = $query->with(['user'])->latest()->paginate(10);
+    $savings = $query->with(['user'])->latest()->paginate(100);
 
     // Calculate totals
     $totalSavings = $query->sum('credit_amount');

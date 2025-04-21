@@ -67,7 +67,7 @@
                     <span class="ml-3">Savings</span>
                 </a>
 
-                  <a href="{{ route('admin.savings.settings.index') }}" class="flex items-center py-2 px-4 text-gray-700 hover:bg-purple-100 rounded {{ request()->routeIs('admin.savings.settings.*') ? 'bg-purple-100 text-purple-700' : '' }}">
+                  <a href="{{ route('admin.savings.settings.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700  {{ request()->routeIs('admin.savings.settings.*') ?  'bg-purple-700' : '' }}">
         <i class="fas fa-cog mr-3"></i>
         <span>Savings Settings</span>
     </a>
@@ -99,7 +99,7 @@
                     <i class="fas fa-exchange-alt w-5"></i>
                     <span class="ml-3">Transactions</span>
                 </a>
-                <a href="{{ route('admin.reports.transaction-summary') }}" class="flex items-center px-4 py-2 text-gray-600 hover:bg-purple-100 hover:text-purple-800 rounded-lg {{ request()->routeIs('admin.reports.transaction-summary*') ? 'bg-purple-100 text-purple-800' : '' }}">
+                <a href="{{ route('admin.reports.transaction-summary') }}" class="flex items-center px-4 py-3 hover:bg-purple-700  {{ request()->routeIs('admin.reports.transaction-summary*') ? 'bg-purple-700' : '' }}">
     <i class="fas fa-chart-bar mr-3"></i>
     <span>Transaction Summary</span>
 </a>
@@ -135,7 +135,7 @@
                         <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
                         <span>Reports</span>
                     </a>
-                      <a href="{{ route('admin.financial-summary.index') }}" class="flex items-center py-2 px-4 text-gray-700 hover:bg-purple-100 hover:text-purple-700 rounded-md {{ request()->routeIs('admin.financial-summary.*') ? 'bg-purple-100 text-purple-700' : '' }}">
+                      <a href="{{ route('admin.financial-summary.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700  {{ request()->routeIs('admin.financial-summary.*') ?  'bg-purple-700' : ''}}">
         <i class="fas fa-chart-line w-5 h-5 mr-3"></i>
         <span>Financial Summary</span>
     </a>
