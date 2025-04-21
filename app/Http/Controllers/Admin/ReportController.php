@@ -134,27 +134,53 @@ class ReportController extends Controller
     return view('admin.reports.shares', compact('shares', 'shareTypes', 'months', 'years', 'totalAmount', 'totalApproved', 'totalNotyet', 'totalShareholders'));
 }
 
-    public function loans()
-    {
-        $loanTypes = LoanType::all();
-        $loans = Loan::with(['user', 'loanType'])
-            ->latest()
-            ->paginate(50);
+   public function loans()
+{
+    $loanTypes = LoanType::all();
+    $months = Month::all();
+    $years = Year::all();
 
-        $totalLoans = Loan::where('status', 'approved')->sum('amount');
-        $activeLoans = Loan::where('status', 'approved')->where('balance', '>', 0)->sum('amount');
-        $totalRepayments = Loan::where('status', 'approved')->sum('amount_paid');
-        $outstandingBalance = Loan::where('status', 'approved')->sum('balance');
+    $query = Loan::with(['user', 'loanType']);
 
-        return view('admin.reports.loans', compact(
-            'loans',
-            'loanTypes',
-            'totalLoans',
-            'activeLoans',
-            'totalRepayments',
-            'outstandingBalance'
-        ));
+    if (request('loan_type_id')) {
+        $query->where('loan_type_id', request('loan_type_id'));
     }
+    if (request('status')) {
+        $query->where('status', request('status'));
+    }
+    if (request('month_id')) {
+        $query->where('month_id', request('month_id'));
+    }
+    if (request('year_id')) {
+        $query->where('year_id', request('year_id'));
+    }
+    if (request('date_from')) {
+        $query->whereDate('created_at', '>=', request('date_from'));
+    }
+    if (request('date_to')) {
+        $query->whereDate('created_at', '<=', request('date_to'));
+    }
+
+    // Calculate totals
+    $totalLoans = Loan::where('status', 'approved')->sum('amount');
+    $activeLoans = Loan::where('status', 'approved')->sum('amount');
+    $totalRepayments = Loan::where('status', 'approved')->sum('amount_paid');
+    $outstandingBalance = $totalLoans - $totalRepayments;
+
+    $loans = $query->latest()->paginate(50);
+
+    return view('admin.reports.loans', compact(
+        'loans',
+        'loanTypes',
+        'months',
+        'years',
+        'totalLoans',
+        'activeLoans',
+        'totalRepayments',
+        'outstandingBalance'
+    ));
+}
+
 
     public function transactions(Request $request)
     {
@@ -217,12 +243,60 @@ class ReportController extends Controller
         return Excel::download(new LoansExport, 'loans-report.xlsx');
     }
 
-    public function loansPdf()
-    {
-        $loans = Loan::with(['user', 'loanType'])->get();
-        $pdf = PDF::loadView('admin.reports.loans-pdf', compact('loans'));
+  public function loansPdf()
+{
+    try {
+        // Build the query with filters
+        $query = Loan::with(['user', 'loanType']);
+
+        if (request('loan_type_id')) {
+            $query->where('loan_type_id', request('loan_type_id'));
+        }
+        if (request('status')) {
+            $query->where('status', request('status'));
+        }
+        if (request('month_id')) {
+            $query->where('month_id', request('month_id'));
+        }
+        if (request('year_id')) {
+            $query->where('year_id', request('year_id'));
+        }
+        if (request('date_from')) {
+            $query->whereDate('created_at', '>=', request('date_from'));
+        }
+        if (request('date_to')) {
+            $query->whereDate('created_at', '<=', request('date_to'));
+        }
+
+        // Get all loans for the PDF (not paginated)
+        $loans = $query->latest()->get();
+
+        // Calculate statistics
+        $totalLoans = Loan::where('status', 'approved')->sum('amount');
+        $activeLoans = Loan::where('status', 'approved')->sum('amount');
+        $totalRepayments = Loan::where('status', 'approved')->sum('amount_paid');
+        $outstandingBalance = $totalLoans - $totalRepayments;
+
+        // Load the PDF view with all required data
+        $pdf = PDF::loadView('admin.reports.loans-pdf', compact(
+            'loans',
+            'totalLoans',
+            'activeLoans',
+            'totalRepayments',
+            'outstandingBalance'
+        ));
+
+        // Download the PDF
         return $pdf->download('loans-report.pdf');
+    } catch (\Exception $e) {
+        // Log the error
+        \Log::error('PDF Generation Error: ' . $e->getMessage());
+
+        // Return with error message
+        return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
     }
+}
+
 
     public function transactionsExcel()
     {
@@ -310,35 +384,48 @@ public function savingsExcel()
     return Excel::download(new SavingsExport($headers, $data), 'savings-report.xlsx');
 }
 
-public function savingsPdf()
+public function savingsPdf(Request $request)
 {
 
        ini_set('memory_limit', '5024M');
 
+ try {
+        // Get page number from request or default to 1
+        $page = $request->input('page', 1);
+        $perPage = 500;
 
-    try {
-        // Get the savings transactions
+        // Paginate the data
         $savings = Transaction::where('type', 'savings')
             ->with('user')
+            ->latest()
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage)
             ->get();
 
-        // Calculate totals for the report
+        // Calculate totals for this page only
         $totalSavings = $savings->sum('credit_amount');
         $activeSavers = $savings->pluck('user_id')->unique()->count();
         $monthlyAverage = $savings->where('created_at', '>=', now()->startOfMonth())
                                 ->where('created_at', '<=', now()->endOfMonth())
                                 ->avg('credit_amount') ?? 0;
 
+        // Add page information
+        $pageInfo = [
+            'current' => $page,
+            'total' => ceil(Transaction::where('type', 'savings')->count() / $perPage)
+        ];
+
         // Load the PDF view with all required data
         $pdf = PDF::loadView('admin.reports.savings-pdf', compact(
             'savings',
             'totalSavings',
             'activeSavers',
-            'monthlyAverage'
+            'monthlyAverage',
+            'pageInfo'
         ));
 
         // Download the PDF
-        return $pdf->download('savings-report.pdf');
+        return $pdf->download("savings-report-page-{$page}.pdf");
     } catch (\Exception $e) {
         // Log the error
         \Log::error('PDF Generation Error: ' . $e->getMessage());
@@ -347,7 +434,6 @@ public function savingsPdf()
         return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
     }
 }
-
 
 }
 

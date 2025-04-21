@@ -13,6 +13,8 @@ class Loan extends Model
         'amount',
         'interest_amount',
         'total_amount',
+          'balance',
+             'amount_paid',
         'duration',
         'monthly_payment',
         'start_date',
@@ -34,7 +36,9 @@ class Loan extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'approved_at' => 'datetime',
-         'application_fee' => 'decimal:2'
+         'application_fee' => 'decimal:2',
+           'balance' => 'decimal:2',
+        'amount_paid' => 'decimal:2'
 
     ];
 
