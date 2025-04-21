@@ -21,6 +21,7 @@ use App\Models\SavingType;
 use App\Models\ShareType;
 use App\Models\LoanType;
 use App\Models\Month;
+use App\Models\Saving;
 use App\Models\Year;
 
 class ReportController extends Controller
@@ -275,10 +276,80 @@ class ReportController extends Controller
     ));
 }
 
+public function savingsExcel()
+{
+    // Define the headers for the Excel export
+    $headers = [
+        'Date',
+        'Member ID',
+        'Member Name',
+        'Saving Type',
+        'Amount',
+        'Status'
+    ];
 
+    // Get the savings data
+    $savings = Transaction::where('type', 'savings')
+        ->with(['user', 'savingType'])
+        ->get();
+
+    // Format the data for Excel
+    $data = [];
+    foreach ($savings as $saving) {
+        $data[] = [
+            'date' => $saving->created_at->format('M d, Y'),
+            'member_id' => $saving->user->member_no ?? 'N/A',
+            'member_name' => $saving->user->surname . ' ' . $saving->user->firstname,
+            'saving_type' => $saving->savingType->name ?? 'Regular Savings',
+            'amount' => $saving->credit_amount,
+            'status' => ucfirst($saving->status)
+        ];
+    }
+
+    // Pass both headers and data to the SavingsExport constructor
+    return Excel::download(new SavingsExport($headers, $data), 'savings-report.xlsx');
+}
+
+public function savingsPdf()
+{
+
+       ini_set('memory_limit', '5024M');
+
+
+    try {
+        // Get the savings transactions
+        $savings = Transaction::where('type', 'savings')
+            ->with('user')
+            ->get();
+
+        // Calculate totals for the report
+        $totalSavings = $savings->sum('credit_amount');
+        $activeSavers = $savings->pluck('user_id')->unique()->count();
+        $monthlyAverage = $savings->where('created_at', '>=', now()->startOfMonth())
+                                ->where('created_at', '<=', now()->endOfMonth())
+                                ->avg('credit_amount') ?? 0;
+
+        // Load the PDF view with all required data
+        $pdf = PDF::loadView('admin.reports.savings-pdf', compact(
+            'savings',
+            'totalSavings',
+            'activeSavers',
+            'monthlyAverage'
+        ));
+
+        // Download the PDF
+        return $pdf->download('savings-report.pdf');
+    } catch (\Exception $e) {
+        // Log the error
+        \Log::error('PDF Generation Error: ' . $e->getMessage());
+
+        // Return with error message
+        return back()->with('error', 'Failed to generate PDF: ' . $e->getMessage());
+    }
 }
 
 
+}
 
 
 

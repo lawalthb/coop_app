@@ -151,7 +151,12 @@ class Transaction extends Model
         return $this->debit_amount > 0 ? 'debit' : 'credit';
     }
 
+    public function savingType()
+    {
+        return $this->belongsTo(SavingType::class);
+    }
 
+    
 }
 
 

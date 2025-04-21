@@ -8,15 +8,17 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class SavingsExport implements FromArray, WithHeadings
 {
     protected $headers;
+    protected $data;
 
-    public function __construct(array $headers)
+    public function __construct(array $headers, array $data = [])
     {
         $this->headers = $headers;
+        $this->data = $data;
     }
 
     public function array(): array
     {
-        return [];
+        return $this->data;
     }
 
     public function headings(): array
