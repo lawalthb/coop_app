@@ -74,6 +74,23 @@
             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
         @enderror
     </div>
+      <div>
+    <label class="block text-sm font-medium text-gray-700">Application Fee</label>
+    <div class="relative">
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 pointer-events-none">₦</span>
+    <input
+        type="number"
+        name="application_fee"
+        step="1000"
+        min="0"
+        value="{{ old('application_fee', $loanType->application_fee ?? 0) }}"
+        class="w-full pl-10 rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200"
+        required
+        style="border: 1px solid #ccc; padding: 10px 10px 10px 30px; font-size: 16px; border-radius: 5px;"
+    >
+    </div>
+    <p class="mt-1 text-sm text-gray-500">Fee charged when applying for this loan type</p>
+</div>
 
 
                     </div>

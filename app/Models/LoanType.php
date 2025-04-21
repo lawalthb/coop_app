@@ -17,7 +17,8 @@ class LoanType extends Model
         'allow_early_payment',
         'saved_percentage',
         'no_guarantors',
-        'status'
+        'status',
+         'application_fee'
     ];
 
     protected $casts = [
@@ -28,6 +29,7 @@ class LoanType extends Model
         'minimum_amount' => 'decimal:2',
         'maximum_amount' => 'decimal:2',
         'allow_early_payment' => 'boolean',
+          'application_fee' => 'decimal:2',
     ];
 
     public function loans()

@@ -31,6 +31,7 @@ class LoanTypeController extends Controller
             'maximum_amount' => 'required|numeric|gt:minimum_amount',
             'allow_early_payment' => 'boolean',
             'no_guarantors' => 'required|integer|min:0',
+            'application_fee' => 'required|numeric|min:0',
         ]);
 
         try {
@@ -61,6 +62,7 @@ class LoanTypeController extends Controller
             'status' => 'required|in:active,inactive',
             'saved_percentage' => 'nullable|in:50,100,150,200,250,300,None',
             'no_guarantors' => 'required|integer|min:0',
+                'application_fee' => 'required|numeric|min:0',
         ]);
 
         $loanType->update($validated);
