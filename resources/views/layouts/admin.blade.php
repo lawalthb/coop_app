@@ -66,6 +66,13 @@
                     <i class="fas fa-piggy-bank w-5"></i>
                     <span class="ml-3">Savings</span>
                 </a>
+
+                  <a href="{{ route('admin.savings.settings.index') }}" class="flex items-center py-2 px-4 text-gray-700 hover:bg-purple-100 rounded {{ request()->routeIs('admin.savings.settings.*') ? 'bg-purple-100 text-purple-700' : '' }}">
+        <i class="fas fa-cog mr-3"></i>
+        <span>Savings Settings</span>
+    </a>
+
+    
                 <a href="{{ route('admin.savings.withdraw-form') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('admin.savings.withdraw-form') ? 'bg-purple-700' : '' }}">
     <i class="fas fa-money-bill-wave w-5"></i>
     <span class="ml-3">Process Withdrawal</span>
@@ -207,6 +214,7 @@
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50">
                                         <i class="fas fa-cog mr-2"></i> Settings
                                     </a>
+
                                     <div class="border-t border-gray-100"></div>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf

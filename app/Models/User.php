@@ -155,6 +155,13 @@ class User extends Authenticatable
         return $this->hasMany(Loan::class)->where('status', 'approved');
     }
 
+    
+public function monthlySavingsSettings()
+{
+    return $this->hasMany(MonthlySavingsSetting::class);
+}
+
+
 }
 
 

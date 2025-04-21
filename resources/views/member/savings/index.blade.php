@@ -7,6 +7,11 @@
         <a href="{{ route('member.savings.monthly-summary') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             <i class="fas fa-table mr-2"></i>Monthly Summary
         </a>
+
+                &nbsp; &nbsp;
+         <a href="{{ route('member.savings.settings.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        <i class="fas fa-cog mr-2"></i>Manage Monthly Savings
+    </a>
     </div>
 
     <!-- Savings Overview -->

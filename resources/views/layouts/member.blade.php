@@ -107,6 +107,13 @@
                         <i class="fas fa-piggy-bank w-5"></i>
                         <span class="ml-3">Savings</span>
                     </a>
+
+                        <a href="{{ route('member.savings.settings.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.savings.settings.*')  ? 'bg-purple-700' : ''  }}">
+        <i class="fas fa-cog mr-3"></i>
+        <span>Savings Settings</span>
+    </a>
+
+
                     <a href="{{ route('member.withdrawals.index') }}" class="flex items-center px-4 py-3 hover:bg-purple-700 {{ request()->routeIs('member.withdrawals.*') ? 'bg-purple-700' : '' }}">
                         <i class="fas fa-hand-holding-usd w-5"></i>
                         <span class="ml-3">Withdrawals</span>
@@ -232,3 +239,4 @@
 </body>
 
 </html>
+

@@ -148,6 +148,20 @@ Route::get('/member/financial-summary', [MemberFinancialSummaryController::class
     Route::get('/member/financial-summary/export', [MemberFinancialSummaryController::class, 'export'])->name('member.financial-summary.export');
     Route::get('/member/financial-summary/pdf', [MemberFinancialSummaryController::class, 'downloadPdf'])->name('member.financial-summary.pdf');
 
+
+        Route::get('/member/savings/settings', [MemberSavingsController::class, 'showSavingsSettings'])
+        ->name('member.savings.settings.index');
+    Route::get('/member/savings/settings/create', [MemberSavingsController::class, 'createSavingsSetting'])
+        ->name('member.savings.settings.create');
+    Route::post('/member/savings/settings', [MemberSavingsController::class, 'storeSavingsSetting'])
+        ->name('member.savings.settings.store');
+    Route::get('/member/savings/settings/{setting}/edit', [MemberSavingsController::class, 'editSavingsSetting'])
+        ->name('member.savings.settings.edit');
+    Route::put('/member/savings/settings/{setting}', [MemberSavingsController::class, 'updateSavingsSetting'])
+        ->name('member.savings.settings.update');
+    Route::delete('/member/savings/settings/{setting}', [MemberSavingsController::class, 'destroySavingsSetting'])
+        ->name('member.savings.settings.destroy');
+
 }); //end of member routes
 
 // Admin Routes
@@ -201,8 +215,13 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
 
     Route::get('/savings/download-format', [SavingController::class, 'downloadFormat'])
     ->name('savings.download-format');
-
-
+//save settings
+  Route::get('savings/settings', [SavingController::class, 'monthlySavingsSettings'])
+        ->name('savings.settings.index');
+            Route::post('/savings/settings/{setting}/approve', [SavingController::class, 'approveSavingsSetting'])
+        ->name('savings.settings.approve');
+    Route::post('/savings/settings/{setting}/reject', [SavingController::class, 'rejectSavingsSetting'])
+        ->name('savings.settings.reject');
 
     //savings
      Route::get('/savings/withdraw', [SavingController::class, 'showWithdrawForm'])->name('savings.withdraw-form');
@@ -217,6 +236,11 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::get('/savings/{saving}/edit', [SavingController::class, 'edit'])->name('savings.edit');
     Route::put('/savings/{saving}', [SavingController::class, 'update'])->name('savings.update');
     Route::delete('/savings/{saving}', [SavingController::class, 'destroy'])->name('savings.destroy');
+
+    //saving settings
+
+
+
 
 
 
@@ -386,6 +410,9 @@ Route::get('/financial-summary/overall/pdf', [AdminFinancialSummaryController::c
     Route::get('/financial-summary/overall/pdf', [AdminFinancialSummaryController::class, 'downloadOverallPdf'])->name('financial-summary.overall.pdf');
     Route::get('/financial-summary/member/{member}/export', [AdminFinancialSummaryController::class, 'exportMember'])->name('financial-summary.member.export');
     Route::get('/financial-summary/member/{member}/pdf', [AdminFinancialSummaryController::class, 'downloadMemberPdf'])->name('financial-summary.member.pdf');
+
+
+
 
 });
  //end of admin routes

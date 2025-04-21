@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Month;
+use App\Models\MonthlySavingsSetting;
 use App\Models\Saving;
 use App\Models\Transaction;
 use App\Models\SavingType;
@@ -151,4 +152,133 @@ class MemberSavingsController extends Controller
                 ->with('error', 'An error occurred while generating the monthly summary.');
         }
     }
+
+
+
+    // Add these methods to the MemberSavingsController
+
+public function showSavingsSettings()
+{
+    $user = auth()->user();
+    $savingTypes = SavingType::all();
+    $months = Month::all();
+    $years = Year::orderBy('year', 'desc')->get();
+
+    $settings = MonthlySavingsSetting::where('user_id', $user->id)
+        ->with(['savingType', 'month', 'year'])
+        ->latest()
+        ->paginate(10);
+
+    return view('member.savings.settings.index', compact('settings', 'savingTypes', 'months', 'years'));
+}
+
+public function createSavingsSetting()
+{
+    $savingTypes = SavingType::all();
+    $months = Month::all();
+    $years = Year::orderBy('year', 'desc')->get();
+
+    return view('member.savings.settings.create', compact('savingTypes', 'months', 'years'));
+}
+
+public function storeSavingsSetting(Request $request)
+{
+    $validated = $request->validate([
+        'saving_type_id' => 'required|exists:saving_types,id',
+        'month_id' => 'required|exists:months,id',
+        'year_id' => 'required|exists:years,id',
+        'amount' => 'required|numeric|min:0',
+    ]);
+
+    // Check if a setting already exists for this combination
+    $existingSetting = MonthlySavingsSetting::where([
+        'user_id' => auth()->id(),
+        'saving_type_id' => $validated['saving_type_id'],
+        'month_id' => $validated['month_id'],
+        'year_id' => $validated['year_id'],
+    ])->first();
+
+    if ($existingSetting) {
+        return redirect()->back()->with('error', 'A savings setting already exists for this type, month, and year. Please edit the existing setting instead.');
+    }
+
+    // Create new setting
+    $setting = MonthlySavingsSetting::create([
+        'user_id' => auth()->id(),
+        'saving_type_id' => $validated['saving_type_id'],
+        'month_id' => $validated['month_id'],
+        'year_id' => $validated['year_id'],
+        'amount' => $validated['amount'],
+        'status' => 'pending',
+    ]);
+
+    return redirect()->route('member.savings.settings.index')
+        ->with('success', 'Monthly savings amount set successfully. It will be applied after admin approval.');
+}
+
+public function editSavingsSetting(MonthlySavingsSetting $setting)
+{
+    // Ensure the user can only edit their own settings
+    if ($setting->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // Only allow editing of pending settings
+    if ($setting->status !== 'pending') {
+        return redirect()->route('member.savings.settings.index')
+            ->with('error', 'Only pending settings can be edited.');
+    }
+
+    $savingTypes = SavingType::all();
+    $months = Month::all();
+    $years = Year::orderBy('year', 'desc')->get();
+
+    return view('member.savings.settings.edit', compact('setting', 'savingTypes', 'months', 'years'));
+}
+
+public function updateSavingsSetting(Request $request, MonthlySavingsSetting $setting)
+{
+    // Ensure the user can only update their own settings
+    if ($setting->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // Only allow updating of pending settings
+    if ($setting->status !== 'pending') {
+        return redirect()->route('member.savings.settings.index')
+            ->with('error', 'Only pending settings can be updated.');
+    }
+
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:0',
+    ]);
+
+    $setting->update([
+        'amount' => $validated['amount'],
+        'status' => 'pending', // Reset to pending if it was previously rejected
+    ]);
+
+    return redirect()->route('member.savings.settings.index')
+        ->with('success', 'Monthly savings amount updated successfully.');
+}
+
+public function destroySavingsSetting(MonthlySavingsSetting $setting)
+{
+    // Ensure the user can only delete their own settings
+    if ($setting->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // Only allow deleting of pending settings
+    if ($setting->status !== 'pending') {
+        return redirect()->route('member.savings.settings.index')
+            ->with('error', 'Only pending settings can be deleted.');
+    }
+
+    $setting->delete();
+
+    return redirect()->route('member.savings.settings.index')
+        ->with('success', 'Monthly savings setting deleted successfully.');
+}
+
 }

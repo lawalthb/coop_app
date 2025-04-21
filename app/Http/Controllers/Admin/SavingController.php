@@ -11,7 +11,9 @@ use App\Models\Year;
 use App\Models\SavingType;
 use App\Helpers\TransactionHelper;
 use App\Imports\SavingsImport;
+use App\Models\MonthlySavingsSetting;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -293,6 +295,58 @@ public function withdraw(Request $request)
         ->with('success', 'Withdrawal processed successfully');
 }
 
+
+public function monthlySavingsSettings()
+{
+    $settings = MonthlySavingsSetting::with(['user', 'savingType', 'month', 'year'])
+        ->latest()
+        ->paginate(10);
+
+    return view('admin.savings.settings.index', compact('settings'));
+}
+
+public function approveSavingsSetting(MonthlySavingsSetting $setting)
+{
+    $setting->update([
+        'status' => 'approved',
+        'approved_by' => auth()->id(),
+        'approved_at' => now(),
+    ]);
+
+    // Update the user's monthly_savings amount if this is the current month/year
+    $currentMonth = Carbon::now()->month;
+    $currentYear = Carbon::now()->year;
+
+    $settingMonth = $setting->month->id;
+    $settingYear = $setting->year->year;
+
+    if ($settingMonth == $currentMonth && $settingYear == $currentYear) {
+        $setting->user->update([
+            'monthly_savings' => $setting->amount
+        ]);
+    }
+
+    return redirect()->route('admin.savings.settings.index')
+        ->with('success', 'Monthly savings setting approved successfully.');
+}
+
+
+public function rejectSavingsSetting(Request $request, MonthlySavingsSetting $setting)
+{
+    $validated = $request->validate([
+        'admin_notes' => 'required|string|max:500',
+    ]);
+
+    $setting->update([
+        'status' => 'rejected',
+        'admin_notes' => $validated['admin_notes'],
+        'approved_by' => auth()->id(),
+        'approved_at' => now(),
+    ]);
+
+    return redirect()->route('admin.savings.settings.index')
+        ->with('success', 'Monthly savings setting rejected successfully.');
+}
 
     }
 
