@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use  SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -48,7 +50,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    protected $dates = ['deleted_at'];
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -155,7 +157,7 @@ class User extends Authenticatable
         return $this->hasMany(Loan::class)->where('status', 'approved');
     }
 
-    
+
 public function monthlySavingsSettings()
 {
     return $this->hasMany(MonthlySavingsSetting::class);

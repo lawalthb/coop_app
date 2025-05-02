@@ -29,12 +29,54 @@
                 </div>
             </div>
         </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Total Members Card -->
+            <div class="bg-purple-50 rounded-lg p-6 border border-purple-100 shadow-sm">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500 text-sm font-medium">Total Members</h3>
+                        <p class="text-3xl font-bold text-gray-800">{{ number_format($totalMembers) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approved This Month Card -->
+            <div class="bg-green-50 rounded-lg p-6 border border-green-100 shadow-sm">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                        <i class="fas fa-user-check text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500 text-sm font-medium">New Approvals This Month</h3>
+                        <p class="text-3xl font-bold text-gray-800">{{ number_format($approvedThisMonth) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="overflow-x-auto">
             <div class="inline-block min-w-full align-middle">
                 <div class="overflow-hidden md:rounded-lg">
                     @if(session('warning'))
                     <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
                         {{ session('warning') }}
+                    </div>
+                    @endif
+
+                    @if(session('success'))
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+
+                    @if(session('error'))
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+                        {{ session('error') }}
                     </div>
                     @endif
 
@@ -105,8 +147,6 @@
                                         </form>
                                         @endif
                                         @if (auth()->user()->id !== $member->id)
-
-
                                         <form action="{{ route('admin.members.destroy', $member) }}" method="POST" class="inline"
                                             onsubmit="return confirm('Are you sure you want to delete this member?')">
                                             @csrf

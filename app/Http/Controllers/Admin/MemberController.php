@@ -17,29 +17,44 @@ use App\Helpers\TransactionHelper;
 
 class MemberController extends Controller
 {
-    public function index(Request $request)
-    {
-        $search = $request->input('search');
+   public function index(Request $request)
+{
+    $search = $request->input('search');
 
-        $members = User::where('is_admin', false)
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('firstname', 'like', "%{$search}%")
-                        ->orWhere('surname', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%")
-                        ->orWhere('member_no', 'like', "%{$search}%");
-                });
-            })
-            ->latest()
-            ->paginate(10);
+    $query = User::where('is_admin', false);
 
-        if ($search && $members->isEmpty()) {
-            return view('admin.members.index', compact('members', 'search'))
-                ->with('warning', 'No members found matching "' . $search . '"');
-        }
-
-        return view('admin.members.index', compact('members', 'search'));
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('firstname', 'like', "%{$search}%")
+                ->orWhere('surname', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('member_no', 'like', "%{$search}%");
+        });
     }
+
+    $members = $query->latest()->paginate(10);
+
+    // Calculate statistics
+    $totalMembers = User::where('is_admin', false)->count();
+
+    // Count members who joined and were approved this month
+    $currentMonth = now()->month;
+    $currentYear = now()->year;
+
+    $approvedThisMonth = User::where('is_admin', false)
+        ->where('is_approved', 1)
+        ->whereMonth('approved_at', $currentMonth)
+        ->whereYear('approved_at', $currentYear)
+        ->count();
+
+    if ($search && $members->isEmpty()) {
+        return view('admin.members.index', compact('members', 'search', 'totalMembers', 'approvedThisMonth'))
+            ->with('warning', 'No members found matching "' . $search . '"');
+    }
+
+    return view('admin.members.index', compact('members', 'search', 'totalMembers', 'approvedThisMonth'));
+}
+
 
 
     public function show(User $member)
@@ -81,10 +96,27 @@ class MemberController extends Controller
     }
 
     public function destroy(User $member)
-    {
+{
+    try {
+       
+        if ($member->loans()->where('status', 'approved')->where('balance', '>', 0)->exists()) {
+            return redirect()->route('admin.members')->with('error', 'Cannot delete member with active loans. Please settle all loans first.');
+        }
+
+        // Soft delete the member
+        $member->update([
+            'status' => 'inactive',
+            'email' => $member->email . '_deleted_' . time(),
+            'is_active' => false
+        ]);
+
         $member->delete();
-        return redirect()->route('admin.members')->with('danger', 'Member deleted successfully');
+
+        return redirect()->route('admin.members')->with('success', 'Member deleted successfully');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.members')->with('error', 'Failed to delete member: ' . $e->getMessage());
     }
+}
 
 
     public function downloadPDF(User $member)
@@ -177,5 +209,5 @@ class MemberController extends Controller
             ->with('success', 'Member created successfully');
     }
 
- 
+
 }
