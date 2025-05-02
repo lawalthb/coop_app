@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\EntranceFeesExport;
 use App\Http\Controllers\Controller;
 use App\Models\EntranceFee;
 use App\Models\Month;
@@ -14,17 +15,37 @@ use App\Helpers\TransactionHelper;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\EntranceFeesImport;
+use App\Models\Transaction;
 
 class EntranceFeeController extends Controller
 {
-    public function index()
-    {
-        $entranceFees = EntranceFee::with(['user', 'month', 'year', 'postedBy'])
-            ->latest()
-            ->paginate(10);
+public function index()
+{
+    $query = EntranceFee::with(['user', 'month', 'year', 'postedBy']);
 
-        return view('admin.entrance-fees.index', compact('entranceFees'));
+    // Apply filters if provided
+    if (request()->has('month_id') && request('month_id') != '') {
+        $query->where('month_id', request('month_id'));
     }
+
+    if (request()->has('year_id') && request('year_id') != '') {
+        $query->where('year_id', request('year_id'));
+    }
+
+    // Get the filtered entrance fees
+    $entranceFees = $query->latest()->paginate(10);
+
+    // Calculate total amount based on the same filters (without pagination)
+    $totalAmount = clone $query;
+    $totalAmount = $totalAmount->sum('amount');
+
+    // Get all months and years for filter dropdowns
+    $months = Month::all();
+    $years = Year::all();
+
+    return view('admin.entrance-fees.index', compact('entranceFees', 'totalAmount', 'months', 'years'));
+}
+
 
     public function create()
     {
@@ -110,12 +131,34 @@ class EntranceFeeController extends Controller
             ->with('success', 'Entrance fee updated successfully');
     }
 
-    public function destroy(EntranceFee $entranceFee)
-    {
+  public function destroy(EntranceFee $entranceFee)
+{
+    try {
+        DB::beginTransaction();
+
+        // Find and delete the related transaction
+        $transaction = Transaction::where('user_id', $entranceFee->user_id)
+            ->where('type', 'entrance_fee')
+            ->where('debit_amount', 0)
+            ->where('credit_amount', $entranceFee->amount)
+            ->first();
+
+        if ($transaction) {
+            $transaction->delete();
+        }
+
+        // Delete the entrance fee
         $entranceFee->delete();
 
+        DB::commit();
+
         return back()->with('success', 'Entrance fee deleted successfully');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Failed to delete entrance fee: ' . $e->getMessage());
     }
+}
+
 
   public function export()
 {

@@ -30,6 +30,55 @@
         </a>
     </div>
 
+    <!-- Total Amount Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-lg font-normal text-gray-700 mb-1">Total Entrance Fees</h2>
+                <p class="text-2xl font-normal text-purple-600">₦{{ number_format($totalAmount, 2) }}</p>
+            </div>
+
+            <!-- Filter Form -->
+            <form action="{{ route('admin.entrance-fees') }}" method="GET" class="flex items-center space-x-4">
+                <div>
+                    <label for="month_id" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
+                    <select id="month_id" name="month_id" class="rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <option value="">All Months</option>
+                        @foreach($months as $month)
+                            <option value="{{ $month->id }}" {{ request('month_id') == $month->id ? 'selected' : '' }}>
+                                {{ $month->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label for="year_id" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                    <select id="year_id" name="year_id" class="rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                        <option value="">All Years</option>
+                        @foreach($years as $year)
+                            <option value="{{ $year->id }}" {{ request('year_id') == $year->id ? 'selected' : '' }}>
+                                {{ $year->year }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex items-end space-x-2">
+                    <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                        <i class="fas fa-filter mr-1"></i> Filter
+                    </button>
+
+                    @if(request('month_id') || request('year_id'))
+                        <a href="{{ route('admin.entrance-fees') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+                            <i class="fas fa-times mr-1"></i> Clear
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="mb-6">
         <form action="{{ route('admin.entrance-fees.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center space-x-4">
             @csrf
@@ -87,7 +136,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
                             No entrance fees found
                         </td>
                     </tr>
@@ -96,7 +145,7 @@
             </table>
         </div>
         <div class="px-6 py-4">
-            {{ $entranceFees->links() }}
+            {{ $entranceFees->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
