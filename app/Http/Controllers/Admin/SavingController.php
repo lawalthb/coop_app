@@ -20,30 +20,34 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SavingController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Saving::with(['user', 'savingType', 'month', 'year', 'postedBy']);
+   public function index(Request $request)
+{
+    $query = Saving::with(['user', 'savingType', 'month', 'year', 'postedBy']);
 
-        if ($request->filled('month')) {
-            $query->where('month_id', $request->month);
-        }
-
-        if ($request->filled('year')) {
-            $query->where('year_id', $request->year);
-        }
-
-        if ($request->filled('type')) {
-            $query->where('saving_type_id', $request->type);
-        }
-
-        $savings = $query->latest()->paginate(100);
-
-        $months = Month::all();
-        $years = Year::all();
-        $savingTypes = SavingType::where('status', 'active')->get();
-
-        return view('admin.savings.index', compact('savings', 'months', 'years', 'savingTypes'));
+    if ($request->filled('month')) {
+        $query->where('month_id', $request->month);
     }
+
+    if ($request->filled('year')) {
+        $query->where('year_id', $request->year);
+    }
+
+    if ($request->filled('type')) {
+        $query->where('saving_type_id', $request->type);
+    }
+
+    // Calculate total savings based on the same filters
+    $totalSavings = (clone $query)->sum('amount');
+
+    $savings = $query->latest()->paginate(100);
+
+    $months = Month::all();
+    $years = Year::all();
+    $savingTypes = SavingType::where('status', 'active')->get();
+
+    return view('admin.savings.index', compact('savings', 'months', 'years', 'savingTypes', 'totalSavings'));
+}
+
 
 
    public function create()
@@ -322,7 +326,7 @@ public function monthlySavingsSettings()
        ->orderBy('year_id', 'desc')
     ->orderBy('month_id', 'desc')
         ->paginate(100);
-      
+
 
     return view('admin.savings.settings.index', compact('settings'));
 }

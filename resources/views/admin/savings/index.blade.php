@@ -19,6 +19,28 @@
             </div>
         </div>
 
+        <!-- Total Savings Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-700 mb-1">Total Savings</h2>
+                    <p class="text-3xl font-bold text-purple-600">₦{{ number_format($totalSavings, 2) }}</p>
+                    <p class="text-sm text-gray-500 mt-1">
+                        @if(request('month') || request('year') || request('type'))
+                            Filtered total based on your criteria
+                        @else
+                            Total of all savings
+                        @endif
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ route('admin.savings.withdraw') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        <i class="fas fa-money-bill-wave mr-2"></i>Process Withdrawal
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter Section -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <form action="{{ route('admin.savings') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -62,6 +84,12 @@
                     <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                         <i class="fas fa-filter mr-2"></i>Filter
                     </button>
+
+                    @if(request('month') || request('year') || request('type'))
+                    <a href="{{ route('admin.savings') }}" class="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300">
+                        <i class="fas fa-times mr-2"></i>Clear
+                    </a>
+                    @endif
                 </div>
             </form>
         </div>
@@ -121,12 +149,8 @@
                             <td colspan="9" class="px-6 py-4 text-center text-gray-500">No savings entries found</td>
                         </tr>
                         @endforelse
-
-
                     </tbody>
-
                 </table>
-
             </div>
             <div class="px-6 py-4">
                 {{ $savings->links() }}
