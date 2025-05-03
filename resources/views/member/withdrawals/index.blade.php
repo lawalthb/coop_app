@@ -1,4 +1,4 @@
-               @extends('layouts.member')
+@extends('layouts.member')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
@@ -21,13 +21,73 @@
     </div>
     @endif
 
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Total Withdrawals Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                    <i class="fas fa-money-bill-wave text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-gray-500 text-sm font-medium">Total Withdrawals</h3>
+                    <p class="text-2xl font-bold text-gray-800">₦{{ number_format($totalAmount, 2) }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        @if(request('status'))
+                            Filtered by {{ ucfirst(request('status')) }} status
+                        @else
+                            All withdrawal requests
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved Withdrawals Card -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+                    <i class="fas fa-check-circle text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-gray-500 text-sm font-medium">Approved Withdrawals</h3>
+                    <p class="text-2xl font-bold text-gray-800">₦{{ number_format($approvedAmount, 2) }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Total amount of approved withdrawals</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+        <form action="{{ route('member.withdrawals.index') }}" method="GET" class="flex flex-wrap items-center space-x-4">
+            <div class="flex-grow">
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
+                <select id="status" name="status" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc; padding: 8px; font-size: 16px; border-radius: 5px;">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                </select>
+            </div>
+            <div class="flex items-end space-x-2">
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <i class="fas fa-filter mr-1"></i> Filter
+                </button>
+
+                @if(request('status'))
+                <a href="{{ route('member.withdrawals.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <i class="fas fa-times mr-1"></i> Clear
+                </a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
-                    <tr>
-
-               <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
@@ -72,7 +132,7 @@
             </table>
         </div>
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $withdrawals->links() }}
+            {{ $withdrawals->appends(request()->query())->links() }}
         </div>
     </div>
 </div>

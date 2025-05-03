@@ -99,15 +99,39 @@ class MemberWithdrawalController extends Controller
 
 
 
-    public function index()
-    {
-        $withdrawals = Withdrawal::where('user_id', auth()->id())
-            ->with('savingType')
-            ->latest()
-            ->paginate(10);
+  public function index(Request $request)
+{
+    $query = Withdrawal::where('user_id', auth()->id())
+        ->with('savingType');
 
-        return view('member.withdrawals.index', compact('withdrawals'));
+    // Apply status filter if provided
+    if ($request->has('status') && $request->status != '') {
+        $query->where('status', $request->status);
     }
+
+    // Get the filtered withdrawals
+    $withdrawals = $query->latest()->paginate(10);
+
+    // Calculate total amounts (without pagination)
+    $totalWithdrawals = Withdrawal::where('user_id', auth()->id());
+    $approvedWithdrawals = Withdrawal::where('user_id', auth()->id())
+        ->where('status', 'approved');
+
+    // Apply the same status filter to the totals if provided
+    if ($request->has('status') && $request->status != '') {
+        $totalWithdrawals->where('status', $request->status);
+    }
+
+    // Calculate the sums
+    $totalAmount = $totalWithdrawals->sum('amount');
+    $approvedAmount = $approvedWithdrawals->sum('amount');
+
+    return view('member.withdrawals.index', compact(
+        'withdrawals',
+        'totalAmount',
+        'approvedAmount'
+    ));
+}
 
 
 
