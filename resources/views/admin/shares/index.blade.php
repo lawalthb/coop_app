@@ -59,7 +59,19 @@
                 </div>
 
                 <!-- Filter Form -->
-                <form action="{{ route('admin.shares.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <form action="{{ route('admin.shares.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Member</label>
+                        <select name="user_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
+                            <option value="">All Members</option>
+                            @foreach($members as $member)
+                            <option value="{{ $member->id }}" {{ request('user_id') == $member->id ? 'selected' : '' }}>
+                                {{ $member->surname }} {{ $member->firstname }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Share Type</label>
                         <select name="share_type_id" class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc; padding: 10px; font-size: 16px; border-radius: 5px;">
@@ -106,12 +118,12 @@
                         </select>
                     </div>
 
-                    <div class="md:col-span-4 flex items-center space-x-4">
+                    <div class="md:col-span-5 flex items-center space-x-4">
                         <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                             <i class="fas fa-filter mr-2"></i>Apply Filters
                         </button>
 
-                        @if(request('share_type_id') || request('month_id') || request('year_id') || request('status'))
+                        @if(request('share_type_id') || request('month_id') || request('year_id') || request('status') || request('user_id'))
                         <a href="{{ route('admin.shares.index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300">
                             <i class="fas fa-times mr-2"></i>Clear Filters
                         </a>
@@ -224,7 +236,7 @@
         });
 
         // If there are active filters, show the filters section by default
-        @if(request('share_type_id') || request('month_id') || request('year_id') || request('status'))
+        @if(request('share_type_id') || request('month_id') || request('year_id') || request('status') || request('user_id'))
             filtersSection.style.display = 'block';
             toggleFiltersBtn.innerHTML = '<i class="fas fa-filter mr-2"></i>Hide Filters';
         @endif

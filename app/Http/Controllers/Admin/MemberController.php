@@ -98,14 +98,14 @@ class MemberController extends Controller
     public function destroy(User $member)
 {
     try {
-       
+
         if ($member->loans()->where('status', 'approved')->where('balance', '>', 0)->exists()) {
             return redirect()->route('admin.members')->with('error', 'Cannot delete member with active loans. Please settle all loans first.');
         }
 
         // Soft delete the member
         $member->update([
-            'status' => 'inactive',
+            'is_approved' => 0,
             'email' => $member->email . '_deleted_' . time(),
             'is_active' => false
         ]);

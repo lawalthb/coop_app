@@ -7,100 +7,125 @@ use App\Models\Withdrawal;
 use App\Models\User;
 use App\Models\SavingType;
 use App\Helpers\TransactionHelper;
+use App\Models\Month;
 use App\Models\Transaction;
+use App\Models\Year;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class WithdrawalController extends Controller
 {
-    public function create()
-    {
-      $members = User::where('is_admin', false)
+   public function create()
+{
+    $members = User::where('is_admin', false)
         ->orderBy('surname')
         ->get();
-        $savingTypes = SavingType::all();
-        return view('admin.withdrawals.create', compact('members', 'savingTypes'));
-    }
+    $savingTypes = SavingType::all();
+    $months = Month::all();
+    $years = Year::all();
+
+    return view('admin.withdrawals.create', compact('members', 'savingTypes', 'months', 'years'));
+}
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'saving_type_id' => 'required|exists:saving_types,id',
-            'amount' => 'required|numeric|min:0',
-            'bank_name' => 'required|string',
-            'account_number' => 'required|string',
-            'account_name' => 'required|string',
-            'reason' => 'required|string'
-        ]);
+{
+    $validated = $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'saving_type_id' => 'required|exists:saving_types,id',
+        'amount' => 'required|numeric|min:0',
+        'bank_name' => 'required|string',
+        'account_number' => 'required|string',
+        'account_name' => 'required|string',
+        'reason' => 'required|string',
+        'month_id' => 'required|exists:months,id',
+        'year_id' => 'required|exists:years,id'
+    ]);
 
-        $withdrawal = Withdrawal::create([
-            'user_id' => $validated['user_id'],
-            'saving_type_id' => $validated['saving_type_id'],
-            'reference' => 'WTH-' . Str::random(10),
-            'amount' => $validated['amount'],
-            'bank_name' => $validated['bank_name'],
-            'account_number' => $validated['account_number'],
-            'account_name' => $validated['account_name'],
-            'reason' => $validated['reason'],
-            'status' => 'completed',
-            'approved_at' => now(),
-            'approved_by' => auth()->id()
-        ]);
+    $withdrawal = Withdrawal::create([
+        'user_id' => $validated['user_id'],
+        'saving_type_id' => $validated['saving_type_id'],
+        'reference' => 'WTH-' . Str::random(10),
+        'amount' => $validated['amount'],
+        'bank_name' => $validated['bank_name'],
+        'account_number' => $validated['account_number'],
+        'account_name' => $validated['account_name'],
+        'reason' => $validated['reason'],
+        'status' => 'completed',
+        'approved_at' => now(),
+        'approved_by' => auth()->id(),
+        'month_id' => $validated['month_id'],
+        'year_id' => $validated['year_id']
+    ]);
 
-        // Record the transaction
-        TransactionHelper::recordTransaction(
-            $validated['user_id'],
-            'withdrawal',
-            0,
-            $validated['amount'],
-            'completed',
-            'Savings Withdrawal - ' . $withdrawal->reference
-        );
+    // Record the transaction
+    TransactionHelper::recordTransaction(
+        $validated['user_id'],
+        'withdrawal',
+        0,
+        $validated['amount'],
+        'completed',
+        'Savings Withdrawal - ' . $withdrawal->reference
+    );
 
-        return redirect()->route('admin.withdrawals.create')
-            ->with('success', 'Withdrawal recorded successfully');
-    }
-
+    return redirect()->route('admin.withdrawals.create')
+        ->with('success', 'Withdrawal recorded successfully');
+}
 
    public function index()
-    {
-        $savingTypes = SavingType::all();
+{
+    $savingTypes = SavingType::all();
+    $months = Month::all();
+    $years = Year::all();
 
-        $query = Withdrawal::with(['user', 'savingType']);
+    // Get all members for the filter dropdown
+    $members = User::where('is_admin', false)
+                  ->orderBy('surname')
+                  ->orderBy('firstname')
+                  ->get();
 
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
+    $query = Withdrawal::with(['user', 'savingType']);
 
-        if (request('saving_type_id')) {
-            $query->where('saving_type_id', request('saving_type_id'));
-        }
-
-        if (request('date_from')) {
-            $query->whereDate('created_at', '>=', request('date_from'));
-        }
-
-        if (request('date_to')) {
-            $query->whereDate('created_at', '<=', request('date_to'));
-        }
-
-        $withdrawals = $query->latest()->paginate(10);
-
-       // Calculate statistics
-        $totalWithdrawals = Withdrawal::sum('amount');
-        $pendingWithdrawals = Withdrawal::where('status', 'pending')->sum('amount');
-        $approvedWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
-
-        return view('admin.withdrawals.index', compact(
-            'withdrawals',
-            'savingTypes',
-            'totalWithdrawals',
-            'pendingWithdrawals',
-            'approvedWithdrawals'
-        ));
+    // Apply member filter if provided
+    if (request('user_id')) {
+        $query->where('user_id', request('user_id'));
     }
+
+    if (request('status')) {
+        $query->where('status', request('status'));
+    }
+
+    if (request('saving_type_id')) {
+        $query->where('saving_type_id', request('saving_type_id'));
+    }
+
+    // Month and year filters
+    if (request('month_id')) {
+        $query->where('month_id', request('month_id'));
+    }
+
+    if (request('year_id')) {
+        $query->where('year_id', request('year_id'));
+    }
+
+    $withdrawals = $query->latest()->paginate(10);
+
+    // Calculate statistics
+    $totalWithdrawals = Withdrawal::sum('amount');
+    $pendingWithdrawals = Withdrawal::where('status', 'pending')->sum('amount');
+    $approvedWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
+
+    return view('admin.withdrawals.index', compact(
+        'withdrawals',
+        'savingTypes',
+        'months',
+        'years',
+        'members',
+        'totalWithdrawals',
+        'pendingWithdrawals',
+        'approvedWithdrawals'
+    ));
+}
      public function show(Withdrawal $withdrawal)
     {
         return view('admin.withdrawals.show', compact('withdrawal'));

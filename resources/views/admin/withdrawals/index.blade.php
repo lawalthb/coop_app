@@ -31,14 +31,25 @@
                 </div>
                 <div class="flex items-center text-gray-500">
                     <span id="filter-count" class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mr-2">
-                        {{ array_filter(request()->only(['status', 'saving_type_id', 'date_from', 'date_to'])) ? count(array_filter(request()->only(['status', 'saving_type_id', 'date_from', 'date_to']))) : '0' }} active
+                        {{ array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])) ? count(array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id']))) : '0' }} active
                     </span>
                     <i id="filter-icon" class="fas fa-chevron-down transition-transform duration-300"></i>
                 </div>
             </button>
 
-            <div id="filter-panel" class="p-6 {{ array_filter(request()->only(['status', 'saving_type_id', 'date_from', 'date_to'])) ? '' : 'hidden' }}">
-                <form action="{{ route('admin.withdrawals.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div id="filter-panel" class="p-6 {{ array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])) ? '' : 'hidden' }}">
+                <form action="{{ route('admin.withdrawals.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Member</label>
+                        <select name="user_id" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
+                            <option value="">All Members</option>
+                            @foreach($members as $member)
+                            <option value="{{ $member->id }}" {{ request('user_id') == $member->id ? 'selected' : '' }}>
+                                {{ $member->surname }} {{ $member->firstname }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                         <select name="status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
@@ -60,16 +71,28 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
-                        <input type="date" name="date_from" value="{{ request('date_from') }}"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                        <select name="month_id" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
+                            <option value="">All Months</option>
+                            @foreach($months as $month)
+                            <option value="{{ $month->id }}" {{ request('month_id') == $month->id ? 'selected' : '' }}>
+                                {{ $month->name }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
-                        <input type="date" name="date_to" value="{{ request('date_to') }}"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                        <select name="year_id" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 py-2 px-3">
+                            <option value="">All Years</option>
+                            @foreach($years as $year)
+                            <option value="{{ $year->id }}" {{ request('year_id') == $year->id ? 'selected' : '' }}>
+                                {{ $year->year }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="flex items-end space-x-2 md:col-span-4">
+                    <div class="flex items-end space-x-2 md:col-span-5">
                         <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 flex-1 flex items-center justify-center border border-purple-600">
                             <i class="fas fa-search mr-2"></i>Apply Filters
                         </button>
@@ -256,25 +279,7 @@
             filterIcon.classList.toggle('rotate-180');
         });
 
-        // Date range validation
-        const dateFrom = document.querySelector('input[name="date_from"]');
-        const dateTo = document.querySelector('input[name="date_to"]');
-
-        if (dateFrom && dateTo) {
-            dateFrom.addEventListener('change', function() {
-                dateTo.min = this.value;
-                if (dateTo.value && dateTo.value < this.value) {
-                    dateTo.value = this.value;
-                }
-            });
-
-            dateTo.addEventListener('change', function() {
-                dateFrom.max = this.value;
-                if (dateFrom.value && dateFrom.value > this.value) {
-                    dateFrom.value = this.value;
-                }
-            });
-        }
+        // Remove the date range validation code since we're using dropdowns now
     });
 </script>
 @endsection

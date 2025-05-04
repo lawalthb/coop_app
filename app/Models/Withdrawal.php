@@ -20,7 +20,9 @@ class Withdrawal extends Model
         'reason',
         'status',
         'approved_at',
-        'approved_by'
+        'approved_by',
+        'month_id',
+        'year_id',
     ];
 
     protected $casts = [
@@ -43,5 +45,5 @@ class Withdrawal extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
-     
+
 }

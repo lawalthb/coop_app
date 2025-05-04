@@ -16,7 +16,7 @@
                                 <option value="">Select Member</option>
                                 @foreach($members as $member)
                                 <option value="{{ $member->id }}" {{ old('user_id') == $member->id ? 'selected' : '' }}>
-                                    {{ $member->surname }} {{ $member->firstname }}
+                                    {{ $member->surname }} {{ $member->firstname }} -( {{ $member->member_no }})
                                 </option>
                                 @endforeach
                             </select>
@@ -26,7 +26,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Share Type</label>
                             <select name="share_type_id" required class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                                 <option value="">Select Share Type</option>
-                                  <option selected value="1">normal</option>
+                                  <option selected value="1">Normal</option>
                                 @foreach($shareTypes as $type)
                                 <option value="{{ $type->id }}" {{ old('share_type_id') == $type->id ? 'selected' : '' }}>
                                     {{ $type->name }} (minimum ₦{{ number_format($type->minimum_amount, 2) }} ) (maxinum ₦{{ number_format($type->maximum_amount, 2) }} )
@@ -37,14 +37,15 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Amount Paid</label>
-                            <input type="number" name="amount_paid" value="{{ old('amount_paid') }}" required
+                            <input type="number" name="amount_paid" value="{{ old('amount_paid') }}" required step="0.01"
                                 class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
                         </div>
 <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
                             <select name="month_id" required class="w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200" style="border: 1px solid #ccc;  font-size: 16px; border-radius: 5px; padding: 10px;">
+    <option selected value="4">April</option>
                                 <option value="">Select Month</option>
-                                 <option selected value="4">April</option>
+
                                 @foreach($months as $month)
                                 <option value="{{ $month->id }}" {{ old('month_id') == $month->id ? 'selected' : '' }}>
                                     {{ $month->name }}

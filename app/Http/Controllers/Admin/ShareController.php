@@ -38,6 +38,11 @@ class ShareController extends Controller
         $query->where('status', $request->status);
     }
 
+    // Add filter by member
+    if ($request->filled('user_id')) {
+        $query->where('user_id', $request->user_id);
+    }
+
     // Calculate total amount based on the same filters (without pagination)
     $totalShares = (clone $query)->sum('amount_paid');
 
@@ -48,15 +53,22 @@ class ShareController extends Controller
     $shareTypes = ShareType::all();
     $months = Month::all();
     $years = Year::all();
+    $members = User::where('is_admin', false)
+                  ->where('admin_sign', 'Yes')
+                  ->orderBy('surname')
+                  ->orderBy('firstname')
+                  ->get();
 
     return view('admin.shares.index', compact(
         'shares',
         'shareTypes',
         'months',
         'years',
+        'members',
         'totalShares'
     ));
 }
+
 public function create()
 {
     $members = User::where('is_admin', false)
@@ -74,7 +86,7 @@ public function create()
         $validated = $request->validate([
     'user_id' => 'required|exists:users,id',
     'share_type_id' => 'required|exists:share_types,id',
-    'amount_paid' => 'required|integer|min:1',
+    'amount_paid' => 'required|integer|min:0.01',
     'month_id' => 'required|exists:months,id',
     'year_id' => 'required|exists:years,id',
     'remark' => 'nullable|string'
