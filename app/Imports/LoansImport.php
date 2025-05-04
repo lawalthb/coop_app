@@ -19,7 +19,7 @@ class LoansImport implements ToModel, WithValidation, WithHeadingRow
 {
     $user = User::where('email', $row['member_email'])->first();
     $loanType = LoanType::find($row['loan_type_id']);
-   $startDate = Carbon::createFromFormat('d/m/y', $row['start_date']);
+    $startDate = Carbon::createFromFormat('d/m/y', $row['start_date']);
     $currentDate = Carbon::now();
 
     // Calculate loan details using annual base formula
@@ -53,6 +53,9 @@ class LoansImport implements ToModel, WithValidation, WithHeadingRow
     $monthsDiff = $startDate->diffInMonths($currentDate);
     $repaymentsNeeded = min($monthsDiff, $row['duration']);
 
+    // Track total repayments amount
+    $totalRepayments = 0;
+
     // Process historical repayments
     for ($i = 1; $i <= $repaymentsNeeded; $i++) {
         $repaymentDate = $startDate->copy()->addMonths($i);
@@ -78,7 +81,22 @@ class LoansImport implements ToModel, WithValidation, WithHeadingRow
             'Historical Loan Repayment - ' . $loan->reference,
             $repaymentDate
         );
+
+        // Add to total repayments
+        $totalRepayments += $monthlyPayment;
     }
+
+    // Update loan balance and status
+    $remainingBalance = $totalAmount - $totalRepayments;
+    $loan->amount_paid = $totalRepayments;
+    $loan->balance = $remainingBalance;
+
+    // If balance is less than 1 or zero, mark the loan as completed
+    if ($remainingBalance <= 1) {
+        $loan->status = 'completed';
+    }
+
+    $loan->save();
 
     // Record initial loan disbursement
     TransactionHelper::recordTransaction(
@@ -93,6 +111,7 @@ class LoansImport implements ToModel, WithValidation, WithHeadingRow
 
     return $loan;
 }
+
 
 
     public function rules(): array

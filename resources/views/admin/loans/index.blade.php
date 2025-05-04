@@ -16,33 +16,107 @@
             </div>
         </div>
 
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Total Loan Amount Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
+                        <i class="fas fa-money-bill-wave text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500 text-sm font-medium">Total Loan Amount</h3>
+                        <p class="text-2xl font-bold text-gray-800">₦{{ number_format($totalLoanAmount, 2) }}</p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            @if(request('reference') || request('status'))
+                                Filtered total based on your criteria
+                            @else
+                                Total of all loans
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outstanding Amount Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+                        <i class="fas fa-hand-holding-usd text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-500 text-sm font-medium">Outstanding Balance</h3>
+                        <p class="text-2xl font-bold text-gray-800">₦{{ number_format($totalOutstandingAmount, 2) }}</p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            @if(request('reference') || request('status'))
+                                Filtered outstanding amount
+                            @else
+                                Total outstanding balance
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter Section -->
-      <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
-    <form action="{{ route('admin.loans.index') }}" method="GET" class="flex flex-wrap items-end gap-4">
-        <div class="w-full sm:w-auto">
-            <label for="reference" class="block text-sm font-medium text-gray-700 mb-1">
-                Filter by Loan Reference
-            </label>
-            <select name="reference" id="reference"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                <option value="">All Loans</option>
-                @foreach($loanReferences as $loanRef)
-                    <option value="{{ $loanRef->reference }}" {{ request('reference') == $loanRef->reference ? 'selected' : '' }}>
-                        {{ $loanRef->surname }} {{ $loanRef->firstname }} - {{ $loanRef->loan_type_name }} ({{ $loanRef->reference }})
-                    </option>
-                @endforeach
-            </select>
+        <div class="bg-white rounded-xl shadow-lg p-4 mb-6">
+            <form action="{{ route('admin.loans.index') }}" method="GET" class="flex flex-wrap items-end gap-4">
+                <div class="w-full sm:w-auto">
+                    <label for="reference" class="block text-sm font-medium text-gray-700 mb-1">
+                        Filter by Loan Reference
+                    </label>
+                    <select name="reference" id="reference"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                        <option value="">All Loans</option>
+                        @foreach($loanReferences as $loanRef)
+                            <option value="{{ $loanRef->reference }}" {{ request('reference') == $loanRef->reference ? 'selected' : '' }}>
+                                {{ $loanRef->surname }} {{ $loanRef->firstname }} - {{ $loanRef->loan_type_name }} ({{ $loanRef->reference }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="w-full sm:w-auto">
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
+                        Filter by Status
+                    </label>
+                    <select name="status" id="status"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                        <option value="">All Statuses</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                            Pending
+                            @if(isset($statusCounts['pending']))
+                                <span class="text-yellow-600">({{ $statusCounts['pending'] }})</span>
+                            @endif
+                        </option>
+                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>
+                            Approved
+                            @if(isset($statusCounts['approved']))
+                                <span class="text-green-600">({{ $statusCounts['approved'] }})</span>
+                            @endif
+                        </option>
+                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>
+                            Rejected
+                            @if(isset($statusCounts['rejected']))
+                                <span class="text-red-600">({{ $statusCounts['rejected'] }})</span>
+                            @endif
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex space-x-2">
+                    <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                    @if(request('reference') || request('status'))
+                        <a href="{{ route('admin.loans.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </a>
+                    @endif
+                </div>
+            </form>
         </div>
-        <div class="flex space-x-2">
-            <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                <i class="fas fa-filter mr-2"></i>Filter
-            </button>
-            <a href="{{ route('admin.loans.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
-                <i class="fas fa-redo mr-2"></i>Reset
-            </a>
-        </div>
-    </form>
-</div>
 
         <!-- Table Section -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">

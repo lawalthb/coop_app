@@ -17,15 +17,46 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ShareController extends Controller
 {
-    public function index()
-    {
-        $shares = Share::with(['user', 'shareType', 'approvedBy', 'postedBy', 'month', 'year'])
-            ->latest()
-            ->paginate(50);
+   public function index(Request $request)
+{
+    $query = Share::with(['user', 'shareType', 'approvedBy', 'postedBy', 'month', 'year']);
 
-        return view('admin.shares.index', compact('shares'));
+    // Apply filters if provided
+    if ($request->filled('share_type_id')) {
+        $query->where('share_type_id', $request->share_type_id);
     }
 
+    if ($request->filled('month_id')) {
+        $query->where('month_id', $request->month_id);
+    }
+
+    if ($request->filled('year_id')) {
+        $query->where('year_id', $request->year_id);
+    }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // Calculate total amount based on the same filters (without pagination)
+    $totalShares = (clone $query)->sum('amount_paid');
+
+    // Get the filtered shares
+    $shares = $query->latest()->paginate(50);
+
+    // Get data for filter dropdowns
+    $shareTypes = ShareType::all();
+    $months = Month::all();
+    $years = Year::all();
+
+    return view('admin.shares.index', compact(
+        'shares',
+        'shareTypes',
+        'months',
+        'years',
+        'totalShares'
+    ));
+}
 public function create()
 {
     $members = User::where('is_admin', false)

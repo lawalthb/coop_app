@@ -15,24 +15,38 @@ use Illuminate\Http\Request;
 
 class MemberLoanController extends Controller
 {
-    public function index()
-    {
-        $user = auth()->user();
+public function index()
+{
+    $user = auth()->user();
 
-        $activeLoans = Loan::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->with('loanType')
-            ->get();
+    // Get active loans with loanType and repayments
+    $activeLoans = Loan::where('user_id', $user->id)
+        ->where('status', 'approved')
+        ->with(['loanType', 'repayments'])
+        ->get();
 
-        $loanHistory = Loan::where('user_id', $user->id)
-            ->with('loanType')
-            ->latest()
-            ->get();
+    // Calculate paid amount and balance for each loan
+    $activeLoans->each(function ($loan) {
+        $loan->paid_amount = $loan->repayments->sum('amount');
+        $loan->balance = $loan->total_amount - $loan->paid_amount;
+    });
 
-        $availableLoanTypes = LoanType::all();
+    $loanHistory = Loan::where('user_id', $user->id)
+        ->with(['loanType', 'repayments'])
+        ->latest()
+        ->get();
 
-        return view('member.loans.index', compact('activeLoans', 'loanHistory', 'availableLoanTypes'));
-    }
+    // Calculate paid amount and balance for each loan in history
+    $loanHistory->each(function ($loan) {
+        $loan->paid_amount = $loan->repayments->sum('amount');
+        $loan->balance = $loan->total_amount - $loan->paid_amount;
+    });
+
+    $availableLoanTypes = LoanType::all();
+
+    return view('member.loans.index', compact('activeLoans', 'loanHistory', 'availableLoanTypes'));
+}
+
     public function create()
     {
         $loanTypes = LoanType::where('status', 'active')->get();

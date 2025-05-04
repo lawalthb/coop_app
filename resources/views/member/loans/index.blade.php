@@ -38,10 +38,10 @@
                         <span class="text-gray-600">Duration:</span>
                         <span>{{ $loan->duration }} months</span>
                     </p>
-                    <p class="flex justify-between">
-                        <span class="text-gray-600">Balance:</span>
-                        <span class="font-semibold">₦{{ number_format($loan->total_amount - $loan->paid_amount, 2) }}</span>
-                    </p>
+                 <p class="flex justify-between">
+    <span class="text-gray-600">Balance:</span>
+    <span class="font-semibold">₦{{ number_format($loan->balance, 2) }}</span>
+</p>
                 </div>
                 <a href="{{ route('member.loans.show', $loan) }}" class="mt-4 text-purple-600 hover:text-purple-700 text-sm font-medium">
                     View Details →

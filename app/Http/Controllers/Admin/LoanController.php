@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+use App\Models\LoanRepayment;
 
 class LoanController extends Controller
 {
@@ -26,6 +28,22 @@ public function index(Request $request)
     if ($request->has('reference') && !empty($request->reference)) {
         $query->where('reference', $request->reference);
     }
+
+    // Apply status filter if provided
+    if ($request->has('status') && !empty($request->status)) {
+        $query->where('status', $request->status);
+    }
+
+    // Calculate totals based on the same filters (without pagination)
+    $totalQuery = clone $query;
+    $totalLoanAmount = $totalQuery->sum('amount');
+    $totalOutstandingAmount = $totalQuery->sum(DB::raw('total_amount - IFNULL((SELECT SUM(amount) FROM loan_repayments WHERE loan_id = loans.id), 0)'));
+
+    // Get status counts for the filter dropdown badges
+    $statusCounts = Loan::selectRaw('status, COUNT(*) as count')
+        ->groupBy('status')
+        ->pluck('count', 'status')
+        ->toArray();
 
     $loans = $query->latest()->paginate(50);
 
@@ -43,8 +61,20 @@ public function index(Request $request)
         $loans->appends(['reference' => $request->reference]);
     }
 
-    return view('admin.loans.index', compact('loans', 'loanReferences'));
+    if ($request->has('status')) {
+        $loans->appends(['status' => $request->status]);
+    }
+
+    return view('admin.loans.index', compact(
+        'loans',
+        'loanReferences',
+        'totalLoanAmount',
+        'totalOutstandingAmount',
+        'statusCounts'
+    ));
 }
+
+
 
 
 
