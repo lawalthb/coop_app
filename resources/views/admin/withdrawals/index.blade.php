@@ -104,6 +104,54 @@
             </div>
         </div>
 
+        @if(array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])))
+        <div class="bg-blue-50 p-4 rounded-lg mb-6">
+            <div class="flex items-center">
+                <div class="p-2 rounded-full bg-blue-100 text-blue-600 mr-3">
+                    <i class="fas fa-filter"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-blue-800">Active Filters:</h3>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        @if(request('user_id'))
+                            @php $member = $members->firstWhere('id', request('user_id')); @endphp
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                Member: {{ $member ? $member->surname . ' ' . $member->firstname : 'Unknown' }}
+                            </span>
+                        @endif
+
+                        @if(request('status'))
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                Status: {{ ucfirst(request('status')) }}
+                            </span>
+                        @endif
+
+                        @if(request('saving_type_id'))
+                            @php $savingType = $savingTypes->firstWhere('id', request('saving_type_id')); @endphp
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                Saving Type: {{ $savingType ? $savingType->name : 'Unknown' }}
+                            </span>
+                        @endif
+
+                        @if(request('month_id'))
+                            @php $month = $months->firstWhere('id', request('month_id')); @endphp
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                Month: {{ $month ? $month->name : 'Unknown' }}
+                            </span>
+                        @endif
+
+                        @if(request('year_id'))
+                            @php $year = $years->firstWhere('id', request('year_id')); @endphp
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                Year: {{ $year ? $year->year : 'Unknown' }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-lg p-6">
@@ -113,7 +161,10 @@
                     </div>
                     <div class="w-full">
                         <h3 class="text-lg font-normal text-gray-700 mb-1">Total Withdrawals</h3>
-                        <p class="text-xl font-normal text-purple-600 truncate">₦{{ number_format($totalWithdrawals, 2) }}</p>
+                        <p class="text-xl font-normal text-purple-600 truncate">₦{{ number_format($filteredTotalWithdrawals, 2) }}</p>
+                        @if(array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])))
+                            <p class="text-xs text-gray-500">Overall: ₦{{ number_format($totalWithdrawals, 2) }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -124,7 +175,10 @@
                     </div>
                     <div class="w-full">
                         <h3 class="text-lg font-normal text-gray-700 mb-1">Pending Withdrawals</h3>
-                        <p class="text-xl font-normal text-yellow-600 truncate">₦{{ number_format($pendingWithdrawals, 2) }}</p>
+                        <p class="text-xl font-normal text-yellow-600 truncate">₦{{ number_format($filteredPendingWithdrawals, 2) }}</p>
+                        @if(array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])))
+                            <p class="text-xs text-gray-500">Overall: ₦{{ number_format($pendingWithdrawals, 2) }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -135,7 +189,10 @@
                     </div>
                     <div class="w-full">
                         <h3 class="text-lg font-normal text-gray-700 mb-1">Approved Withdrawals</h3>
-                        <p class="text-xl font-normal text-green-600 truncate">₦{{ number_format($approvedWithdrawals, 2) }}</p>
+                        <p class="text-xl font-normal text-green-600 truncate">₦{{ number_format($filteredApprovedWithdrawals, 2) }}</p>
+                        @if(array_filter(request()->only(['status', 'saving_type_id', 'month_id', 'year_id', 'user_id'])))
+                            <p class="text-xs text-gray-500">Overall: ₦{{ number_format($approvedWithdrawals, 2) }}</p>
+                        @endif
                     </div>
                 </div>
             </div>

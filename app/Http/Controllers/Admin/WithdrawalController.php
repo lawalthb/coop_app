@@ -108,9 +108,15 @@ class WithdrawalController extends Controller
         $query->where('year_id', request('year_id'));
     }
 
+    // Calculate filtered statistics
+    $filteredTotalWithdrawals = (clone $query)->sum('amount');
+    $filteredPendingWithdrawals = (clone $query)->where('status', 'pending')->sum('amount');
+    $filteredApprovedWithdrawals = (clone $query)->where('status', 'approved')->sum('amount');
+
+    // Get paginated results
     $withdrawals = $query->latest()->paginate(10);
 
-    // Calculate statistics
+    // Calculate overall statistics (unfiltered)
     $totalWithdrawals = Withdrawal::sum('amount');
     $pendingWithdrawals = Withdrawal::where('status', 'pending')->sum('amount');
     $approvedWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
@@ -123,7 +129,10 @@ class WithdrawalController extends Controller
         'members',
         'totalWithdrawals',
         'pendingWithdrawals',
-        'approvedWithdrawals'
+        'approvedWithdrawals',
+        'filteredTotalWithdrawals',
+        'filteredPendingWithdrawals',
+        'filteredApprovedWithdrawals'
     ));
 }
      public function show(Withdrawal $withdrawal)
