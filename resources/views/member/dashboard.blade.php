@@ -54,10 +54,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-700">Total Savings</h3>
+                <h3 class="text-lg font-semibold text-gray-700">Total Savings Balance</h3>
                 <i class="fas fa-piggy-bank text-blue-500 text-2xl"></i>
             </div>
-            <p class="text-3xl font-bold text-blue-600">₦{{ number_format($totalSavings, 2) }}</p>
+            <p class="text-3xl font-bold text-blue-600">₦{{ number_format($savingsBalance, 2) }}</p>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">

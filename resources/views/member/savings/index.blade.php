@@ -26,6 +26,10 @@
             <h3 class="text-lg font-semibold text-gray-700 mb-2">Current Month Total</h3>
             <p class="text-3xl font-bold text-green-600">₦{{ number_format($currentMonthTotal, 2) }}</p>
         </div>
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Savingd Balance</h3>
+            <p class="text-3xl font-bold text-green-600">₦{{ number_format($savingsBalance, 2) }}</p>
+        </div>
     </div>
 
     <!-- Transaction History -->

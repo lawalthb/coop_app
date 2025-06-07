@@ -8,6 +8,7 @@ use App\Models\MonthlySavingsSetting;
 use App\Models\Saving;
 use App\Models\Transaction;
 use App\Models\SavingType;
+use App\Models\Withdrawal;
 use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,13 +18,16 @@ class MemberSavingsController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $savingTypes = SavingType::all();
+        $savingTypes = SavingType::active()->get();
 
         $savingsData = [];
+        $totalSavingsAmount = 0;
         foreach ($savingTypes as $type) {
-            $savingsData[$type->id] = Saving::where('user_id', $user->id)
+            $amount = Saving::where('user_id', $user->id)
                 ->where('saving_type_id', $type->id)
                 ->sum('amount');
+            $savingsData[$type->id] = $amount;
+            $totalSavingsAmount += $amount;
         }
 
         $monthlyContributions = Saving::where('user_id', $user->id)
@@ -43,12 +47,23 @@ class MemberSavingsController extends Controller
             ->where('year_id', $current_year_id)
             ->sum('amount');
 
+        // Calculate total withdrawals (approved only)
+        $totalWithdrawals = Withdrawal::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->sum('amount');
+
+        // Calculate savings balance
+        $savingsBalance = $totalSavingsAmount - $totalWithdrawals;
+
         return view('member.savings.index', compact(
             'savingTypes',
             'savingsData',
             'monthlyContributions',
             'recentTransactions',
             'currentMonthTotal',
+            'totalWithdrawals',
+            'totalSavingsAmount',
+            'savingsBalance',
         ));
     }
 
@@ -153,7 +168,26 @@ class MemberSavingsController extends Controller
         }
     }
 
+    public function withdrawalHistory(Request $request)
+    {
+        $user = auth()->user();
 
+        $withdrawals = Withdrawal::where('user_id', $user->id)
+            ->when($request->status, function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->when($request->start_date, function ($query) use ($request) {
+                $query->whereDate('created_at', '>=', $request->start_date);
+            })
+            ->when($request->end_date, function ($query) use ($request) {
+                $query->whereDate('created_at', '<=', $request->end_date);
+            })
+            ->with(['savingType', 'approvedBy'])
+            ->latest()
+            ->paginate(15);
+
+        return view('member.savings.withdrawal-history', compact('withdrawals'));
+    }
 
     // Add these methods to the MemberSavingsController
 
