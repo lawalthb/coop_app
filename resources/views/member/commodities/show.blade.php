@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-6">
-        <a href="{{ route('commodities.index') }}" class="text-purple-600 hover:text-purple-800">
+        <a href="{{ route('member.commodities.index') }}" class="text-purple-600 hover:text-purple-800">
             <i class="fas fa-arrow-left mr-2"></i> Back to Commodities
         </a>
     </div>
@@ -72,7 +72,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('commodities.subscribe', $commodity) }}" method="POST" class="space-y-4">
+                <form action="{{ route('member.commodities.subscribe', $commodity) }}" method="POST" class="space-y-4">
                     @csrf
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>

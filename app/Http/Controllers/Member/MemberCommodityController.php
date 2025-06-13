@@ -91,7 +91,7 @@ class MemberCommodityController extends Controller
     $commodity->quantity_available -= $validated['quantity'];
     $commodity->save();
 
-    return redirect()->route('commodity-subscriptions.index')
+    return redirect()->route('member.commodity-subscriptions.index')
         ->with('success', 'Subscription submitted successfully.');
 }
 
