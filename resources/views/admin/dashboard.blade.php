@@ -25,9 +25,21 @@
                     <i class="fas fa-piggy-bank text-2xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-gray-500 text-sm">Total Savings</h3>
+                    <h3 class="text-gray-500 text-sm">Total Saved</h3>
                     <p class="text-1xl font-bold ">₦{{ number_format($totalSavings, 2) }}</p>
                     <span class="text-sm text-gray-400">₦{{ number_format($monthlySavings, 2) }} this month</span>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-fuchsia-100 text-fuchsia-600">
+                    <i class="fas fa-piggy-bank text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-gray-500 text-sm">Total Withdrawals</h3>
+                    <p class="text-1xl font-bold ">₦{{ number_format($totalWithdrawals, 2) }}</p>
+                    <span class="text-sm text-gray-400">₦{{ number_format($monthlyWithdrawals, 2) }} this month</span>
                 </div>
             </div>
         </div>
@@ -56,6 +68,47 @@
                     <h3 class="text-gray-500 text-sm">Active Loans</h3>
                     <p class="text-2xl font-bold">{{ $activeLoans }}</p>
                     <span class="text-sm text-gray-400">₦{{ number_format($outstandingLoans, 2) }} outstanding</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- saving balance --}}
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-pink-100 text-pink-600">
+                    <i class="fas fa-hand-holding-usd text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-gray-500 text-sm">Saving Balance</h3>
+                    <p class="text-2xl font-bold">{{ number_format($savingBalance, 2) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Stats -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-red-100 text-red-600">
+                    <i class="fas fa-folder-open text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-gray-500 text-sm">Total Information</h3>
+                    <p class="text-1xl font-bold">{{ number_format($totalResources) }}</p>
+                    <span class="text-sm text-gray-400">{{ number_format($totalResourcesSize / (1024 * 1024), 1) }} MB storage</span>
+                </div>
+            </div>
+        </div>
+
+            {{-- commodity --}}
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-cyan-100 text-cyan-600">
+                    <i class="fas fa-boxes text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-gray-500 text-sm">Total Commodities</h3>
+                    <p class="text-1xl font-bold">{{ number_format($totalCommodities) }}</p>
+                    <span class="text-sm text-gray-400">{{ number_format($totalCommodityValue / (1024 * 1024), 1) }} Value</span>
                 </div>
             </div>
         </div>

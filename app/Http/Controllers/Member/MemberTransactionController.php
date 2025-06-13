@@ -13,7 +13,7 @@ class MemberTransactionController extends Controller
         $transactions = Transaction::where('user_id', auth()->id())
         ->whereNot('type', 'entrance_fee')
             ->latest()
-            ->paginate(15);
+            ->paginate(100);
 
         $totalCredits = Transaction::where('user_id', auth()->id())
             ->whereNot('type', 'entrance_fee')
