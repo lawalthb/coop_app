@@ -97,9 +97,9 @@ Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::post('/member/loans', [MemberLoanController::class, 'store'])->name('member.loans.store');
     Route::get('/member/loans/{loan}', [MemberLoanController::class, 'show'])->name('member.loans.show');
 
-    Route::get('/member/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
-    Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
-    Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
+    // Route::get('/member/withdrawals', [MemberWithdrawalController::class, 'index'])->name('member.withdrawals.index');
+    // Route::get('/member/withdrawals/create', [MemberWithdrawalController::class, 'create'])->name('member.withdrawals.create');
+    // Route::post('/member/withdrawals', [MemberWithdrawalController::class, 'store'])->name('member.withdrawals.store');
 
 
 
@@ -411,8 +411,8 @@ Route::post('/commodity-payments/{payment}/reject', [AdminCommodityPaymentContro
 
 
     Route::get('/financial-summary', [AdminFinancialSummaryController::class, 'index'])->name('financial-summary.index');
-Route::get('/financial-summary/member/export', [AdminFinancialSummaryController::class, 'exportMember'])->name('financial-summary.member.export');
-Route::get('/financial-summary/member/pdf', [AdminFinancialSummaryController::class, 'downloadMemberPdf'])->name('financial-summary.member.pdf');
+// Route::get('/financial-summary/member/export', [AdminFinancialSummaryController::class, 'exportMember'])->name('financial-summary.member.export');
+// Route::get('/financial-summary/member/pdf', [AdminFinancialSummaryController::class, 'downloadMemberPdf'])->name('financial-summary.member.pdf');
 Route::get('/financial-summary/overall/export', [AdminFinancialSummaryController::class, 'exportOverall'])->name('financial-summary.overall.export');
 Route::get('/financial-summary/overall/pdf', [AdminFinancialSummaryController::class, 'downloadOverallPdf'])->name('financial-summary.overall.pdf');
    Route::get('/financial-summary/member/{member}', [AdminFinancialSummaryController::class, 'member'])->name('financial-summary.member');
