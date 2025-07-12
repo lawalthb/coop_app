@@ -14,6 +14,8 @@ class LoanRepayment extends Model
         'payment_method',
         'status',
         'notes',
+        'month_id',
+        'year_id',
         'posted_by'
     ];
 

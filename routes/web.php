@@ -81,8 +81,8 @@ Route::get('/faculties/{faculty}/departments', [RegisterController::class, 'getD
 //member routes
 Route::middleware(['auth', 'admin_sign'])->group(function () {
     Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
-    Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
-    Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+    // Route::get('/member/profile', [MemberProfileController::class, 'show'])->name('member.profile');
+    // Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
     Route::get('/member/savings', [MemberSavingsController::class, 'index'])->name('member.savings');
 
     //shares
@@ -175,7 +175,7 @@ Route::get('/member/financial-summary', [MemberFinancialSummaryController::class
 Route::middleware(['auth', 'is_admin', 'permission:view_roles'])->prefix('admin')->name('admin.')->group(function () {
     route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-
+    Route::get('/loans/repayment', [LoanRepaymentController::class, 'index'])->name('loans.repayments.index');
     //member management
 
     Route::get('/members/create', [MemberController::class, 'create'])->name('members.create');
@@ -291,6 +291,7 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
 
 
 
+
     // Admin Loan Management Routes
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
@@ -299,6 +300,9 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
     Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
     Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
+
+    Route::get('/loans/repayments/upload', [LoanRepaymentController::class, 'upload'])->name('loans.repayments.upload');
+Route::post('/loans/repayments/upload', [LoanRepaymentController::class, 'processUpload'])->name('loans.repayments.process-upload');
 
 
 
@@ -312,8 +316,10 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
 
 
     //loan repayment
+
     Route::get('/loans/{loan}/repayments/create', [LoanRepaymentController::class, 'create'])->name('loans.repayments.create');
     Route::post('/loans/{loan}/repayments', [LoanRepaymentController::class, 'store'])->name('loans.repayments.store');
+
 
 
     //transactions
