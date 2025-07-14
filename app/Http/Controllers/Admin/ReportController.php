@@ -23,6 +23,7 @@ use App\Models\LoanType;
 use App\Models\Month;
 use App\Models\Saving;
 use App\Models\Year;
+use App\Exports\SavingsSummaryExport;
 
 class ReportController extends Controller
 {
@@ -311,9 +312,9 @@ class ReportController extends Controller
     }
 
 
-  public function savings(Request $request)
+ public function savings(Request $request)
 {
-    $query = Transaction::where('type', 'savings')
+    $query = Saving::query()
         ->when($request->member_id, function($query, $memberId) {
             return $query->where('user_id', $memberId);
         })
@@ -333,12 +334,12 @@ class ReportController extends Controller
     // Get saving types
     $savingTypes = SavingType::all();
 
-    $savings = $query->with(['user'])->latest()->paginate(100);
+    $savings = $query->with(['user', 'savingType'])->latest()->paginate(100);
 
     // Calculate totals
-    $totalSavings = $query->sum('credit_amount');
+    $totalSavings = $query->sum('amount');
     $activeSavers = $query->distinct('user_id')->count();
-    $monthlyAverage = $query->whereMonth('created_at', now()->month)->avg('credit_amount') ?? 0;
+    $monthlyAverage = $query->whereMonth('created_at', now()->month)->avg('amount') ?? 0;
 
     return view('admin.reports.savings', compact(
         'savings',
@@ -435,7 +436,60 @@ public function savingsPdf(Request $request)
     }
 }
 
+public function savingsSummary(Request $request)
+{
+    $query = User::where('is_admin', false)
+        ->when($request->status, function($query, $status) {
+            return $query->where('status', $status);
+        })
+        ->when($request->search, function($query, $search) {
+            return $query->where(function($q) use ($search) {
+                $q->where('member_no', 'like', "%{$search}%")
+                  ->orWhere('firstname', 'like', "%{$search}%")
+                  ->orWhere('surname', 'like', "%{$search}%");
+            });
+        });
+
+    $members = $query->withSum('savings', 'amount')
+                    ->withSum(['withdrawals' => function($query) {
+                        $query->where('status', 'completed');
+                    }], 'amount')
+                    ->paginate(500);
+
+    // Calculate totals for each member
+    $membersWithTotals = $members->map(function($member) {
+        $totalSaved = $member->savings_sum_amount ?? 0;
+        $totalWithdrawn = $member->withdrawals_sum_amount ?? 0;
+        $balance = $totalSaved - $totalWithdrawn;
+
+        $member->total_saved = $totalSaved;
+        $member->total_withdrawn = $totalWithdrawn;
+        $member->balance = $balance;
+
+        return $member;
+    });
+
+    // Calculate overall totals
+    $overallTotals = [
+        'total_saved' => $membersWithTotals->sum('total_saved'),
+        'total_withdrawn' => $membersWithTotals->sum('total_withdrawn'),
+        'total_balance' => $membersWithTotals->sum('balance'),
+        'active_savers' => $membersWithTotals->where('total_saved', '>', 0)->count()
+    ];
+
+    return view('admin.reports.savings-summary', compact('members', 'overallTotals'));
 }
 
+public function savingsSummaryExcel(Request $request)
+{
+    
+    $filters = [
+        'status' => $request->status,
+        'search' => $request->search,
+    ];
 
+    $filename = 'savings-summary-report-' . date('Y-m-d-H-i-s') . '.xlsx';
 
+    return Excel::download(new SavingsSummaryExport($filters), $filename);
+}
+}

@@ -7,6 +7,9 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Savings Report</h1>
             <div class="flex space-x-3">
+                <a href="{{ route('admin.reports.savings.summary') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                    <i class="fas fa-chart-bar mr-2"></i>Summary View
+                </a>
                 <a href="{{ route('admin.reports.savings.excel') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center">
                     <i class="fas fa-file-excel mr-2"></i>Export Excel
                 </a>

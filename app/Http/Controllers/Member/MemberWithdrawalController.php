@@ -115,7 +115,7 @@ class MemberWithdrawalController extends Controller
     // Calculate total amounts (without pagination)
     $totalWithdrawals = Withdrawal::where('user_id', auth()->id());
     $approvedWithdrawals = Withdrawal::where('user_id', auth()->id())
-        ->where('status', 'approved');
+        ->where('status', 'completed');
 
     // Apply the same status filter to the totals if provided
     if ($request->has('status') && $request->status != '') {

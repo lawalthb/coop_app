@@ -163,7 +163,17 @@ public function monthlySavingsSettings()
     return $this->hasMany(MonthlySavingsSetting::class);
 }
 
+public function withdrawals()
+{
+    return $this->hasMany(Withdrawal::class);
+}
 
+public function getSavingsBalance()
+{
+    $totalSaved = $this->savings()->sum('amount');
+    $totalWithdrawn = $this->withdrawals()->where('status', 'approved')->sum('amount');
+    return $totalSaved - $totalWithdrawn;
+}
 }
 
 

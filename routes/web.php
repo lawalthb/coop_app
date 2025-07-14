@@ -272,6 +272,8 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     // Shares
     Route::get('/shares', [ShareController::class, 'index'])->name('shares.index');
     Route::get('/shares/create', [ShareController::class, 'create'])->name('shares.create');
+     Route::get('/shares/withdraw', [ShareController::class, 'withdraw'])->name('shares.withdraw');
+      Route::post('/shares/withdraw', [ShareController::class, 'withdrawStore'])->name('shares.withdrawals.store');
     Route::post('/shares', [ShareController::class, 'store'])->name('shares.store');
     Route::get('/shares/{share}', [ShareController::class, 'show'])->name('shares.show');
     Route::post('/shares/{share}/approve', [ShareController::class, 'approve'])->name('shares.approve');
@@ -302,9 +304,9 @@ Route::get('/entrance-fees/export', [EntranceFeeController::class, 'export'])->n
     Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
 
     Route::get('/loans/repayments/upload', [LoanRepaymentController::class, 'upload'])->name('loans.repayments.upload');
-Route::post('/loans/repayments/upload', [LoanRepaymentController::class, 'processUpload'])->name('loans.repayments.process-upload');
+    Route::post('/loans/repayments/process-upload', [LoanRepaymentController::class, 'processUpload'])->name('loans.repayments.process-upload');
 
-
+       Route::get('/loans/repayments/download-template', [LoanRepaymentController::class, 'downloadTemplate'])->name('loans.repayments.download-template');
 
 
     // Admin Loan Types Routes
@@ -379,6 +381,10 @@ Route::post('/loans/repayments/upload', [LoanRepaymentController::class, 'proces
         Route::get('/transactions/pdf', [ReportController::class, 'transactionsPdf'])->name('transactions.pdf');
 
          Route::get('/savings/pdf', [ReportController::class, 'savingsPdf'])->name('savings.pdf');
+
+
+    Route::get('/savings/summary', [ReportController::class, 'savingsSummary'])->name('savings.summary');
+      Route::get('/savings/summary/excel', [ReportController::class, 'savingsSummaryExcel'])->name('savings.summary.excel');
 
     });
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

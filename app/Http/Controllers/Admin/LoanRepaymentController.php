@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\LoanRepayment;
 use App\Models\User;
+use App\Models\Month;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use App\Exports\LoanRepaymentTemplateExport;
 
 class LoanRepaymentController extends Controller
 {
@@ -56,9 +59,16 @@ class LoanRepaymentController extends Controller
         return view('admin.loan-repayments.index', compact('loans'));
     }
 
+    public function downloadTemplate()
+    {
+        return Excel::download(new LoanRepaymentTemplateExport, 'active_loans_template_' . date('Y-m-d') . '.xlsx');
+    }
+
     public function upload()
     {
-        return view('admin.loan-repayments.upload');
+        $months = Month::all();
+        $years = Year::all();
+        return view('admin.loan-repayments.upload', compact('months', 'years'));
     }
 
     public function processUpload(Request $request)
@@ -69,7 +79,7 @@ class LoanRepaymentController extends Controller
             'payment_method' => 'required|string|max:255',
             'notes' => 'nullable|string|max:1000'
         ]);
-
+dd($request);
         try {
             $file = $request->file('file');
             $paymentDate = $request->payment_date;
@@ -94,9 +104,9 @@ class LoanRepaymentController extends Controller
                 $rowNumber = $index + 2; // +2 because we removed header and arrays are 0-indexed
 
                 try {
-                    // Validate row data
-                    if (count($row) < 3) {
-                        $errors[] = "Row {$rowNumber}: Insufficient data columns";
+                    // Validate row data - now expecting 5 columns: email, loan_ref, amount, month_id, year_id
+                    if (count($row) < 5) {
+                        $errors[] = "Row {$rowNumber}: Insufficient data columns (expected 5: email, loan_reference, amount, month_id, year_id)";
                         $errorCount++;
                         continue;
                     }
@@ -104,18 +114,36 @@ class LoanRepaymentController extends Controller
                     $email = trim($row[0]);
                     $loanReference = trim($row[1]);
                     $amount = floatval($row[2]);
+                    $monthId = intval($row[3]);
+                    $yearId = intval($row[4]);
 
                     // Validate required fields
-                    if (empty($email) || empty($loanReference) || $amount <= 0) {
-                        $errors[] = "Row {$rowNumber}: Missing or invalid required data (Member No: {$email}, Loan Ref: {$loanReference}, Amount: {$amount})";
+                    if (empty($email) || empty($loanReference) || $amount <= 0 || $monthId <= 0 || $yearId <= 0) {
+                        $errors[] = "Row {$rowNumber}: Missing or invalid required data (Email: {$email}, Loan Ref: {$loanReference}, Amount: {$amount}, Month ID: {$monthId}, Year ID: {$yearId})";
                         $errorCount++;
                         continue;
                     }
 
-                    // Find the user by member number
+                    // Find the user by email
                     $user = User::where('email', $email)->first();
                     if (!$user) {
                         $errors[] = "Row {$rowNumber}: Member with email '{$email}' not found";
+                        $errorCount++;
+                        continue;
+                    }
+
+                    // Validate month and year
+                    $month = Month::find($monthId);
+                    $year = Year::find($yearId);
+
+                    if (!$month) {
+                        $errors[] = "Row {$rowNumber}: Invalid month ID '{$monthId}'";
+                        $errorCount++;
+                        continue;
+                    }
+
+                    if (!$year) {
+                        $errors[] = "Row {$rowNumber}: Invalid year ID '{$yearId}'";
                         $errorCount++;
                         continue;
                     }
@@ -140,6 +168,18 @@ class LoanRepaymentController extends Controller
                         continue;
                     }
 
+                    // Check for duplicate repayment for same loan, month, and year
+                    $existingRepayment = LoanRepayment::where('loan_id', $loan->id)
+                        ->where('month_id', $monthId)
+                        ->where('year_id', $yearId)
+                        ->first();
+
+                    if ($existingRepayment) {
+                        $errors[] = "Row {$rowNumber}: Repayment already exists for this loan in {$month->name} {$year->year}";
+                        $errorCount++;
+                        continue;
+                    }
+
                     // Create repayment record
                     $repayment = LoanRepayment::create([
                         'loan_id' => $loan->id,
@@ -147,8 +187,10 @@ class LoanRepaymentController extends Controller
                         'amount' => $amount,
                         'payment_date' => $paymentDate,
                         'payment_method' => $paymentMethod,
-                        'notes' => $notes . " (Bulk upload - Row {$rowNumber})",
-                        'posted_by' => auth()->id()
+                        'notes' => $notes . " (Bulk upload - Row {$rowNumber} - {$month->name} {$year->year})",
+                        'posted_by' => auth()->id(),
+                        'month_id' => $monthId,
+                        'year_id' => $yearId
                     ]);
 
                     // Record transaction
@@ -158,7 +200,7 @@ class LoanRepaymentController extends Controller
                         $amount,
                         0,
                         'completed',
-                        'Loan Repayment - ' . $repayment->reference
+                        'Loan Repayment - ' . $repayment->reference . ' (' . $month->name . ' ' . $year->year . ')'
                     );
 
                     // Update loan balance
@@ -208,7 +250,9 @@ class LoanRepaymentController extends Controller
 
     public function create(Loan $loan)
     {
-        return view('admin.loan-repayments.create', compact('loan'));
+        $months = Month::all();
+        $years = Year::all();
+        return view('admin.loan-repayments.create', compact('loan', 'months', 'years'));
     }
 
    public function store(Request $request, Loan $loan)
@@ -217,8 +261,24 @@ class LoanRepaymentController extends Controller
         'amount' => 'required|numeric|min:0',
         'payment_date' => 'required|date',
         'payment_method' => 'required|string',
-        'notes' => 'nullable|string'
+        'notes' => 'nullable|string',
+        'month_id' => 'required|exists:months,id',
+        'year_id' => 'required|exists:years,id'
     ]);
+
+    // Check for duplicate repayment
+    $existingRepayment = LoanRepayment::where('loan_id', $loan->id)
+        ->where('month_id', $validated['month_id'])
+        ->where('year_id', $validated['year_id'])
+        ->first();
+
+    if ($existingRepayment) {
+        $month = Month::find($validated['month_id']);
+        $year = Year::find($validated['year_id']);
+        return redirect()->back()
+            ->with('error', "Repayment already exists for this loan in {$month->name} {$year->year}")
+            ->withInput();
+    }
 
     $repayment = LoanRepayment::create([
         'loan_id' => $loan->id,
@@ -227,17 +287,22 @@ class LoanRepaymentController extends Controller
         'payment_date' => $validated['payment_date'],
         'payment_method' => $validated['payment_method'],
         'notes' => $validated['notes'],
-        'posted_by' => auth()->id()
+        'posted_by' => auth()->id(),
+        'month_id' => $validated['month_id'],
+        'year_id' => $validated['year_id']
     ]);
 
     // Record transaction
+    $month = Month::find($validated['month_id']);
+    $year = Year::find($validated['year_id']);
+
     TransactionHelper::recordTransaction(
         $loan->user_id,
         'loan_repayment',
         $validated['amount'],
         0,
         'completed',
-        'Loan Repayment - ' . $repayment->reference
+        'Loan Repayment - ' . $repayment->reference . ' (' . $month->name . ' ' . $year->year . ')'
     );
 
     // Update loan balance
@@ -257,6 +322,5 @@ class LoanRepaymentController extends Controller
 
     return redirect()->route('admin.loans.repayments.index')
         ->with('success', 'Loan repayment recorded successfully');
-}
-
+    }
 }

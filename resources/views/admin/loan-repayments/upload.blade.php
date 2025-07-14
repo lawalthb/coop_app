@@ -7,13 +7,22 @@
             <div class="px-6 py-4 bg-purple-600">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-semibold text-white">Upload Loan Repayments</h2>
-                    <a href="{{ route('admin.loans.repayments.index') }}"
-                       class="inline-flex items-center px-3 py-2 border border-white text-sm font-medium rounded-md text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Back to Repayments
-                    </a>
+                    <div class="flex space-x-2">
+                        <a href="{{ route('admin.loans.repayments.download-template') }}"
+                           class="inline-flex items-center px-3 py-2 border border-white text-sm font-medium rounded-md text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Download Template
+                        </a>
+                        <a href="{{ route('admin.loans.repayments.index') }}"
+                           class="inline-flex items-center px-3 py-2 border border-white text-sm font-medium rounded-md text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Back to Repayments
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -50,11 +59,39 @@
                             <li><strong>Column A:</strong> Member Email</li>
                             <li><strong>Column B:</strong> Loan Reference</li>
                             <li><strong>Column C:</strong> Payment Amount</li>
+                            <li><strong>Column D:</strong> Month ID</li>
+                            <li><strong>Column E:</strong> Year ID</li>
                         </ol>
                         <p class="mt-3 text-xs">
                             <strong>Note:</strong> The first row can be headers (they will be ignored).
                             Supported formats: .xlsx, .xls, .csv (Max size: 2MB)
                         </p>
+                        <p class="mt-2 text-xs">
+                            <strong>Tip:</strong> Use the "Download Template" button to get a pre-filled Excel file with all active loans.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Month/Year Reference -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+                    <h4 class="font-medium text-gray-900 mb-3">Month & Year Reference</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">Available Months:</h5>
+                            <div class="text-xs text-gray-600 space-y-1">
+                                @foreach($months as $month)
+                                    <div>ID: {{ $month->id }} - {{ $month->name }}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">Available Years:</h5>
+                            <div class="text-xs text-gray-600 space-y-1">
+                                @foreach($years as $year)
+                                    <div>ID: {{ $year->id }} - {{ $year->year }}</div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -65,21 +102,27 @@
                         <table class="min-w-full text-sm">
                             <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="px-3 py-2 text-left">Member Email</th>
+                                    <th class="px-3 py-2 text-left">Email</th>
                                     <th class="px-3 py-2 text-left">Loan Reference</th>
                                     <th class="px-3 py-2 text-left">Amount</th>
+                                    <th class="px-3 py-2 text-left">Month ID</th>
+                                    <th class="px-3 py-2 text-left">Year ID</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
                                 <tr class="border-t">
-                                    <td class="px-3 py-2">Ilohammeowolabi@gmail.com</td>
+                                    <td class="px-3 py-2">john@example.com</td>
                                     <td class="px-3 py-2">LOAN-2024-ABC123</td>
                                     <td class="px-3 py-2">50000</td>
+                                    <td class="px-3 py-2">1</td>
+                                    <td class="px-3 py-2">1</td>
                                 </tr>
                                 <tr class="border-t">
-                                    <td class="px-3 py-2">Eletuahmedajiboye@gmail.com</td>
+                                    <td class="px-3 py-2">jane@example.com</td>
                                     <td class="px-3 py-2">LOAN-2024-DEF456</td>
                                     <td class="px-3 py-2">25000</td>
+                                    <td class="px-3 py-2">2</td>
+                                    <td class="px-3 py-2">1</td>
                                 </tr>
                             </tbody>
                         </table>

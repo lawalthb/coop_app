@@ -74,12 +74,32 @@ public function create()
     $members = User::where('is_admin', false)
         ->where('admin_sign', 'Yes')
         ->get();
-    $shareTypes = ShareType::where('status', 'active')->get();
+$shareTypes = ShareType::where('status', 'active')
+    ->where('name', 'NOT LIKE', '%withdraw%')
+    ->get();
     $months = Month::all();
     $years = Year::all();
 
     return view('admin.shares.create', compact('members', 'shareTypes', 'months', 'years'));
 }
+
+
+public function withdraw()
+{
+    $members = User::where('is_admin', false)
+        ->where('admin_sign', 'Yes')
+        ->get();
+   $shareTypes = ShareType::where('status', 'active')
+    ->where('name', 'LIKE', '%withdraw%')
+    ->get();
+    $months = Month::all();
+    $years = Year::all();
+
+    return view('admin.shares.withdraw', compact('members', 'shareTypes', 'months', 'years'));
+}
+
+
+
 
     public function store(Request $request)
     {
@@ -114,7 +134,7 @@ public function create()
             'Share Purchase - ' . $share->certificate_number
         );
 
-        return redirect()->route('admin.shares.create')
+        return redirect()->route('admin.shares.index')
             ->with('success', 'Share purchase recorded successfully');
     }
 
@@ -194,5 +214,42 @@ public function create()
 
     return redirect()->route('admin.shares.index')
         ->with('success', 'Shares imported successfully');
+}
+
+
+public function withdrawStore(Request $request){
+       $validated = $request->validate([
+    'user_id' => 'required|exists:users,id',
+    'share_type_id' => 'required|exists:share_types,id',
+    'amount_paid' => 'required|integer|min:0.01',
+    'month_id' => 'required|exists:months,id',
+    'year_id' => 'required|exists:years,id',
+    'remark' => 'nullable|string'
+]);
+
+
+       $share = Share::create([
+    'user_id' => $validated['user_id'],
+    'share_type_id' => $validated['share_type_id'],
+    'certificate_number' => 'SHRWD-' . date('Y') . '-' . Str::random(8),
+    'amount_paid' => -abs($validated['amount_paid']),
+    'month_id' => $validated['month_id'],
+    'year_id' => $validated['year_id'],
+    'posted_by' => auth()->id(),
+     'status' => 'approved',
+    'remark' => $validated['remark']
+]);
+        TransactionHelper::recordTransaction(
+            $validated['user_id'],
+            'share_purchase',
+
+            $validated['amount_paid'],
+            0,
+            'completed',
+            'Share Withdraw - ' . $share->certificate_number
+        );
+
+        return redirect()->route('admin.shares.index')
+            ->with('success', 'Share Withdraw recorded successfully');
 }
 }

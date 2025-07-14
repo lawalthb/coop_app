@@ -9,6 +9,12 @@
             <a href="{{ route('admin.shares.create') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
                 <i class="fas fa-plus mr-2"></i>New Share Purchase
             </a>
+
+             <a href="{{ route('admin.shares.withdraw') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                <i class="fas fa-minus mr-2"></i>Withdraw
+            </a>
+
+
         </div>
 
         <!-- Total Shares Card -->

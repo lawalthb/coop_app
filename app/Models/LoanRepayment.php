@@ -14,9 +14,9 @@ class LoanRepayment extends Model
         'payment_method',
         'status',
         'notes',
+        'posted_by',
         'month_id',
-        'year_id',
-        'posted_by'
+        'year_id'
     ];
 
     protected $casts = [
@@ -31,5 +31,15 @@ class LoanRepayment extends Model
     public function postedBy()
     {
         return $this->belongsTo(User::class, 'posted_by');
+    }
+
+    public function month()
+    {
+        return $this->belongsTo(Month::class);
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
     }
 }
